@@ -2,6 +2,7 @@ import React from "react";
 import MainDshboard from "../MainDashboard/MainDashboard";
 import Employees from "../Employees/Employees";
 import Department from "../Department/Department";
+import Leave from "../../Pages/Leave/Leave";
 
 const DashboardContent = ({ active }) => {
   const renderContent = () => {
@@ -13,7 +14,7 @@ const DashboardContent = ({ active }) => {
       case "Department":
         return <p><Department/></p>
       case "Leave":
-        return <h2 className="text-2xl font-bold">Leave Content</h2>;
+        return <p><Leave/></p>;
       case "Salary":
         return <h2 className="text-2xl font-bold">Salary Content</h2>;
       case "Setting":

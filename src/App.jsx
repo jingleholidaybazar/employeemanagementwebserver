@@ -1,26 +1,29 @@
-import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import PrivateRoute from './Pages/PrivateRoute/PrivateRoute';
 import Login from './Components/Login/Login'
-import { Toaster } from 'react-hot-toast'
-import Dashboard from './Pages/Dashboard/Dashboard'
+import EmployeeDashbord from './Pages/EmployeeDashboard/EmployeeDashboard'
+import Dashboard from './Pages/Dashboard/Dashboard';
+import { Toaster } from 'react-hot-toast';
 
-
-
-function App() {
+const App = () => {
   return (
-    <div>
-       <BrowserRouter>
-       <Routes>
-         <Route path='/' element ={<Login/>}/>
-         <Route path='/dashboard' element ={<Dashboard/>}/>
-       </Routes>
-       <Toaster/>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route
+          path="/employeeDashboard"
+          element={<PrivateRoute element={<EmployeeDashbord />} />}
+        />
+        <Route
+          path="/adminDashboard"
+          element={<PrivateRoute element={<Dashboard />} />}
+        />
+      </Routes>
+      <Toaster/>
+    </Router>
+    
+  );
+};
 
-       </BrowserRouter>
-
-  
-    </div>
-  )
-}
-
-export default App
+export default App;

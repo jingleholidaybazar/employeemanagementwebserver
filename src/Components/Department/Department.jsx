@@ -1,31 +1,96 @@
-import React, { useState } from 'react';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
-import AddDepartment from './AddDepartmen'; // Import AddDepartment component
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { FaEdit, FaTrashAlt, FaPlus } from "react-icons/fa";
+import { handleError, handleSuccess } from "../util";
+import AddDepartment from "./AddDepartment"; // Import AddDepartment component
+import toast from "react-hot-toast";
 
 const Department = () => {
-  const [departments, setDepartments] = useState([
-    { id: 1, name: 'Sales' },
-    { id: 2, name: 'Marketing' },
-    { id: 3, name: 'HR' },
-  ]);
-  const [search, setSearch] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [departments, setDepartments] = useState([]);
+  const [search, setSearch] = useState("");
+  const [editModal, setEditModal] = useState(false);
+  const [addModal, setAddModal] = useState(false); // State for Add modal
+  const [currentDepartment, setCurrentDepartment] = useState(null);
+  const [newName, setNewName] = useState("");
 
-  const handleEdit = (id) => {
-    console.log('Edit department', id);
+  // Fetch departments from the API
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/v1/department/getDepartment"
+        );
+        setDepartments(response.data.department || []);
+      } catch (error) {
+        handleError("Error fetching departments:", error);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
+
+  // Delete Department From The API
+  const handleDelete = async (_id) => {
+    if (!_id) {
+      handleError("ID is undefined or missing");
+      return;
+    }
+
+    try {
+      await axios.delete(
+        `http://localhost:8080/api/v1/department/deleteDepartment/${_id}`
+      );
+      setDepartments(
+        departments.filter((department) => department._id !== _id)
+      );
+
+      handleSuccess("Department Deleted Successfully");
+    } catch (error) {
+      handleError("Error deleting department:");
+      handleError("Error deleting department:", error);
+    }
   };
 
-  const handleDelete = (id) => {
-    setDepartments(departments.filter(department => department.id !== id));
+  // Edit Department Functionality
+  const handleEdit = (department) => {
+    setCurrentDepartment(department);
+    setNewName(department.departmentName);
+    setEditModal(true);
   };
 
-  const handleAddNewDepartment = (newDepartmentName) => {
-    const newId = departments.length + 1;
-    setDepartments([...departments, { id: newId, name: newDepartmentName }]);
+  const handleUpdate = async () => {
+    if (!currentDepartment || !newName.trim()) return;
+
+    try {
+      await axios.put(
+        `http://localhost:8080/api/v1/department/updateDepartment/${currentDepartment._id}`,
+        { departmentName: newName }
+      );
+
+      setDepartments(
+        departments.map((dept) =>
+          dept._id === currentDepartment._id
+            ? { ...dept, departmentName: newName }
+            : dept
+        )
+      );
+      handleSuccess("Department Updated Successfully");
+      setEditModal(false);
+      setCurrentDepartment(null);
+      setNewName("");
+    } catch (error) {
+      handleError("Error updating department:");
+      handleError("Error updating department:", error);
+    }
   };
 
-  const filteredDepartments = departments.filter(department =>
-    department.name.toLowerCase().includes(search.toLowerCase())
+  // Add New Department Functionality
+  const addNewDepartment = (department) => {
+    setDepartments([...departments, department]);
+  };
+
+  const filteredDepartments = departments.filter((department) =>
+    department.departmentName?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -41,36 +106,40 @@ const Department = () => {
           />
         </div>
         <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+          onClick={() => setAddModal(true)}
+          className="py-2 px-4 bg-green-500 text-white rounded-md hover:bg-green-600 flex items-center space-x-2"
         >
-          New Department
+          <FaPlus />
+          <span>Add New Department</span>
         </button>
       </div>
 
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
         <table className="min-w-full text-sm text-left text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-200">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-300">
             <tr>
-              <th scope="col" className="px-6 py-3">S No.</th>
-              <th scope="col" className="px-6 py-3">Department Name</th>
-              <th scope="col" className="px-6 py-3 text-center">Actions</th>
+              <th className="px-6 py-3">S No.</th>
+              <th className="px-6 py-3">Department Name</th>
+              <th className="px-6 py-3 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredDepartments.map((department, index) => (
-              <tr key={department.id} className="bg-white border-b hover:bg-gray-100">
+              <tr
+                key={department.id}
+                className="bg-white border-b hover:bg-gray-200"
+              >
                 <td className="px-6 py-4">{index + 1}</td>
-                <td className="px-6 py-4">{department.name}</td>
+                <td className="px-6 py-4">{department.departmentName}</td>
                 <td className="px-6 py-4 text-center">
                   <button
-                    onClick={() => handleEdit(department.id)}
+                    onClick={() => handleEdit(department)}
                     className="text-blue-600 hover:text-blue-800 mr-3"
                   >
                     <FaEdit />
                   </button>
                   <button
-                    onClick={() => handleDelete(department.id)}
+                    onClick={() => handleDelete(department._id)}
                     className="text-red-600 hover:text-red-800"
                   >
                     <FaTrashAlt />
@@ -82,12 +151,43 @@ const Department = () => {
         </table>
       </div>
 
-      {/* AddDepartment Modal */}
-      <AddDepartment
-        showModal={showModal}
-        setShowModal={setShowModal}
-        addNewDepartment={handleAddNewDepartment}
-      />
+      {/* Add Department Modal */}
+      {addModal && (
+        <AddDepartment
+          showModal={addModal}
+          setShowModal={setAddModal}
+          addNewDepartment={addNewDepartment} // Pass function as prop
+        />
+      )}
+
+      {/* Edit Department Modal */}
+      {editModal && currentDepartment && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4">Edit Department</h2>
+            <input
+              type="text"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              className="w-full p-2 border rounded-md mb-4"
+            />
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setEditModal(false)}
+                className="py-2 px-4 bg-gray-300 rounded-md hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUpdate}
+                className="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

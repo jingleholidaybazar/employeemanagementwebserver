@@ -57,7 +57,7 @@ const MainDashboard = () => {
   ];
 
   return (
-    <div className="p-4 space-y-8">
+    <div className=" min-lg:p-4 space-y-8">
       {/* General Statistics */}
       <div>
         <h2 className="text-2xl font-semibold mb-4">Overview</h2>

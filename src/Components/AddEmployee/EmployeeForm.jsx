@@ -1,58 +1,141 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { handleError, handleSuccess } from "../util";
 
 const EmployeeForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
-    image: null,
     name: "",
     lastname: "",
     email: "",
     password: "",
-    phone: "",
-    department: "",
+    mobile: "",
+    jobRole: "",
     salary: "",
-    adharnumber: "",
-    pancardnumber: "", // Add PAN card number field
+    aadhar: "",
+    panCard: "",
   });
-  const [previewImage, setPreviewImage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData({ ...formData, image: file });
-      setPreviewImage(URL.createObjectURL(file));
+  const validateForm = () => {
+    const {
+      name,
+      lastname,
+      email,
+      password,
+      mobile,
+      jobRole,
+      salary,
+      aadhar,
+      panCard,
+    } = formData;
+
+    // Basic validation checks
+    if (
+      !name ||
+      !lastname ||
+      !email ||
+      !password ||
+      !mobile ||
+      !jobRole ||
+      !salary ||
+      !aadhar ||
+      !panCard
+    ) {
+      return handleError("All fields are required.");
     }
+
+    // Email validation (simple format check)
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return handleError("Please enter a valid email address.");
+    }
+
+    // Mobile validation (simple numeric check)
+    if (!/^\d{10}$/.test(mobile)) {
+      return handleError("Please enter a valid 10-digit mobile number.");
+    }
+
+    // Salary validation (positive number check)
+    if (isNaN(salary) || parseFloat(salary) <= 0) {
+      return handleError("Please enter a valid salary.");
+    }
+
+    // Aadhar validation (simple numeric check for 12 digits)
+    if (!/^\d{12}$/.test(aadhar)) {
+      return handleError("Please enter a valid 12-digit Aadhar number.");
+    }
+
+    // PAN Card validation (simple alphanumeric check for 10 characters)
+    if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(panCard)) {
+      return handleError("Please enter a valid PAN card number.");
+    }
+
+    return true;
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    setFormData({
-      image: null,
-      name: "",
-      lastname: "",
-      email: "",
-      password: "",
-      phone: "",
-      department: "",
-      salary: "",
-      adharnumber: "",
-      pancardnumber: "", // Reset PAN card number
-    });
-    setPreviewImage("");
+
+    // Validate form data before submitting
+    if (!validateForm()) {
+      return;
+    }
+
+    // Log the form data before submitting
+    console.log("Form Data Submitted:", formData);
+
+    try {
+      // Send form data to the backend API using axios
+      setIsSubmitting(true); // Disable submit button while sending request
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/auth/addEmployee",
+        formData
+      );
+
+      // Handle success response
+      handleSuccess("Employee added successfully!");
+
+      // Optionally reset the form data
+      setFormData({
+        name: "",
+        lastname: "",
+        email: "",
+        password: "",
+        mobile: "",
+        jobRole: "",
+        salary: "",
+        aadhar: "",
+        panCard: "",
+      });
+
+      // Assuming onSubmit is for additional actions
+      onSubmit(response.data);
+    } catch (error) {
+      console.error("Error adding employee:", error);
+      handleError("Failed to add employee.");
+    } finally {
+      setIsSubmitting(false); // Enable the submit button again
+    }
   };
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded shadow-md w-full max-w-4xl relative">
-        <h3 className="text-lg font-semibold mb-4 uppercase text-center">Add New Employee</h3>
+        <h3 className="text-lg font-semibold mb-4 uppercase text-center">
+          Add Employee
+        </h3>
         <form onSubmit={handleFormSubmit}>
-          <div className="flex gap-5">
-            <div className="mb-4 w-[49%]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="mb-4">
               <label className="block font-medium mb-2">Name</label>
               <input
                 type="text"
@@ -60,10 +143,9 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 value={formData.name}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
-            <div className="mb-4 w-[49%]">
+            <div className="mb-4">
               <label className="block font-medium mb-2">Last Name</label>
               <input
                 type="text"
@@ -71,46 +153,12 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 value={formData.lastname}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
           </div>
-          <div className="flex gap-5">
-            <div className="mb-4 w-[49%]">
-              <label className="block font-medium mb-2">Image</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-              {previewImage && (
-                <img
-                  src={previewImage}
-                  alt="Preview"
-                  className="w-16 h-16 mt-2 rounded-full object-cover"
-                />
-              )}
-            </div>
-            <div className="mb-4 w-[49%]">
-              <label className="block font-medium mb-2">Department</label>
-              <select
-                name="department"
-                value={formData.department}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              >
-                <option value="">Select Department</option>
-                <option value="Engineering">Engineering</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Human Resources">Human Resources</option>
-                <option value="Finance">Finance</option>
-              </select>
-            </div>
-          </div>
-          <div className="flex gap-5">
-            <div className="mb-4 w-[49%]">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="mb-4">
               <label className="block font-medium mb-2">Email</label>
               <input
                 type="email"
@@ -118,10 +166,9 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 value={formData.email}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
-            <div className="mb-4 w-[49%]">
+            <div className="mb-4">
               <label className="block font-medium mb-2">Password</label>
               <input
                 type="password"
@@ -129,75 +176,90 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 value={formData.password}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
           </div>
-          <div className="flex gap-5">
-            <div className="mb-4 w-[49%]">
-              <label className="block font-medium mb-2">Phone</label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
-              />
-            </div>
-            <div className="mb-4 w-[49%]">
-              <label className="block font-medium mb-2">Salary</label>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="mb-4">
+              <label className="block font-medium mb-2">Mobile</label>
               <input
                 type="text"
+                name="mobile"
+                value={formData.mobile}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block font-medium mb-2">Job Role</label>
+              <select
+                name="jobRole"
+                value={formData.jobRole}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+              >
+                <option value="">Select Job Role</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Finance">Finance</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="mb-4">
+              <label className="block font-medium mb-2">Salary</label>
+              <input
+                type="number"
                 name="salary"
                 value={formData.salary}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
-          </div>
-
-          {/* Aadhar Number Section */}
-          <div className="flex gap-5">
-            <div className="mb-4 w-[49%]">
+            <div className="mb-4">
               <label className="block font-medium mb-2">Aadhar Number</label>
               <input
                 type="text"
-                name="adharnumber"
-                value={formData.adharnumber}
+                name="aadhar"
+                value={formData.aadhar}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
-                required
-              />
-            </div>
-            {/* PAN Card Number Section */}
-            <div className="mb-4 w-[49%]">
-              <label className="block font-medium mb-2">PAN Card Number</label>
-              <input
-                type="text"
-                name="pancardnumber"
-                value={formData.pancardnumber}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-                required
               />
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Add Employee
-          </button>
-          <button
-            type="button"
-            onClick={onCancel}
-            className="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-          >
-            Cancel
-          </button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="mb-4">
+              <label className="block font-medium mb-2">Pan Card</label>
+              <input
+                type="text"
+                name="panCard"
+                value={formData.panCard}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between mt-6">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="bg-gray-500 text-white py-2 px-4 rounded"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-blue-600 text-white py-2 px-4 rounded disabled:bg-gray-400"
+            >
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </button>
+          </div>
         </form>
       </div>
     </div>
