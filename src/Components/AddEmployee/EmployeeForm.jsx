@@ -38,7 +38,6 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       panCard,
     } = formData;
 
-    // Basic validation checks
     if (
       !name ||
       !lastname ||
@@ -53,28 +52,23 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       return handleError("All fields are required.");
     }
 
-    // Email validation (simple format check)
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       return handleError("Please enter a valid email address.");
     }
 
-    // Mobile validation (simple numeric check)
     if (!/^\d{10}$/.test(mobile)) {
       return handleError("Please enter a valid 10-digit mobile number.");
     }
 
-    // Salary validation (positive number check)
     if (isNaN(salary) || parseFloat(salary) <= 0) {
       return handleError("Please enter a valid salary.");
     }
 
-    // Aadhar validation (simple numeric check for 12 digits)
     if (!/^\d{12}$/.test(aadhar)) {
       return handleError("Please enter a valid 12-digit Aadhar number.");
     }
 
-    // PAN Card validation (simple alphanumeric check for 10 characters)
     if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(panCard)) {
       return handleError("Please enter a valid PAN card number.");
     }
@@ -84,27 +78,17 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate form data before submitting
     if (!validateForm()) {
       return;
     }
 
-    // Log the form data before submitting
-    console.log("Form Data Submitted:", formData);
-
     try {
-      // Send form data to the backend API using axios
-      setIsSubmitting(true); // Disable submit button while sending request
+      setIsSubmitting(true);
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/addEmployee",
+        "https://management-system-jet.vercel.app/api/auth/addEmployee",
         formData
       );
-
-      // Handle success response
-      handleSuccess("Employee added successfully!");
-
-      // Optionally reset the form data
+      handleSuccess("Adding Employee Successfully");
       setFormData({
         name: "",
         lastname: "",
@@ -117,25 +101,24 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
         panCard: "",
       });
 
-      // Assuming onSubmit is for additional actions
       onSubmit(response.data);
     } catch (error) {
       console.error("Error adding employee:", error);
       handleError("Failed to add employee.");
     } finally {
-      setIsSubmitting(false); // Enable the submit button again
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded shadow-md w-full max-w-4xl relative">
+      <div className="bg-white p-4 md:p-6 rounded shadow-md w-full max-w-4xl">
         <h3 className="text-lg font-semibold mb-4 uppercase text-center">
           Add Employee
         </h3>
         <form onSubmit={handleFormSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
               <label className="block font-medium mb-2">Name</label>
               <input
                 type="text"
@@ -145,7 +128,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
-            <div className="mb-4">
+            <div>
               <label className="block font-medium mb-2">Last Name</label>
               <input
                 type="text"
@@ -157,8 +140,8 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
               <label className="block font-medium mb-2">Email</label>
               <input
                 type="email"
@@ -168,7 +151,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
-            <div className="mb-4">
+            <div>
               <label className="block font-medium mb-2">Password</label>
               <input
                 type="password"
@@ -180,8 +163,8 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
               <label className="block font-medium mb-2">Mobile</label>
               <input
                 type="text"
@@ -191,7 +174,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
-            <div className="mb-4">
+            <div>
               <label className="block font-medium mb-2">Job Role</label>
               <select
                 name="jobRole"
@@ -208,8 +191,8 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
               <label className="block font-medium mb-2">Salary</label>
               <input
                 type="number"
@@ -219,7 +202,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
-            <div className="mb-4">
+            <div>
               <label className="block font-medium mb-2">Aadhar Number</label>
               <input
                 type="text"
@@ -231,31 +214,29 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="mb-4">
-              <label className="block font-medium mb-2">Pan Card</label>
-              <input
-                type="text"
-                name="panCard"
-                value={formData.panCard}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
+          <div>
+            <label className="block font-medium mb-2">Pan Card</label>
+            <input
+              type="text"
+              name="panCard"
+              value={formData.panCard}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
           </div>
 
-          <div className="flex items-center justify-between mt-6">
+          <div className="flex flex-col md:flex-row items-center justify-between mt-6 space-y-4 md:space-y-0">
             <button
               type="button"
               onClick={onCancel}
-              className="bg-gray-500 text-white py-2 px-4 rounded"
+              className="bg-gray-500 text-white py-2 px-4 rounded w-full md:w-auto"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-blue-600 text-white py-2 px-4 rounded disabled:bg-gray-400"
+              className="bg-blue-600 text-white py-2 px-4 rounded w-full md:w-auto disabled:bg-gray-400"
             >
               {isSubmitting ? "Submitting..." : "Submit"}
             </button>

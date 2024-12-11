@@ -18,7 +18,7 @@ const Department = () => {
     const fetchDepartments = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/v1/department/getDepartment"
+          "https://management-system-jet.vercel.app/api/department/getDepartment"
         );
         setDepartments(response.data.department || []);
       } catch (error) {
@@ -38,7 +38,7 @@ const Department = () => {
 
     try {
       await axios.delete(
-        `http://localhost:8080/api/v1/department/deleteDepartment/${_id}`
+        `https://management-system-jet.vercel.app/api/department/deleteDepartment/${_id}`
       );
       setDepartments(
         departments.filter((department) => department._id !== _id)
@@ -63,7 +63,7 @@ const Department = () => {
 
     try {
       await axios.put(
-        `http://localhost:8080/api/v1/department/updateDepartment/${currentDepartment._id}`,
+        `https://management-system-jet.vercel.app/api/department/updateDepartment/${currentDepartment._id}`,
         { departmentName: newName }
       );
 
@@ -116,7 +116,7 @@ const Department = () => {
 
       <div className="overflow-x-auto shadow-md sm:rounded-lg">
         <table className="min-w-full text-sm text-left text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-300">
+          <thead className="text-xs text-gray-700 uppercase bg-red-500">
             <tr>
               <th className="px-6 py-3">S No.</th>
               <th className="px-6 py-3">Department Name</th>

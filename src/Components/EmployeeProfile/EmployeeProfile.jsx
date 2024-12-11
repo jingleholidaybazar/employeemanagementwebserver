@@ -1,38 +1,97 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Loading from "../Loading/Loading"; // Import the Loading component
+import { useAuth } from "../Context.jsx/AuthContext";
 
 function EmployeeProfile() {
+  const [employee, setEmployee] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { singaleEmployee } = useAuth();
+
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      try {
+        // Simulate a delay
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        if (!singaleEmployee) {
+          setError("Employee data not found.");
+        } else {
+          setEmployee(singaleEmployee);
+        }
+      } catch (error) {
+        setError("An unexpected error occurred.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEmployee();
+  }, [singaleEmployee]);
+
+  if (loading) {
+    return <Loading message="Loading employee data..." />;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="text-center">
+          <p className="text-red-500 text-xl">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded shadow-md hover:bg-blue-600"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!employee) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <p className="text-gray-500 text-xl">No employee data found.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-lg:p-4 bg-gray-50 min-h-screen">
+    <div className="flex items-centermin-lg:p-4 bg-gray-50">
       {/* Profile Section */}
       <section className="w-full p-4 shadow-lg flex flex-col lg:flex-row gap-10 justify-center bg-white rounded-md">
         {/* Employee Image and Name */}
         <div className="flex flex-col items-center">
           <img
-            src="https://fps.cdnpk.net/images/ai/image-generator/gallery/65446.webp?w=1920&h=1920&q=90"
+            src={
+              employee.image ||
+              "https://fps.cdnpk.net/images/ai/image-generator/gallery/65446.webp?w=1920&h=1920&q=90"
+            }
             alt="Employee"
             className="w-40 h-40 sm:w-60 sm:h-60 lg:w-80 lg:h-80 rounded-md object-cover shadow-md"
           />
-          <h3 className="font-sans font-semibold tracking-widest text-center mt-2 text-lg">
-            Nitish Kumar
+          <h3 className="font-sans font-semibold tracking-widest text-center mt-2 text-lg uppercase">
+            {employee.name || "Nitish Kumar"}
           </h3>
-          <h3 className="font-sans font-medium tracking-widest text-center text-gray-500">
-            Developer
+          <h3 className="font-sans font-medium tracking-widest text-center text-gray-500 uppercase">
+            {employee.jobRole || "Developer"}
           </h3>
         </div>
 
         {/* Employee Details */}
         <div className="w-full lg:w-2/3 overflow-x-auto">
-          <table className="w-full border border-gray-300 text-left">
+          <table className="w-full border border-gray-300 text-left capitalize">
             <tbody>
               {[
-                ["Name", "Nitish Kumar"],
-                ["Employee ID", "12345em"],
-                ["Email", "nk768276@gmail.com"],
-                ["Aadhar Number", "45362987"],
-                ["Pan Card Number", "ASDF6573D"],
-                ["Joining Date", "25/12/2023"],
-                ["Phone Number", "9572576470"],
-                ["Salary", "30000 rs"],
+                ["Name", employee.name || "Nitish Kumar"],
+                ["Employee ID", employee._id || "12345em"],
+                ["Email", employee.email || "nk768276@gmail.com"],
+                ["Aadhar Number", employee.aadhar || "45362987"],
+                ["Pan Card Number", employee.pan || "ASDF6573D"],
+                ["Joining Date", employee.joiningDate || "25/12/2023"],
+                ["Phone Number", employee.phoneNumber || "9572576470"],
+                ["Salary", employee.salary || "30000 rs"],
               ].map(([label, value], index) => (
                 <tr
                   key={index}

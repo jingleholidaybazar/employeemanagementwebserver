@@ -19,7 +19,7 @@ const AddDepartment = ({ showModal, setShowModal, addNewDepartment }) => {
       const sanitizedDepartmentName = newDepartmentName.toString().trim();
 
       const response = await axios.post(
-        "http://localhost:8080/api/v1/department/createDepartment",
+        "https://management-system-jet.vercel.app/api/department/createDepartment",
         {
           departmentName: sanitizedDepartmentName,
         }
@@ -29,10 +29,10 @@ const AddDepartment = ({ showModal, setShowModal, addNewDepartment }) => {
 
       const { message, status, department } = response.data;
 
-      if (status === 201 && department) {
-        handleSuccess(message);
-        toast.success("Department added successfully!");
+      if (status == 201 && department) {
+        console.log(message);
 
+        handleSuccess(message);
         // Add the new department to the parent state
         addNewDepartment(department);
 

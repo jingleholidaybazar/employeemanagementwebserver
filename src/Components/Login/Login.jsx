@@ -24,7 +24,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/login",
+        "http://localhost:8080/api/auth/login",
         {
           email,
           password,
@@ -32,11 +32,12 @@ const Login = () => {
       );
 
       if (response.status === 200) {
-        const { role } = response.data.employee;
+        const { role, _id } = response.data.employee;
         const { token } = response.data;
         // Store token in local storage
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
+        localStorage.setItem("id", _id);
         handleSuccess("Login successful!");
 
         // Navigate based on user role
@@ -57,7 +58,7 @@ const Login = () => {
       if (error.response && error.response.data) {
         handleError(error.response.data.message || "Login failed.");
       } else {
-       handleError("An error occurred while logging in.");
+        handleError("An error occurred while logging in.");
       }
     }
   };

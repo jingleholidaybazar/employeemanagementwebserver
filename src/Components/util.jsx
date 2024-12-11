@@ -1,12 +1,15 @@
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
 
-export const handleSuccess = (mess) =>{
-    toast.success(mess,{
-        position:'top-center'
-    })
-}
-export const handleError = (mess) =>{
-    toast.error(mess,{
-        position:'top-center'
-    })
-}
+export const handleError = (message) => {
+  toast.error(message || "An error occurred.", {
+    duration: 4000,
+    position: "top-center",
+  });
+};
+
+export const handleSuccess = (message) => {
+  toast.success(message || "Operation successful!", {
+    duration: 4000,
+    position: "top-center",
+  });
+};
