@@ -36,7 +36,8 @@ function AuthContextProvider({ children }) {
           },
         }
       );
-      console.log("Employee updated:", response.data);
+      
+      
     } catch (error) {
       console.error("Error updating employee:", error);
       setError("Failed to update employee. Please try again.");
@@ -192,7 +193,7 @@ function AuthContextProvider({ children }) {
     }, 20000);
     return () => clearInterval(leaveInterval); // Cleanup on unmount
   }, []);
-  console.log(singaleEmployee);
+
 
   return (
     <UserContext.Provider

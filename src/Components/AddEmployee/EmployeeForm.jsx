@@ -14,24 +14,24 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
     salary: "",
     aadhar: "",
     panCard: "",
+    gender: "",
+    dob: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prevState) => {
-      let formattedValue = value;
-      if (name === "joiningDate") {
-        // Format date to yyyy-mm-dd
-        formattedValue = new Date(value).toISOString().split("T")[0];
-      }
+    // Format date fields to yyyy-mm-dd
+    let formattedValue = value;
+    if (name === "joiningDate" || name === "dob") {
+      formattedValue = new Date(value).toISOString().split("T")[0];
+    }
 
-      return {
-        ...prevState,
-        [name]: formattedValue,
-      };
-    });
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: formattedValue,
+    }));
   };
 
   const validateForm = () => {
@@ -45,6 +45,8 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       salary,
       aadhar,
       panCard,
+      gender,
+      dob,
     } = formData;
 
     if (
@@ -56,7 +58,9 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       !jobRole ||
       !salary ||
       !aadhar ||
-      !panCard
+      !panCard ||
+      !gender ||
+      !dob
     ) {
       return handleError("All fields are required.");
     }
@@ -84,13 +88,12 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
 
     return true;
   };
-
+console.log(formData)
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
       return;
     }
-    console.log("Submitting Data:", formData);
 
     try {
       setIsSubmitting(true);
@@ -103,7 +106,8 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
           },
         }
       );
-      handleSuccess("Employee added successfully.");
+      if (response.status === 200)
+        handleSuccess("Employee added successfully.");
       setFormData({
         name: "",
         joiningDate: "",
@@ -114,7 +118,8 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
         salary: "",
         aadhar: "",
         panCard: "",
-        image: "",
+        gender: "",
+        dob: "",
       });
       onSubmit(response.data);
     } catch (error) {
@@ -124,6 +129,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       setIsSubmitting(false);
     }
   };
+
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-4 md:p-6 rounded shadow-md w-full max-w-4xl">
@@ -189,6 +195,33 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
               />
             </div>
             <div>
+              <label className="block font-medium mb-2">Gender</label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block font-medium mb-2">DOB</label>
+              <input
+                type="date"
+                name="dob"
+                value={formData.dob}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div>
               <label className="block font-medium mb-2">Job Role</label>
               <select
                 name="jobRole"
@@ -197,10 +230,15 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 className="w-full p-2 border border-gray-300 rounded"
               >
                 <option value="">Select Job Role</option>
-                <option value="Engineering">Engineering</option>
+                <option value="Full-stack Developer">
+                  Full-stack Developer
+                </option>
+                <option value="Back-end Developer">Back-end Developer</option>
+                <option value="Front-end Developer">Front-end Developer</option>
                 <option value="Marketing">Marketing</option>
-                <option value="Human Resources">Human Resources</option>
-                <option value="Finance">Finance</option>
+                <option value="SEO">SEO</option>
+                <option value="Digital Marketing">Digital Marketing</option>
+                <option value="Internship">Internship</option>
               </select>
             </div>
           </div>
