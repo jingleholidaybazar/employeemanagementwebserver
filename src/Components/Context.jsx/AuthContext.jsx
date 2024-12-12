@@ -9,7 +9,7 @@ function AuthContextProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [employees, setEmployees] = useState([]);
-  const [singaleEmployee, setSingaleEmployees] = useState([]);
+  const [singaleEmployee, setSingleEmployee] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [leavesList, setLeavesList] = useState([]);
   const [singaleLeave, setSingaleLeave] = useState([]);
@@ -81,11 +81,16 @@ function AuthContextProvider({ children }) {
     }
   };
 
-  const fetchSingaleEmployees = async () => {
+  const fetchSingleEmployee = async () => {
     try {
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("id");
-
+  
+      if (!token || !userId) {
+        setError("Missing required authorization or user ID. Please log in again.");
+        return;
+      }
+  
       const response = await axios.get(
         `${apiBaseUrl}/api/employee/getSingaleEmployee/${userId}`,
         {
@@ -94,12 +99,21 @@ function AuthContextProvider({ children }) {
           },
         }
       );
-      setSingaleEmployees(response.data.employee); // Update employees state with the fetched data
+  
+      if (response.status === 200 && response.data.employee) {
+        setSingleEmployee(response.data.employee); // Update employee state with the fetched data
+      } else {
+        setError("No employee data found.");
+      }
     } catch (error) {
       console.error("Error fetching employee:", error);
-      setError("Failed to load employee. Please try again.");
+      setError(
+        error.response?.data?.message ||
+        "Failed to load employee. Please try again."
+      );
     }
   };
+  
 
   const fetchDepartment = async () => {
     try {
@@ -157,7 +171,7 @@ function AuthContextProvider({ children }) {
   // Use useEffect to fetch employees when the component mounts
   useEffect(() => {
     fetchAllEmployees(); // Call the function to fetch employees
-    fetchSingaleEmployees();
+    fetchSingleEmployee();
     fetchDepartment();
     fetchLeaves();
     fetchSingaleLeave();
@@ -178,6 +192,7 @@ function AuthContextProvider({ children }) {
     }, 20000);
     return () => clearInterval(leaveInterval); // Cleanup on unmount
   }, []);
+  console.log(singaleEmployee);
 
   return (
     <UserContext.Provider

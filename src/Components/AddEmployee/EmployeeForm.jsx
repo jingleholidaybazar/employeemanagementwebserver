@@ -6,7 +6,7 @@ import { handleError, handleSuccess } from "../util";
 const EmployeeForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     name: "",
-    lastname: "",
+    joiningDate: "",
     email: "",
     password: "",
     mobile: "",
@@ -19,16 +19,25 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+
+    setFormData((prevState) => {
+      let formattedValue = value;
+      if (name === "joiningDate") {
+        // Format date to yyyy-mm-dd
+        formattedValue = new Date(value).toISOString().split("T")[0];
+      }
+
+      return {
+        ...prevState,
+        [name]: formattedValue,
+      };
+    });
   };
 
   const validateForm = () => {
     const {
       name,
-      lastname,
+      joiningDate,
       email,
       password,
       mobile,
@@ -40,7 +49,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
 
     if (
       !name ||
-      !lastname ||
+      !joiningDate ||
       !email ||
       !password ||
       !mobile ||
@@ -81,17 +90,23 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
     if (!validateForm()) {
       return;
     }
+    console.log("Submitting Data:", formData);
 
     try {
       setIsSubmitting(true);
       const response = await axios.post(
-        "https://management-system-jet.vercel.app/api/auth/addEmployee",
-        formData
+        "http://localhost:8080/api/auth/addEmployee",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
-      handleSuccess("Adding Employee Successfully");
+      handleSuccess("Employee added successfully.");
       setFormData({
         name: "",
-        lastname: "",
+        joiningDate: "",
         email: "",
         password: "",
         mobile: "",
@@ -99,17 +114,16 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
         salary: "",
         aadhar: "",
         panCard: "",
+        image: "",
       });
-
       onSubmit(response.data);
     } catch (error) {
-      console.error("Error adding employee:", error);
+      console.error("Error adding employee:", error.response);
       handleError("Failed to add employee.");
     } finally {
       setIsSubmitting(false);
     }
   };
-
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-4 md:p-6 rounded shadow-md w-full max-w-4xl">
@@ -129,11 +143,11 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
               />
             </div>
             <div>
-              <label className="block font-medium mb-2">Last Name</label>
+              <label className="block font-medium mb-2">Joining Date</label>
               <input
-                type="text"
-                name="lastname"
-                value={formData.lastname}
+                type="date"
+                name="joiningDate"
+                value={formData.joiningDate}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
               />
