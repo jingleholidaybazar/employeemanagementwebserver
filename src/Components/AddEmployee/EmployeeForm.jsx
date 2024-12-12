@@ -95,7 +95,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
     try {
       setIsSubmitting(true);
       const response = await axios.post(
-        "http://localhost:8080/api/auth/addEmployee",
+        "https://management-system-jet.vercel.app/api/auth/addEmployee",
         formData,
         {
           headers: {
