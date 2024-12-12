@@ -1,24 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaEllipsisV, FaTimes, FaSignOutAlt, FaCog } from "react-icons/fa"; // Import logout icon
+import { FaEllipsisV, FaTimes, FaSignOutAlt, FaCog } from "react-icons/fa";
 import { useAuth } from "../Context.jsx/AuthContext";
 
 function Navbar({ onToggleSidebar, onLogoutModal }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to track sidebar status
-  const dropdownRef = useRef(null); // Reference for dropdown menu
-  const userRef = useRef(null); // Reference for the user (image and name)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const userRef = useRef(null);
   const { singaleEmployee } = useAuth();
+  console.log(singaleEmployee);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
 
   const toggleSidebar = () => {
-    setIsSidebarOpen((prevState) => !prevState);
-    onToggleSidebar(); // Notify parent about sidebar status
+    const newState = !isSidebarOpen;
+    setIsSidebarOpen(newState);
+    onToggleSidebar(newState);
   };
 
-  // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -41,16 +42,13 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
     <nav className="bg-white text-black p-4 flex justify-between items-center shadow-md rounded-t-xl lg:rounded-t-3xl">
       {/* Left side: Toggle Button and Logo */}
       <div className="flex items-center">
-        {/* Toggle button for mobile screens */}
-        <button className="md:hidden p-2" onClick={toggleSidebar}>
-          {!isSidebarOpen ? (
-            <span className="text-2xl">☰</span> // Hamburger icon
-          ) : (
-            <span className="text-2xl font-bold">×</span> // Close icon
-          )}
+        <button
+          className="block md:hidden p-2 text-xl"
+          onClick={toggleSidebar}
+          aria-label="Toggle Sidebar"
+        >
+          ☰
         </button>
-
-        {/* Logo */}
         <img
           src="https://i.imgur.com/f1OH7Ef.png"
           alt="Logo"
@@ -58,7 +56,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
         />
       </div>
 
-      {/* Right side: Image, Name, and Dropdown */}
+      {/* Right side: User Section */}
       <div className="flex items-center space-x-3" ref={userRef}>
         <img
           src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
@@ -66,27 +64,25 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
           className="h-10 w-10 rounded-full cursor-pointer"
           onClick={toggleDropdown}
         />
-        <span
-          className="text-lg cursor-pointer capitalize"
+        <div
+          className="flex items-center space-x-2 cursor-pointer"
           onClick={toggleDropdown}
         >
-          {singaleEmployee?.name || "User"}
-        </span>
+          <span className="text-lg capitalize">
+            {singaleEmployee?.name || "User"}
+          </span>
+          <FaEllipsisV size={18} />
+        </div>
 
-        {/* Dropdown for user details and actions */}
+        {/* Dropdown */}
         <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={toggleDropdown}
-            className="text-lg focus:outline-none"
-          >
-            <FaEllipsisV className="hidden md:block" />
-          </button>
           {isDropdownOpen && (
             <div className="absolute right-0 mt-5 w-64 bg-white text-black rounded shadow-lg p-4">
               {/* Close Icon */}
               <button
                 className="absolute top-2 right-2 text-black hover:bg-red-600 rounded-md p-1 hover:text-white"
                 onClick={() => setIsDropdownOpen(false)}
+                aria-label="Close Dropdown"
               >
                 <FaTimes size={18} />
               </button>
@@ -120,8 +116,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
                   onClick={onLogoutModal}
                   className="block w-full px-4 py-2 text-left text-red-500 text-lg hover:bg-gray-200 rounded mt-2"
                 >
-                  <FaSignOutAlt className="mr-2 inline" /> Logout{" "}
-                  {/* Logout Icon */}
+                  <FaSignOutAlt className="mr-2 inline" /> Logout
                 </button>
               </div>
             </div>

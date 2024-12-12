@@ -56,7 +56,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       !password ||
       !mobile ||
       !jobRole ||
-      !salary ||
+      (!salary && salary !== "0" && salary.toUpperCase() !== "NA") ||
       !aadhar ||
       !panCard ||
       !gender ||
@@ -74,8 +74,8 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       return handleError("Please enter a valid 10-digit mobile number.");
     }
 
-    if (isNaN(salary) || parseFloat(salary) <= 0) {
-      return handleError("Please enter a valid salary.");
+    if (salary !== "NA" && (isNaN(salary) || parseFloat(salary) < 0)) {
+      return handleError("Please enter a valid salary or 'NA'.");
     }
 
     if (!/^\d{12}$/.test(aadhar)) {
@@ -88,7 +88,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
 
     return true;
   };
-console.log(formData)
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {

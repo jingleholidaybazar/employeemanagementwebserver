@@ -14,7 +14,7 @@ function Sidebar({ onOptionSelect, options, onLogoutModal }) {
     Dashboard: <FaTachometerAlt />,
     Profile: <FaUserTie />,
     Leave: <FaCalendarAlt />,
-    Salary: <FaMoneyCheckAlt />,
+    Attendances: <FaMoneyCheckAlt />,
     Settings: <FaCog />,
     Logout: <FaSignOutAlt />,
   };
@@ -27,7 +27,7 @@ function Sidebar({ onOptionSelect, options, onLogoutModal }) {
           {options.map((option) => (
             <li
               key={option}
-              className="py-3 px-4 hover:bg-gray-700 cursor-pointer text-lg md:text-xl lg:text-2xl flex items-center space-x-4"
+              className="py-3 px-4 hover:bg-gray-700 cursor-pointer text-lg flex items-center space-x-2"
               onClick={() => onOptionSelect(option)} // Handle option selection
             >
               {/* Render corresponding icon for the option */}

@@ -33,11 +33,8 @@ function Dashboard() {
         onToggleSidebar={toggleSidebar}
         onLogoutModal={handleLogoutModal}
       />
-
       {/* Layout Wrapper */}
       <div className="flex h-[calc(100vh-5rem)]">
-        {" "}
-        {/* Adjust for navbar height */}
         {/* Sidebar */}
         <div
           className={`fixed md:relative z-20 w-64 bg-gray-800 text-white h-full transition-transform duration-300 ${
@@ -54,9 +51,9 @@ function Dashboard() {
               "Employee",
               "Departments",
               "Leave",
-              "Salary",
+              "Attendance",
               "Settings",
-            ]} // Ensure "Dashboard" is in options
+            ]}
             handleLogoutModal={handleLogoutModal}
           />
         </div>

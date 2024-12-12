@@ -7,10 +7,10 @@ const Leave = () => {
   const [leaves, setLeaves] = useState([]);
   const [filteredLeaves, setFilteredLeaves] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showFullDescriptionModal, setShowFullDescriptionModal] =
-    useState(false);
+  const [showFullDescriptionModal, setShowFullDescriptionModal] = useState(false);
   const [selectedDescription, setSelectedDescription] = useState("");
   const [filter, setFilter] = useState("All"); // State for filtering
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const { leavesList } = useAuth();
   const token = localStorage.getItem("token");
 
@@ -62,11 +62,31 @@ const Leave = () => {
   // Handle filter change
   const applyFilter = (status) => {
     setFilter(status);
-    if (status === "All") {
-      setFilteredLeaves(leaves);
-    } else {
-      setFilteredLeaves(leaves.filter((leave) => leave.status === status));
-    }
+    const filtered = status === "All" ? leaves : leaves.filter((leave) => leave.status === status);
+
+    // Apply search query to filtered results
+    const searched = filtered.filter(
+      (leave) =>
+        leave.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        leave.employeeId.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    setFilteredLeaves(searched);
+  };
+
+  // Handle search query change
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    // Apply search query to current filtered leaves
+    const searched = leaves.filter(
+      (leave) =>
+        leave.name.toLowerCase().includes(query.toLowerCase()) ||
+        leave.employeeId.toLowerCase().includes(query.toLowerCase())
+    );
+
+    setFilteredLeaves(searched);
   };
 
   // Handle view full description
@@ -106,13 +126,19 @@ const Leave = () => {
 
   return (
     <div className="p-3">
-      {/* <h1 className="text-2xl font-bold text-center mb-1 text-gray-800">
-        Leave Management
-      </h1> */}
+      {/* Search bar and filter buttons */}
+      <div className="flex flex-wrap justify-between items-center pb-2 rounded-lg">
+        <div className="flex gap-3">
+          <input
+            type="text"
+            placeholder="Search by Name or ID"
+            className="px-4 py-2 border rounded w-60"
+            value={searchQuery}
+            onChange={handleSearch}
+          />
+        </div>
 
-      {/* Display total counts and filter buttons */}
-      <div className="flex flex-wrap justify-end gap-4 items-center  pb-2 rounded-lg ">
-        <div className=" flex gap-5">
+        <div className="flex gap-5">
           <button
             className={`font-semibold px-4 py-2 rounded bg-green-600 text-white ${
               filter === "Approved"
@@ -133,8 +159,6 @@ const Leave = () => {
           >
             Rejected: {counts.rejected}
           </button>
-        </div>
-        <div className=" flex gap-5">
           <button
             className={`font-semibold px-4 py-2 rounded bg-yellow-500 text-white ${
               filter === "Pending"

@@ -16,8 +16,8 @@ const DashboardContent = ({ activeComponent }) => {
         return <Department />;
       case "Leave":
         return <Leave />;
-      case "Salary":
-        return <div>Salary Content</div>;
+      case "Attendance":
+        return <div>Attendance Content</div>;
       case "Settings":
         return <div>Settings Content</div>;
       default:

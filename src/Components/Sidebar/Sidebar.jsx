@@ -16,7 +16,7 @@ function Sidebar({ onOptionSelect, options, handleLogoutModal }) {
     Employee: <FaUserTie className="mr-2" />,
     Departments: <FaBuilding className="mr-2" />,
     Leave: <FaCalendarAlt className="mr-2" />,
-    Salary: <FaMoneyCheckAlt className="mr-2" />,
+    Attendance: <FaMoneyCheckAlt className="mr-2" />,
     Settings: <FaCog className="mr-2" />,
   };
 

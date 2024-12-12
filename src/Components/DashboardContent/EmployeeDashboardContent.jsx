@@ -2,6 +2,8 @@ import React from "react";
 import Welcome from "../EmployeeProfile/Welcome";
 import EmployeeProfile from "../EmployeeProfile/EmployeeProfile";
 import RequestLeave from "../EmployeeProfile/RequestLeave";
+import Attendance from "../Attendance/Attendance";
+
 // Example components for sidebar content
 const Dashboard = () => (
   <div>
@@ -18,7 +20,11 @@ const Leave = () => (
     <RequestLeave />
   </div>
 );
-const Salary = () => <div>Salary Content</div>;
+const Attendances = () => (
+  <div>
+    <Attendance />
+  </div>
+);
 const Settings = () => <div>Settings Content</div>;
 
 const DashboardContent = ({ activeComponent }) => {
@@ -30,8 +36,8 @@ const DashboardContent = ({ activeComponent }) => {
         return <Profile />;
       case "Leave":
         return <Leave />;
-      case "Salary":
-        return <Salary />;
+      case "Attendances":
+        return <Attendances />; // Fixed here
       case "Settings":
         return <Settings />;
       default:
@@ -44,7 +50,7 @@ const DashboardContent = ({ activeComponent }) => {
   };
 
   return (
-    <div className="p-1  h-full overflow-y-auto">
+    <div className="p-1 h-full overflow-y-auto">
       {/* Render the active component content */}
       {renderContent()}
     </div>
