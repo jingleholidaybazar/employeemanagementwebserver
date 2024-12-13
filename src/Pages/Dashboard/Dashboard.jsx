@@ -51,7 +51,7 @@ function Dashboard() {
       <div className="flex h-[calc(100vh-5rem)]">
         {/* Sidebar */}
         <div
-          className={`fixed md:relative z-20 w-64 bg-gray-800 text-white h-full transition-transform duration-300 ${
+          className={`fixed md:relative z-20 w-64 bg-gray-600 text-white h-full transition-transform duration-300 ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           } md:translate-x-0`}
         >
