@@ -34,7 +34,7 @@ function EmployeeDashboard() {
   };
 
   return (
-    <div className="relative h-screen">
+    <div className="relative h-screen ">
       {/* Navbar - Fixed at the top */}
       <Navbar
         onToggleSidebar={toggleSidebar}

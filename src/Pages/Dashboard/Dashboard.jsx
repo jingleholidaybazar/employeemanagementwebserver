@@ -41,7 +41,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="relative h-screen">
+    <div className="relative h-screen ">
       {/* Navbar */}
       <Navbar
         onToggleSidebar={toggleSidebar}

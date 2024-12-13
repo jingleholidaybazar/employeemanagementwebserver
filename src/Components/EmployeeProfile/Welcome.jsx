@@ -90,14 +90,12 @@ const Welcome = () => {
 
   return (
     <div className="container mx-auto p-5">
-      <h1 className="text-3xl font-bold mb-5">Welcome</h1>
-
       {/* Leave Buttons */}
       <div className="flex flex-wrap justify-between gap-4 mb-5">
         {Object.keys(leaveData).map((status) => (
           <button
             key={status}
-            className={`w-full md:w-1/2 lg:w-64 h-40 p-2 rounded-lg text-2xl font-semibold shadow-sm shadow-gray-500 ${
+            className={`w-full md:w-1/2 lg:w-64 h-40 p-2 rounded-lg text-2xl font-semibold shadow-sm shadow-gray-500  ${
               selectedStatus === status
                 ? status === "approve"
                   ? "bg-green-500 text-white"
@@ -106,8 +104,8 @@ const Welcome = () => {
                   : status === "reject"
                   ? "bg-red-500 text-white"
                   : "bg-blue-500 text-white"
-                : "bg-white text-black"
-            }`}
+                : " bg-gray-100 text-gray-700"
+            } flex flex-col items-center justify-center`} // Added flex and centering
             onClick={() => handleSectionChange(status)}
           >
             {status === "approve" && (
@@ -123,10 +121,10 @@ const Welcome = () => {
               <FaListAlt className="text-5xl mb-2 text-blue-500" />
             )}
             <div>
-              <span className="block text-2xl font-bold">
+              <span className="block text-2xl font-bold text-center">
                 {status.charAt(0).toUpperCase() + status.slice(1)}:
               </span>
-              <span className="text-2xl font-semibold">
+              <span className="text-2xl font-semibold ">
                 {leaveData[status]}
               </span>
             </div>
