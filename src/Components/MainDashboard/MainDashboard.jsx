@@ -9,6 +9,7 @@ import {
   BarChart,
   Bar,
   Legend,
+  ResponsiveContainer
 } from "recharts";
 import { useAuth } from "../Context.jsx/AuthContext";
 
@@ -30,16 +31,58 @@ const MainDashboard = () => {
   ).length;
 
   const stats = [
-    { id: 1, title: "Total Employees", value: employees?.length || 0, bgColor: "bg-blue-500", icon: "👥" },
-    { id: 2, title: "Total Departments", value: departments?.length || 0, bgColor: "bg-green-500", icon: "🏢" },
-    { id: 3, title: "Monthly Pay", value: `₹${totalSalary.toLocaleString()}`, bgColor: "bg-yellow-300", icon: "💰" },
+    {
+      id: 1,
+      title: "Total Employees",
+      value: employees?.length || 0,
+      bgColor: "bg-blue-500",
+      icon: "👥",
+    },
+    {
+      id: 2,
+      title: "Total Departments",
+      value: departments?.length || 0,
+      bgColor: "bg-green-500",
+      icon: "🏢",
+    },
+    {
+      id: 3,
+      title: "Monthly Pay",
+      value: `₹${totalSalary.toLocaleString()}`,
+      bgColor: "bg-yellow-300",
+      icon: "💰",
+    },
   ];
 
   const leaveDetails = [
-    { id: 1, title: "Total Leave Applied", value: leavesList?.length || 0, bgColor: "bg-indigo-500", icon: "📝" },
-    { id: 2, title: "Total Approved", value: approvedCount, bgColor: "bg-green-500", icon: "✅" },
-    { id: 3, title: "Total Pending", value: pendingCount, bgColor: "bg-yellow-300", icon: "⏳" },
-    { id: 4, title: "Total Rejected", value: rejectedCount, bgColor: "bg-red-400", icon: "❌" },
+    {
+      id: 1,
+      title: "Total Leave Applied",
+      value: leavesList?.length || 0,
+      bgColor: "bg-indigo-500",
+      icon: "📝",
+    },
+    {
+      id: 2,
+      title: "Total Approved",
+      value: approvedCount,
+      bgColor: "bg-green-500",
+      icon: "✅",
+    },
+    {
+      id: 3,
+      title: "Total Pending",
+      value: pendingCount,
+      bgColor: "bg-yellow-300",
+      icon: "⏳",
+    },
+    {
+      id: 4,
+      title: "Total Rejected",
+      value: rejectedCount,
+      bgColor: "bg-red-400",
+      icon: "❌",
+    },
   ];
 
   // Dummy data for graphs
@@ -99,30 +142,34 @@ const MainDashboard = () => {
       </div>
 
       {/* Graphs Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="flex max-md:flex-wrap gap-8">
         {/* Attendance Graph */}
-        <div>
+        <div className="w-1/2 max-md:w-full p-5 shadow-md bg-slate-100 rounded-lg">
           <h3 className="text-xl font-semibold mb-4">Attendance Overview</h3>
-          <LineChart width={500} height={300} data={attendanceData}>
-            <Line type="monotone" dataKey="Attendance" stroke="#8884d8" />
-            <CartesianGrid stroke="#ccc" />
-            <XAxis dataKey="week" />
-            <YAxis />
-            <Tooltip />
-          </LineChart>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={attendanceData}>
+              <Line type="monotone" dataKey="Attendance" stroke="#8884d8" />
+              <CartesianGrid stroke="#ccc" />
+              <XAxis dataKey="week" />
+              <YAxis />
+              <Tooltip />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
 
         {/* Leave Trends Graph */}
-        <div>
+        <div className="w-1/2 max-md:w-full p-5 shadow-md bg-slate-100 rounded-lg">
           <h3 className="text-xl font-semibold mb-4">Leave Trends</h3>
-          <BarChart width={500} height={300} data={leaveTrendsData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="period" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="Leaves" fill="#82ca9d" />
-          </BarChart>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={leaveTrendsData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="period" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Leaves" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
