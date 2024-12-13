@@ -68,10 +68,10 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
           className="flex items-center space-x-2 cursor-pointer"
           onClick={toggleDropdown}
         >
-          <span className="text-lg capitalize">
+          <span className="text-md capitalize">
             {singaleEmployee?.name || "User"}
           </span>
-          <FaEllipsisV size={18} />
+          <FaEllipsisV size={18} className=" max-md:hidden" />
         </div>
 
         {/* Dropdown */}

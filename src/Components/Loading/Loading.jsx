@@ -24,7 +24,7 @@ const Loading = ({ message = "Loading..." }) => {
   }, []);
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
+    <div className="min-h-screen flex justify-center items-center ">
       <div className="flex flex-col items-center">
         <svg
           className={`animate-spin h-20 w-20 mb-4`}
