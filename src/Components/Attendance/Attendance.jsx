@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FaCheck, FaTimes, FaUserCheck } from "react-icons/fa";
+import { toast, Toaster } from "react-hot-toast";
 
 function Attendance() {
   const [employees, setEmployees] = useState([]);
   const [attendance, setAttendance] = useState({});
+  const [selectedDate, setSelectedDate] = useState("");
 
   // Fetch employee list (mocked for this example)
   useEffect(() => {
@@ -17,6 +19,9 @@ function Attendance() {
       setEmployees(mockEmployees);
     };
     fetchEmployees();
+
+    // Set default date to today
+    setSelectedDate(new Date().toISOString().split("T")[0]);
   }, []);
 
   // Handle attendance toggle
@@ -27,9 +32,36 @@ function Attendance() {
     }));
   };
 
+  // Handle attendance submission
+  const markAttendance = () => {
+    if (!selectedDate) {
+      toast.error("Please select a date");
+      return;
+    }
+
+    toast.success("Attendance marked successfully!");
+    console.log("Attendance marked for date:", selectedDate);
+    console.log("Attendance data:", attendance);
+  };
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+      <Toaster />
       <h1 className="text-2xl font-bold mb-6">Attendance</h1>
+
+      {/* Date Selection */}
+      <div className="flex items-center mb-6 gap-4">
+        <label className="text-lg font-semibold" htmlFor="attendance-date">
+          Select Date:
+        </label>
+        <input
+          id="attendance-date"
+          type="date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          className="p-2 border rounded-lg"
+        />
+      </div>
 
       {/* Employee List */}
       <div className="bg-white shadow-md rounded-lg p-4">
@@ -77,16 +109,24 @@ function Attendance() {
         <h2 className="text-xl font-semibold mb-4">Summary</h2>
         <p>Total Employees: {employees.length}</p>
         <p>
-          Present: {
-            Object.values(attendance).filter((status) => status === true).length
-          }
+          Present:{" "}
+          {Object.values(attendance).filter((status) => status === true).length}
         </p>
         <p>
-          Absent: {
-            employees.length -
-            Object.values(attendance).filter((status) => status === true).length
-          }
+          Absent:{" "}
+          {employees.length -
+            Object.values(attendance).filter((status) => status === true).length}
         </p>
+      </div>
+
+      {/* Mark Attendance Button */}
+      <div className="mt-6">
+        <button
+          onClick={markAttendance}
+          className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600"
+        >
+          Mark Attendance
+        </button>
       </div>
     </div>
   );

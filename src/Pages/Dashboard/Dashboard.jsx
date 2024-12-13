@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import DashboardContent from "../../Components/DashboardContent/DashboardContent";
@@ -11,6 +11,19 @@ function Dashboard() {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Retrieve the saved active component from localStorage on component mount
+  useEffect(() => {
+    const savedActiveComponent = localStorage.getItem("activeComponent");
+    if (savedActiveComponent) {
+      setActiveComponent(savedActiveComponent);
+    }
+  }, []);
+
+  // Save the active component to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("activeComponent", activeComponent);
+  }, [activeComponent]);
+
   const toggleSidebar = () => {
     setIsSidebarOpen((prevState) => !prevState);
   };
@@ -22,6 +35,7 @@ function Dashboard() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("activeComponent"); // Clear saved component on logout
     navigate("/"); // Redirect to the home page
     setIsLogoutModalOpen(false);
   };
@@ -101,3 +115,4 @@ function Dashboard() {
 }
 
 export default Dashboard;
+ 

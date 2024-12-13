@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EmployeeSidebar from "../../Components/Sidebar/EmployeeSidebar";
 import EmployeeDashboardContent from "../../Components/DashboardContent/EmployeeDashboardContent"; // Import DashboardContent
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../Components/Navbar/Navbar";
 
 function EmployeeDashboard() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeComponent, setActiveComponent] = useState("Dashboard"); // Set default active component to "Dashboard"
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeComponent, setActiveComponent] = useState(
+    localStorage.getItem("activeComponent") || "Dashboard" // Retrieve from localStorage or default to "Dashboard"
+  );
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Save activeComponent to localStorage whenever it changes
+    localStorage.setItem("activeComponent", activeComponent);
+  }, [activeComponent]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prevState) => !prevState);
@@ -21,6 +28,7 @@ function EmployeeDashboard() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("activeComponent"); // Clear saved state on logout
     navigate("/"); // Redirect to home page after logout
     setIsLogoutModalOpen(false);
   };
@@ -35,8 +43,6 @@ function EmployeeDashboard() {
 
       {/* Layout Wrapper */}
       <div className="flex h-[calc(100vh-5rem)]">
-        {" "}
-        {/* Adjusted to allow room for navbar */}
         {/* Sidebar - Fixed on the left */}
         <div
           className={`fixed md:relative z-20 w-64 bg-gray-800 text-white h-full p-5 transition-transform duration-300 ${
