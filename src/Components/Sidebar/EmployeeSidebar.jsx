@@ -6,6 +6,7 @@ import {
   FaMoneyCheckAlt,
   FaCog,
   FaSignOutAlt,
+  FaFileAlt,
 } from "react-icons/fa";
 
 function Sidebar({ onOptionSelect, options, onLogoutModal }) {
@@ -15,6 +16,7 @@ function Sidebar({ onOptionSelect, options, onLogoutModal }) {
     Profile: <FaUserTie />,
     Leave: <FaCalendarAlt />,
     Attendances: <FaMoneyCheckAlt />,
+    WorkReports: <FaFileAlt />,
     Settings: <FaCog />,
     Logout: <FaSignOutAlt />,
   };

@@ -13,6 +13,7 @@ function AuthContextProvider({ children }) {
   const [departments, setDepartments] = useState([]);
   const [leavesList, setLeavesList] = useState([]);
   const [singaleLeave, setSingaleLeave] = useState([]);
+  const [reports, setReports] = useState([]);
   const [error, setError] = useState(null);
 
   const logout = () => {
@@ -36,8 +37,6 @@ function AuthContextProvider({ children }) {
           },
         }
       );
-      
-      
     } catch (error) {
       console.error("Error updating employee:", error);
       setError("Failed to update employee. Please try again.");
@@ -86,12 +85,14 @@ function AuthContextProvider({ children }) {
     try {
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("id");
-  
+
       if (!token || !userId) {
-        setError("Missing required authorization or user ID. Please log in again.");
+        setError(
+          "Missing required authorization or user ID. Please log in again."
+        );
         return;
       }
-  
+
       const response = await axios.get(
         `${apiBaseUrl}/api/employee/getSingaleEmployee/${userId}`,
         {
@@ -100,7 +101,7 @@ function AuthContextProvider({ children }) {
           },
         }
       );
-  
+
       if (response.status === 200 && response.data.employee) {
         setSingleEmployee(response.data.employee); // Update employee state with the fetched data
       } else {
@@ -110,11 +111,10 @@ function AuthContextProvider({ children }) {
       console.error("Error fetching employee:", error);
       setError(
         error.response?.data?.message ||
-        "Failed to load employee. Please try again."
+          "Failed to load employee. Please try again."
       );
     }
   };
-  
 
   const fetchDepartment = async () => {
     try {
@@ -193,7 +193,6 @@ function AuthContextProvider({ children }) {
     }, 20000);
     return () => clearInterval(leaveInterval); // Cleanup on unmount
   }, []);
-
 
   return (
     <UserContext.Provider

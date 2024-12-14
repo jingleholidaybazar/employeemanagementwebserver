@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import FullDescriptionModal from "./FullDescriptionModal";
 import { useAuth } from "../../Components/Context.jsx/AuthContext";
+import { toast } from "react-hot-toast"; // Import toast
 
 const Leave = () => {
   const [leaves, setLeaves] = useState([]);
   const [filteredLeaves, setFilteredLeaves] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showFullDescriptionModal, setShowFullDescriptionModal] = useState(false);
+  const [showFullDescriptionModal, setShowFullDescriptionModal] =
+    useState(false);
   const [selectedDescription, setSelectedDescription] = useState("");
   const [filter, setFilter] = useState("All"); // State for filtering
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
@@ -53,16 +55,27 @@ const Leave = () => {
 
         // Reapply the filter after updating the status
         applyFilter(filter);
+
+        // Show toast notification
+        toast.success(
+          `Leave successfully ${
+            actionType === "approve" ? "approved" : "rejected"
+          }!`
+        );
       }
     } catch (error) {
       console.error("Error updating leave status:", error);
+      toast.error("Failed to update leave status.");
     }
   };
 
   // Handle filter change
   const applyFilter = (status) => {
     setFilter(status);
-    const filtered = status === "All" ? leaves : leaves.filter((leave) => leave.status === status);
+    const filtered =
+      status === "All"
+        ? leaves
+        : leaves.filter((leave) => leave.status === status);
 
     // Apply search query to filtered results
     const searched = filtered.filter(

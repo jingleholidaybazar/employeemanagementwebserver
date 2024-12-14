@@ -8,7 +8,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
   const dropdownRef = useRef(null);
   const userRef = useRef(null);
   const { singaleEmployee } = useAuth();
-  console.log(singaleEmployee);
+ 
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);

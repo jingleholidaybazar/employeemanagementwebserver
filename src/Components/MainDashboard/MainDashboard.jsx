@@ -1,20 +1,11 @@
-import React from "react";
-import {
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  BarChart,
-  Bar,
-  Legend,
-  ResponsiveContainer
-} from "recharts";
+import React, { useState } from "react";
+import { Bar } from "react-chartjs-2"; // Ensure this import matches your charting library
 import { useAuth } from "../Context.jsx/AuthContext";
 
 const MainDashboard = () => {
+  const [selectedPeriod, setSelectedPeriod] = useState("week"); // Moved inside the component
   const { leavesList, employees, departments } = useAuth();
+
   const totalSalary = employees.reduce(
     (total, employee) => total + employee.salary,
     0
@@ -35,21 +26,21 @@ const MainDashboard = () => {
       id: 1,
       title: "Total Employees",
       value: employees?.length || 0,
-      bgColor: "bg-blue-500",
+      bgColor: " bg-gray-100",
       icon: "👥",
     },
     {
       id: 2,
       title: "Total Departments",
       value: departments?.length || 0,
-      bgColor: "bg-green-500",
+      bgColor: "bg-gray-100",
       icon: "🏢",
     },
     {
       id: 3,
       title: "Monthly Pay",
       value: `₹${totalSalary.toLocaleString()}`,
-      bgColor: "bg-yellow-300",
+      bgColor: "bg-gray-100",
       icon: "💰",
     },
   ];
@@ -85,21 +76,61 @@ const MainDashboard = () => {
     },
   ];
 
-  // Dummy data for graphs
-  const attendanceData = [
-    { week: "Week 1", Attendance: 85 },
-    { week: "Week 2", Attendance: 88 },
-    { week: "Week 3", Attendance: 92 },
-    { week: "Week 4", Attendance: 87 },
-  ];
+  // Leave Graph Data
+  const leaveGraphData = {
+    labels:
+      selectedPeriod === "week"
+        ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        : ["1st", "2nd", "3rd", "4th"],
+    datasets: [
+      {
+        label: "Leave Count",
+        data:
+          selectedPeriod === "week"
+            ? [
+                leavesList?.length,
+                leavesList?.length,
+                leavesList?.length,
+                leavesList?.length,
+                leavesList?.length,
+                leavesList?.length,
+                leavesList?.length,
+              ] // Weekly data
+            : [
+                leavesList?.length,
+                leavesList?.length,
+                leavesList?.length,
+                leavesList?.length,
+              ], // Monthly data
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        borderWidth: 0,
+      },
+    ],
+  };
 
-  const leaveTrendsData = [
-    { period: "Jan", Leaves: 10 },
-    { period: "Feb", Leaves: 8 },
-    { period: "Mar", Leaves: 12 },
-    { period: "Apr", Leaves: 9 },
-    { period: "May", Leaves: 7 },
-  ];
+  // Attendance Graph Data
+  const attendanceGraphData = {
+    labels:
+      selectedPeriod === "week"
+        ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        : ["1st", "2nd", "3rd", "4th"],
+    datasets: [
+      {
+        label: "Attendance Count",
+        data:
+          selectedPeriod === "week"
+            ? [8, 7, 9, 8, 7, 8, 7] // Weekly data
+            : [35, 36, 37, 38], // Monthly data
+        backgroundColor: "rgba(153, 102, 255, 0.6)",
+        borderWidth: 0,
+      },
+    ],
+  };
+
+  // Handle graph period change
+  const handlePeriodChange = (event) => {
+    setSelectedPeriod(event.target.value);
+  };
 
   return (
     <div className="min-lg:p-4 space-y-8">
@@ -110,12 +141,14 @@ const MainDashboard = () => {
           {stats.map((stat) => (
             <div
               key={stat.id}
-              className={`flex items-center p-4 text-white rounded-lg shadow-lg ${stat.bgColor}`}
+              className="flex items-center p-4 text-white rounded-lg shadow-md bg-red-400"
             >
               <div className="text-4xl mr-4">{stat.icon}</div>
               <div>
-                <h2 className="text-lg font-semibold">{stat.title}</h2>
-                <p className="text-2xl font-bold">{stat.value}</p>
+                <h2 className="text-lg font-semibold text-white">
+                  {stat.title}
+                </h2>
+                <p className="text-2xl font-bold text-white">{stat.value}</p>
               </div>
             </div>
           ))}
@@ -129,7 +162,7 @@ const MainDashboard = () => {
           {leaveDetails.map((detail) => (
             <div
               key={detail.id}
-              className={`flex items-center p-4 text-white rounded-lg shadow-lg ${detail.bgColor}`}
+              className={`flex items-center p-4 text-white rounded-lg shadow-md ${detail.bgColor}`}
             >
               <div className="text-4xl mr-4">{detail.icon}</div>
               <div>
@@ -142,34 +175,43 @@ const MainDashboard = () => {
       </div>
 
       {/* Graphs Section */}
-      <div className="flex max-md:flex-wrap gap-8">
-        {/* Attendance Graph */}
-        <div className="w-1/2 max-md:w-full p-5 shadow-md bg-slate-100 rounded-lg">
-          <h3 className="text-xl font-semibold mb-4">Attendance Overview</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={attendanceData}>
-              <Line type="monotone" dataKey="Attendance" stroke="#8884d8" />
-              <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="week" />
-              <YAxis />
-              <Tooltip />
-            </LineChart>
-          </ResponsiveContainer>
+      <div className="flex max-md:flex-wrap gap-6">
+        {/* Leave Graph */}
+        <div className="w-full lg:w-1/2 p-4 shadow-md bg-slate-100 rounded-lg">
+          <div className=" flex justify-between ">
+            <h2 className="text-xl font-semibold mb-4">Leave Graph</h2>
+            <div className="mb-4">
+              {/* <label className="mr-2">Select Period:</label> */}
+              <select
+                value={selectedPeriod}
+                onChange={handlePeriodChange}
+                className="p-2 border rounded"
+              >
+                <option value="week">Week</option>
+                <option value="month">Month</option>
+              </select>
+            </div>
+          </div>
+          <Bar data={leaveGraphData} />
         </div>
 
-        {/* Leave Trends Graph */}
-        <div className="w-1/2 max-md:w-full p-5 shadow-md bg-slate-100 rounded-lg">
-          <h3 className="text-xl font-semibold mb-4">Leave Trends</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={leaveTrendsData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="period" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="Leaves" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
+        {/* Attendance Graph */}
+        <div className="w-full lg:w-1/2 p-4 shadow-md bg-slate-100 rounded-lg">
+          <div className=" flex justify-between">
+            <h2 className="text-xl font-semibold mb-4">Attendance Graph</h2>
+            <div className="mb-4">
+              {/* <label className="mr-2">Select Period:</label> */}
+              <select
+                value={selectedPeriod}
+                onChange={handlePeriodChange}
+                className="p-2 border rounded"
+              >
+                <option value="week">Week</option>
+                <option value="month">Month</option>
+              </select>
+            </div>
+          </div>
+          <Bar data={attendanceGraphData} />
         </div>
       </div>
     </div>

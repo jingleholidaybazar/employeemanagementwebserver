@@ -54,7 +54,14 @@ function EmployeeDashboard() {
               setActiveComponent(option);
               setIsSidebarOpen(false); // Close sidebar on small screens
             }}
-            options={["Dashboard", "Profile", "Leave", "Attendances", "Settings"]} // Ensure "Dashboard" is in the options
+            options={[
+              "Dashboard",
+              "Profile",
+              "WorkReports",
+              "Leave",
+              "Attendances",
+              "Settings",
+            ]} // Ensure "Dashboard" is in the options
             onLogoutModal={handleLogoutModal}
           />
         </div>

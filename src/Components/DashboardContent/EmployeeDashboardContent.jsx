@@ -3,6 +3,7 @@ import Welcome from "../EmployeeProfile/Welcome";
 import EmployeeProfile from "../EmployeeProfile/EmployeeProfile";
 import RequestLeave from "../EmployeeProfile/RequestLeave";
 import Attendance from "../Attendance/Attendance";
+import WorkReport from "../EmployeeProfile/WorkReport";
 
 // Example components for sidebar content
 const Dashboard = () => (
@@ -25,34 +26,50 @@ const Attendances = () => (
     <Attendance />
   </div>
 );
-const Settings = () => <div>Settings Content</div>;
+const WorkReports = () => (
+  <div>
+    <WorkReport />
+  </div>
+);
+const Settings = () => (
+  <div>
+    Settings Content
+  </div>
+);
 
 const DashboardContent = ({ activeComponent }) => {
-  const renderContent = () => {
-    switch (activeComponent) {
-      case "Dashboard":
-        return <Dashboard />;
-      case "Profile":
-        return <Profile />;
-      case "Leave":
-        return <Leave />;
-      case "Attendances":
-        return <Attendances />; // Fixed here
-      case "Settings":
-        return <Settings />;
-      default:
-        return (
-          <div className="text-gray-500 text-center">
-            Please select a section from the sidebar to view details.
-          </div>
-        );
-    }
-  };
+  let content;
+  switch (activeComponent) {
+    case "Dashboard":
+      content = <Dashboard />;
+      break;
+    case "Profile":
+      content = <Profile />;
+      break;
+    case "Leave":
+      content = <Leave />;
+      break;
+    case "Attendances":
+      content = <Attendances />;
+      break;
+    case "WorkReports":
+      content = <WorkReports />;
+      break;
+    case "Settings":
+      content = <Settings />;
+      break;
+    default:
+      content = (
+        <div className="text-gray-500 text-center">
+          Please select a section from the sidebar to view details.
+        </div>
+      );
+      break;
+  }
 
   return (
     <div className="p-1 h-full overflow-y-auto">
-      {/* Render the active component content */}
-      {renderContent()}
+      {content}
     </div>
   );
 };
