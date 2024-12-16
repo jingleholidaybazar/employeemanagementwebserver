@@ -35,13 +35,14 @@ function Dashboard() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("name");
     localStorage.removeItem("activeComponent"); // Clear saved component on logout
     navigate("/"); // Redirect to the home page
     setIsLogoutModalOpen(false);
   };
 
   return (
-    <div className="relative h-screen ">
+    <div className="relative h-screen bg-gray-100 ">
       {/* Navbar */}
       <Navbar
         onToggleSidebar={toggleSidebar}
@@ -63,9 +64,10 @@ function Dashboard() {
             options={[
               "Dashboard",
               "Employee",
-              "Departments",
-              "Leave",
+              "WorkReports",
               "Attendance",
+              "Leave",
+              "Departments",
               "Settings",
             ]}
             handleLogoutModal={handleLogoutModal}
@@ -79,7 +81,7 @@ function Dashboard() {
           />
         )}
         {/* Main Content */}
-        <div className="flex-1 overflow-y-auto p-5 max-lg:p-2">
+        <div className="flex-1 overflow-y-auto p-5 max-lg:p-2 ">
           {/* Render dynamic content based on activeComponent */}
           <DashboardContent activeComponent={activeComponent} />
         </div>

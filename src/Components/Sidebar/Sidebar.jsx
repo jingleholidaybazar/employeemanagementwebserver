@@ -7,6 +7,7 @@ import {
   FaCog,
   FaSignOutAlt,
   FaBuilding,
+  FaFileAlt,
 } from "react-icons/fa";
 
 function Sidebar({ onOptionSelect, options, handleLogoutModal }) {
@@ -14,6 +15,7 @@ function Sidebar({ onOptionSelect, options, handleLogoutModal }) {
   const optionIcons = {
     Dashboard: <FaTachometerAlt className="mr-2" />,
     Employee: <FaUserTie className="mr-2" />,
+    WorkReports: <FaFileAlt className="mr-2" />,
     Departments: <FaBuilding className="mr-2" />,
     Leave: <FaCalendarAlt className="mr-2" />,
     Attendance: <FaMoneyCheckAlt className="mr-2" />,

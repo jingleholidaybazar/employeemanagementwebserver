@@ -3,6 +3,7 @@ import MainDashboard from "../MainDashboard/MainDashboard";
 import Employee from "../Employees/Employees";
 import Leave from "../../Pages/Leave/Leave";
 import Department from "../Department/Department";
+import WorkReport from "../WorkReport/WorkReports";
 
 // Dashboard content component
 const DashboardContent = ({ activeComponent }) => {
@@ -12,6 +13,8 @@ const DashboardContent = ({ activeComponent }) => {
         return <MainDashboard />;
       case "Employee":
         return <Employee />;
+      case "WorkReports":
+        return <WorkReport />;
       case "Departments":
         return <Department />;
       case "Leave":
@@ -26,7 +29,7 @@ const DashboardContent = ({ activeComponent }) => {
   };
 
   return (
-    <div className="p-1 h-full overflow-y-auto">
+    <div className="p-1 h-full overflow-y-auto ">
       {/* Render the active component content */}
       {renderContent()}
     </div>
