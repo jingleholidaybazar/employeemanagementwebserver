@@ -93,7 +93,7 @@ const RequestLeave = () => {
   }
 
   return (
-    <div className="p-6 shadow-md bg-white rounded-md">
+    <div className="p-1 py-3 shadow-md bg-white rounded-md">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Leave Requests</h2>
         <button

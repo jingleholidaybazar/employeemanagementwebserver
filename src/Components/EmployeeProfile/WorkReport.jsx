@@ -135,7 +135,7 @@ const WorkReport = () => {
   };
 
   return (
-    <div className="p-6 space-y-6 shadow-md rounded-md shadow-gray-400">
+    <div className="p-2 space-y-6 shadow-md rounded-md shadow-gray-400">
       {/* Send Report Button */}
       <div className="flex justify-end">
         <button

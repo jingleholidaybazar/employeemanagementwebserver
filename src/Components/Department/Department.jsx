@@ -94,7 +94,7 @@ const Department = () => {
   );
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 max-md:p-1">
       <div className="flex justify-between items-center mb-4">
         <div className="relative w-1/3">
           <input

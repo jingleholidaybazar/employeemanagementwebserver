@@ -79,7 +79,7 @@ function Dashboard() {
           />
         )}
         {/* Main Content */}
-        <div className="flex-1 overflow-y-auto p-5">
+        <div className="flex-1 overflow-y-auto p-5 max-lg:p-2">
           {/* Render dynamic content based on activeComponent */}
           <DashboardContent activeComponent={activeComponent} />
         </div>
@@ -115,4 +115,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
- 

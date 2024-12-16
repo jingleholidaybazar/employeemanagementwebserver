@@ -100,7 +100,7 @@ const Welcome = () => {
   };
 
   return (
-    <div className="container mx-auto p-5">
+    <div className="container mx-auto p-2 max-md:px-2">
       {/* Loading Spinner */}
       {loading ? (
         <Loading />

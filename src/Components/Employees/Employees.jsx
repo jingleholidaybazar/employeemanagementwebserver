@@ -16,12 +16,10 @@ const Employees = () => {
   const [employeeToDelete, setEmployeeToDelete] = useState(null); // State to store the employee to be deleted
   const { deleteEmployee, updateEmployee, employees } = useAuth();
 
- 
   useEffect(() => {
     setEmployeesList(employees);
   }, [employees]);
 
- 
   const onEdit = (employee) => {
     setEmployeeToEdit(employee);
     setShowForm(true);
@@ -65,12 +63,12 @@ const Employees = () => {
   );
 
   return (
-    <div className="max-lg:p-4">
+    <div className="">
       <h2 className="text-2xl font-semibold text-center uppercase mb-3">
         Employee Details
       </h2>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between max-md:gap-5">
         <div className="mb-4 w-96">
           <input
             type="text"

@@ -138,22 +138,22 @@ const Leave = () => {
   };
 
   return (
-    <div className="p-3">
+    <div className="">
       {/* Search bar and filter buttons */}
-      <div className="flex flex-wrap justify-between items-center pb-2 rounded-lg">
-        <div className="flex gap-3">
+      <div className="flex max-md:flex-wrap space-y-3 justify-between items-center pb-2 rounded-lg w-full ">
+        <div className="flex gap-3 max-md:w-full px-2">
           <input
             type="text"
             placeholder="Search by Name or ID"
-            className="px-4 py-2 border rounded w-60"
+            className="px-4 py-2 border rounded w-60 max-md:w-full"
             value={searchQuery}
             onChange={handleSearch}
           />
         </div>
 
-        <div className="flex gap-5">
+        <div className="flex max-md:flex-wrap justify-evenly  gap-2">
           <button
-            className={`font-semibold px-4 py-2 rounded bg-green-600 text-white ${
+            className={`font-semibold px-4 py-2 rounded bg-green-600 text-white max-md:w-2/5 ${
               filter === "Approved"
                 ? "bg-green-500 text-white"
                 : "hover:text-green-600 hover:bg-green-100"
@@ -163,7 +163,7 @@ const Leave = () => {
             Approved: {counts.approved}
           </button>
           <button
-            className={`font-semibold px-4 py-2 rounded bg-red-500 text-white ${
+            className={`font-semibold px-4 py-2 rounded bg-red-500 text-white max-md:w-2/5  ${
               filter === "Rejected"
                 ? "bg-red-500 text-white"
                 : "hover:text-red-600 hover:bg-red-100"
@@ -173,7 +173,7 @@ const Leave = () => {
             Rejected: {counts.rejected}
           </button>
           <button
-            className={`font-semibold px-4 py-2 rounded bg-yellow-500 text-white ${
+            className={`font-semibold px-4 py-2 rounded bg-yellow-500 text-white max-md:w-2/5 ${
               filter === "Pending"
                 ? "bg-yellow-500 text-white"
                 : "hover:text-yellow-600 hover:bg-yellow-100"
@@ -183,7 +183,7 @@ const Leave = () => {
             Pending: {counts.pending}
           </button>
           <button
-            className={`font-semibold px-4 py-2 rounded ${
+            className={`font-semibold px-4 py-2 rounded max-md:w-2/5 ${
               filter === "All"
                 ? "bg-blue-500 text-white"
                 : "text-blue-600 hover:bg-blue-100"
@@ -202,7 +202,7 @@ const Leave = () => {
       ) : (
         <div className="overflow-x-auto shadow-md">
           <table className="w-full text-sm text-left text-gray-500 bg-white shadow-md rounded-lg">
-            <thead className="bg-red-500 uppercase text-white">
+            <thead className="bg-red-500 uppercase text-white ">
               <tr>
                 <th className="px-4 py-3">S No</th>
                 <th className="px-4 py-3">Employee ID</th>
