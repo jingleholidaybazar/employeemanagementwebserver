@@ -62,7 +62,10 @@ const Attendance = () => {
 
   // Automatically mark attendance as "Leave" after 2:30 PM if not marked yet
   useEffect(() => {
-    if (currentTime > "14:30" && !markedDates.some((entry) => entry.date === today)) {
+    if (
+      currentTime > "14:30" &&
+      !markedDates.some((entry) => entry.date === today)
+    ) {
       markAttendanceAsLeave();
     }
   }, [currentTime, markedDates]);
@@ -72,7 +75,7 @@ const Attendance = () => {
       const token = localStorage.getItem("token");
       // Call the API to mark attendance as Leave
       const response = await axios.post(
-        "http://localhost:8080/api/attendance/markAttendance",
+        "https://management-system-jet.vercel.app/api/attendance/markAttendance",
         { date: today, type: "leave" },
         {
           headers: {
@@ -111,7 +114,7 @@ const Attendance = () => {
         const token = localStorage.getItem("token");
         // Call the API to mark attendance
         const response = await axios.post(
-          "http://localhost:8080/api/attendance/markAttendance",
+          "https://management-system-jet.vercel.app/api/attendance/markAttendance",
           { date: today, type },
           {
             headers: {
@@ -208,9 +211,12 @@ const Attendance = () => {
               );
               let bgColor = "bg-gray-200";
 
-              if (markedDate?.type === "fullDay") bgColor = "bg-green-500 text-white";
-              if (markedDate?.type === "halfDay") bgColor = "bg-yellow-500 text-white";
-              if (markedDate?.type === "leave") bgColor = "bg-red-500 text-white";
+              if (markedDate?.type === "fullDay")
+                bgColor = "bg-green-500 text-white";
+              if (markedDate?.type === "halfDay")
+                bgColor = "bg-yellow-500 text-white";
+              if (markedDate?.type === "leave")
+                bgColor = "bg-red-500 text-white";
 
               return (
                 <div
