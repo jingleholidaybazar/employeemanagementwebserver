@@ -66,7 +66,7 @@ function EmployeeProfile() {
           <img
             src={
               employee.image ||
-              "https://fps.cdnpk.net/images/ai/image-generator/gallery/65446.webp?w=1920&h=1920&q=90"
+              "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
             }
             alt="Employee"
             className="w-40 h-40 sm:w-60 sm:h-60 lg:w-80 lg:h-80 rounded-md object-cover shadow-md"

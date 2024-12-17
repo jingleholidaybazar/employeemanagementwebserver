@@ -43,7 +43,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="relative h-screen bg-gray-100 ">
+    <div className="relative h-screen bg-gray-50 ">
       {/* Navbar */}
       <Navbar
         onToggleSidebar={toggleSidebar}

@@ -4,6 +4,7 @@ import Employee from "../Employees/Employees";
 import Leave from "../../Pages/Leave/Leave";
 import Department from "../Department/Department";
 import WorkReport from "../WorkReport/WorkReports";
+import AdminAttendance from "../Attendance/AdminAttendance";
 
 // Dashboard content component
 const DashboardContent = ({ activeComponent }) => {
@@ -20,7 +21,11 @@ const DashboardContent = ({ activeComponent }) => {
       case "Leave":
         return <Leave />;
       case "Attendance":
-        return <div>Attendance Content</div>;
+        return (
+          <div>
+            <AdminAttendance />
+          </div>
+        );
       case "Settings":
         return <div>Settings Content</div>;
       default:

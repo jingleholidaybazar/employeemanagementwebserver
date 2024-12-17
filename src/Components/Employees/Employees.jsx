@@ -92,7 +92,7 @@ const Employees = () => {
       </div>
 
       {/* Table container */}
-      <div className="md:overflow-x-auto shadow-md w-full rounded-lg bg-white">
+      <div className="shadow-md w-full rounded-lg bg-white overflow-x-auto">
         <table className="w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-red-500 text-left text-white">

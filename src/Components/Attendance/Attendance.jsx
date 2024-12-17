@@ -114,7 +114,7 @@ const Attendance = () => {
   return (
     <div className="p-1 min-h-screen">
       <Toaster />
-      <div className="flex flex-wrap justify-evenly gap-4 mb-6">
+      <div className="flex flex-wrap justify-evenly  gap-4 mb-6">
         {["Full Day", "Half Day", "Leave", "Total Attendance"].map(
           (item, index) => {
             const statKey = ["fullDay", "halfDay", "leave", "total"][index];
@@ -129,15 +129,16 @@ const Attendance = () => {
                 </h2>
                 <p className={`text-3xl text-${colors[index]}-600`}>
                   {attendanceStats[statKey]}
-                </p>
+                </p> 
+                
               </div>
             );
           }
         )}
       </div>
 
-      <div className="flex max-md:flex-wrap gap-3">
-        <div className="flex-1 bg-white p-6 rounded shadow w-2/3 max-md:w-full">
+      <div className="flex max-md:flex-wrap gap-5">
+        <div className="flex-1 bg-slate-50 p-6 rounded shadow-md w-2/3 max-md:w-full">
           <form onSubmit={handleMarkAttendance}>
             <input
               type="text"
@@ -176,7 +177,7 @@ const Attendance = () => {
             })}
           </div>
         </div>
-        <div className="bg-white p-6 rounded shadow w-1/3 max-md:w-full">
+        <div className="bg-slate-50 p-6 rounded shadow-md w-1/3 max-md:w-full">
           <h2 className="text-lg font-bold mb-2">Today</h2>
           <p className="text-xl">{dayjs().format("DD MMMM YYYY")}</p>
         </div>

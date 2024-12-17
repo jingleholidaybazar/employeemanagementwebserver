@@ -112,7 +112,7 @@ const Leave = () => {
     setShowFullDescriptionModal(false);
   };
 
-  const truncateDescription = (description, charLimit = 30) => {
+  const truncateDescription = (description, charLimit = 0) => {
     return description.length > charLimit
       ? description.slice(0, charLimit) + "..."
       : description;
@@ -202,7 +202,7 @@ const Leave = () => {
       ) : (
         <div className="overflow-x-auto shadow-md">
           <table className="w-full text-sm text-left text-gray-500 bg-white shadow-md rounded-lg">
-            <thead className="bg-red-500 uppercase text-white ">
+            <thead className="bg-red-500 uppercase text-white font-semibold ">
               <tr>
                 <th className="px-4 py-3">S No</th>
                 <th className="px-4 py-3">Employee ID</th>
@@ -212,7 +212,7 @@ const Leave = () => {
                 <th className="px-4 py-3">To</th>
                 <th className="px-4 py-3">Day(s)</th>
                 <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3 text-right">Action</th>
+                <th className="px-4 py-3 text-center">Action</th>
               </tr>
             </thead>
             <tbody>

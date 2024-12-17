@@ -111,36 +111,34 @@ const Welcome = () => {
             {Object.keys(leaveData).map((status) => (
               <button
                 key={status}
-                className={`w-full lg:w-64 h-40 p-2 rounded-lg text-2xl font-semibold shadow-sm shadow-gray-500  ${
-                  selectedStatus === status
-                    ? status === "approve"
-                      ? "bg-green-500 text-white"
-                      : status === "pending"
-                      ? "bg-yellow-500 text-white"
-                      : status === "reject"
-                      ? "bg-red-500 text-white"
-                      : "bg-blue-500 text-white"
-                    : " bg-gray-100 text-gray-700"
-                } flex flex-col items-center justify-center`} // Added flex and centering
+                className={`w-full lg:w-64 h-40 p-2 rounded-lg text-2xl font-semibold shadow-sm shadow-gray-500 flex flex-col items-center justify-center ${
+                  status === "approve"
+                    ? "bg-green-200 text-green-800" // Default for Approved
+                    : status === "pending"
+                    ? "bg-yellow-200 text-yellow-800" // Default for Pending
+                    : status === "reject"
+                    ? "bg-red-200 text-red-800" // Default for Rejected
+                    : "bg-blue-200 text-blue-800" // Default for Total
+                } ${selectedStatus === status ? "ring-4 ring-gray-400" : ""}`} // Add ring for selected state
                 onClick={() => handleSectionChange(status)}
               >
                 {status === "approve" && (
-                  <FaCheck className="text-5xl mb-2 text-green-500" />
+                  <FaCheck className="text-5xl mb-2 text-green-600" />
                 )}
                 {status === "pending" && (
-                  <FaClock className="text-5xl mb-2 text-yellow-500" />
+                  <FaClock className="text-5xl mb-2 text-yellow-600" />
                 )}
                 {status === "reject" && (
-                  <FaTimesCircle className="text-5xl mb-2 text-red-500" />
+                  <FaTimesCircle className="text-5xl mb-2 text-red-600" />
                 )}
                 {status === "total" && (
-                  <FaListAlt className="text-5xl mb-2 text-blue-500" />
+                  <FaListAlt className="text-5xl mb-2 text-blue-600" />
                 )}
                 <div>
                   <span className="block text-2xl font-bold text-center">
                     {status.charAt(0).toUpperCase() + status.slice(1)}:
                   </span>
-                  <span className="text-2xl font-semibold ">
+                  <span className="text-2xl font-semibold">
                     {leaveData[status]}
                   </span>
                 </div>
