@@ -114,23 +114,38 @@ const Attendance = () => {
   return (
     <div className="p-1 min-h-screen">
       <Toaster />
-      <div className="flex flex-wrap justify-evenly  gap-4 mb-6">
+      <div className="flex flex-wrap justify-evenly gap-4 mb-6">
         {["Full Day", "Half Day", "Leave", "Total Attendance"].map(
           (item, index) => {
             const statKey = ["fullDay", "halfDay", "leave", "total"][index];
-            const colors = ["green", "yellow", "red", "blue"];
+            const bgColors = [
+              "bg-green-100",
+              "bg-yellow-100",
+              "bg-red-100",
+              "bg-blue-100",
+            ];
+            const textColors = [
+              "text-green-600",
+              "text-yellow-600",
+              "text-red-600",
+              "text-blue-600",
+            ];
+
             return (
               <div
                 key={item}
-                className={`text-center h-36 w-60 max-sm:w-full rounded-md shadow-md`}
+                className={`h-36 w-60 max-sm:w-full rounded-md shadow-md flex flex-col items-center justify-center ${bgColors[index]}`}
               >
-                <h2 className={`text-2xl font-bold text-${colors[index]}-600`}>
+                <h2
+                  className={`text-2xl font-bold ${textColors[index]} text-center`}
+                >
                   {item}
                 </h2>
-                <p className={`text-3xl text-${colors[index]}-600`}>
+                <p
+                  className={`text-3xl font-bold ${textColors[index]} text-center`}
+                >
                   {attendanceStats[statKey]}
-                </p> 
-                
+                </p>
               </div>
             );
           }
