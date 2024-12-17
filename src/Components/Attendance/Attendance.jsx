@@ -122,7 +122,7 @@ const Attendance = () => {
             return (
               <div
                 key={item}
-                className={`text-center h-36 w-60 rounded-md shadow-md`}
+                className={`text-center h-36 w-60 max-sm:w-full rounded-md shadow-md`}
               >
                 <h2 className={`text-2xl font-bold text-${colors[index]}-600`}>
                   {item}
@@ -136,8 +136,8 @@ const Attendance = () => {
         )}
       </div>
 
-      <div className="flex gap-3">
-        <div className="flex-1 bg-white p-6 rounded shadow w-2/3">
+      <div className="flex max-md:flex-wrap gap-3">
+        <div className="flex-1 bg-white p-6 rounded shadow w-2/3 max-md:w-full">
           <form onSubmit={handleMarkAttendance}>
             <input
               type="text"
@@ -146,7 +146,7 @@ const Attendance = () => {
               value={today}
             />
             <div className="flex justify-center">
-              <button className="bg-green-500 text-white px-4 py-2 mt-2 rounded">
+              <button className="bg-green-500 text-white px-4 py-2 mt-2 mb-2 rounded">
                 Mark Attendance
               </button>
             </div>
@@ -176,7 +176,7 @@ const Attendance = () => {
             })}
           </div>
         </div>
-        <div className="bg-white p-6 rounded shadow w-1/3">
+        <div className="bg-white p-6 rounded shadow w-1/3 max-md:w-full">
           <h2 className="text-lg font-bold mb-2">Today</h2>
           <p className="text-xl">{dayjs().format("DD MMMM YYYY")}</p>
         </div>
