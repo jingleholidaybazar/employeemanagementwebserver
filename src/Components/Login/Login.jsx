@@ -32,13 +32,14 @@ const Login = () => {
       );
 
       if (response.status === 200) {
-        const { role, _id } = response.data.employee;
+        const { role, _id, name } = response.data.employee;
         const { token } = response.data;
         // Store token in local storage
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
         localStorage.setItem("id", _id);
-        handleSuccess("Login successful!");
+        localStorage.setItem("name", name);
+        handleSuccess("Login successfull!");
 
         // Navigate based on user role
         if (role === "admin") {

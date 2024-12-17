@@ -8,7 +8,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
   const dropdownRef = useRef(null);
   const userRef = useRef(null);
   const { singaleEmployee } = useAuth();
- 
+  const name = localStorage.getItem("name");
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
@@ -68,9 +68,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
           className="flex items-center space-x-2 cursor-pointer"
           onClick={toggleDropdown}
         >
-          <span className="text-md capitalize">
-            {singaleEmployee?.name || "User"}
-          </span>
+          <span className="text-md capitalize">{name || "User"}</span>
           <FaEllipsisV size={18} className=" max-md:hidden" />
         </div>
 
@@ -95,9 +93,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
                   className="h-12 w-12 rounded-full mr-3"
                 />
                 <div>
-                  <p className="font-semibold capitalize">
-                    {singaleEmployee?.name || "User"}
-                  </p>
+                  <p className="font-semibold capitalize">{name || "User"}</p>
                   <p className="text-sm text-gray-500 capitalize">
                     {singaleEmployee?.jobRole || "Role"}
                   </p>

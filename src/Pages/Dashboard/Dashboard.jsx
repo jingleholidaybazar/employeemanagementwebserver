@@ -36,6 +36,7 @@ function Dashboard() {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("name");
+    localStorage.removeItem("id");
     localStorage.removeItem("activeComponent"); // Clear saved component on logout
     navigate("/"); // Redirect to the home page
     setIsLogoutModalOpen(false);
