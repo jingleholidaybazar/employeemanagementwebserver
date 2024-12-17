@@ -168,7 +168,7 @@ const Attendance = () => {
               return (
                 <div
                   key={i}
-                  className={`h-20 flex items-center justify-center rounded ${bgColor}`}
+                  className={`h-20 max-sm:h-12 flex items-center justify-center rounded ${bgColor}`}
                 >
                   {date.date()}
                 </div>
