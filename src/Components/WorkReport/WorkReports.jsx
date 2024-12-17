@@ -132,6 +132,7 @@ const WorkReport = () => {
                 </tr>
               ))}
             </tbody>
+            
           </table>
         )}
       </div>

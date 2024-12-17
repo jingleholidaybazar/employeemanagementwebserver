@@ -27,7 +27,7 @@ const Attendance = () => {
       try {
         const formattedMonth = currentDate.format("YYYY-MM");
         const response = await axios.get(
-          `http://localhost:8080/api/attendance/getAttendance/${userId}/${formattedMonth}`,
+          `https://management-system-jet.vercel.app/api/attendance/getAttendance/${userId}/${formattedMonth}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const data = response.data.attendanceRecords || [];
@@ -65,7 +65,7 @@ const Attendance = () => {
   const markAttendance = async (type) => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/attendance/markAttendance",
+        "https://management-system-jet.vercel.app/api/attendance/markAttendance",
         { date: today, type },
         { headers: { Authorization: `Bearer ${token}` } }
       );

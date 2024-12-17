@@ -154,10 +154,14 @@ const WorkReport = () => {
           {/* Work Report Form */}
           {isFormVisible && (
             <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-              <h2 className="text-2xl font-semibold mb-4">Submit Work Report</h2>
+              <h2 className="text-2xl font-semibold mb-4">
+                Submit Work Report
+              </h2>
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold">Work Report</label>
+                  <label className="block text-sm font-semibold">
+                    Work Report
+                  </label>
                   <textarea
                     name="workReport"
                     value={reportData.workReport}
@@ -230,7 +234,9 @@ const WorkReport = () => {
                 className="bg-white p-6 rounded-lg shadow-lg w-1/2 max-md:w-5/6 "
                 onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
               >
-                <h3 className="text-xl font-semibold mb-4">Work Report Details</h3>
+                <h3 className="text-xl font-semibold mb-4">
+                  Work Report Details
+                </h3>
                 <p>{modalData.workReport}</p>
                 <button
                   onClick={() => setModalData(null)} // Close the modal
