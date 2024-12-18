@@ -25,23 +25,19 @@ const Login = () => {
     try {
       const response = await axios.post(
         "https://management-system-jet.vercel.app/api/auth/login",
-        {
-          email,
-          password,
-        }
+        { email, password }
       );
 
       if (response.status === 200) {
         const { role, _id, name } = response.data.employee;
         const { token } = response.data;
-        // Store token in local storage
+
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
         localStorage.setItem("id", _id);
         localStorage.setItem("name", name);
-        handleSuccess("Login successfull!");
+        handleSuccess("Login successful!");
 
-        // Navigate based on user role
         if (role === "admin") {
           navigate("/adminDashboard");
         } else if (role === "employee") {
@@ -50,7 +46,6 @@ const Login = () => {
           handleError("User type not recognized.");
         }
 
-        // Clear the input fields
         setEmail("");
         setPassword("");
       }
@@ -64,19 +59,30 @@ const Login = () => {
     }
   };
 
+  const handleGoogleLogin = () => {
+    handleSuccess("Google login is not implemented in this version.");
+  };
+
   return (
     <section className="min-h-screen flex box-border justify-center items-center">
-      <div className="bg-gray-100 rounded-2xl flex max-w-5xl p-5 items-center shadow-lg">
+      <div className="bg-gray-100 rounded-2xl flex max-w-5xl p-2 items-center shadow-lg">
         {/* Image Section */}
         <div className="md:block hidden w-1/2">
           <img
             className="rounded-2xl max-h-[1600px]"
             src="https://img.freepik.com/free-vector/programmer-working-isometric-style_52683-16803.jpg"
-            alt="login form"
+            alt="Login Form"
           />
         </div>
 
         <div className="md:w-1/2 px-8">
+          <div className="flex items-center justify-center">
+            <img
+              src="https://i.imgur.com/f1OH7Ef.png"
+              alt="Logo"
+              className="w-64 h-20 mb-10"
+            />
+          </div>
           <h2 className="font-bold text-3xl uppercase text-center text-[#002D74]">
             Login
           </h2>
@@ -130,7 +136,24 @@ const Login = () => {
           <div className="mt-6 items-center text-gray-100">
             <hr className="border-gray-300" />
             <p className="text-center text-sm">OR</p>
+            <button
+              onClick={handleGoogleLogin}
+              className="bg-white flex justify-center items-center gap-2 py-2 w-full rounded-xl border hover:scale-105 duration-300"
+            >
+              <img
+                src="https://img.icons8.com/color/48/000000/google-logo.png"
+                alt="Google Logo"
+                className="w-6 h-6"
+              />
+              Login with Google
+            </button>
           </div>
+          <p
+            className="text-center text-sm text-[#002D74] mt-4 cursor-pointer hover:underline"
+            onClick={() => navigate("/changePassword")}
+          >
+            Forgot your password? <span className="font-bold">Change here</span>
+          </p>
         </div>
       </div>
     </section>

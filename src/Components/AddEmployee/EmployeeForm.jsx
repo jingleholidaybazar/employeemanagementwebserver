@@ -6,6 +6,7 @@ import { handleError, handleSuccess } from "../util";
 const EmployeeForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     name: "",
+    image: null, // Image should be null initially
     joiningDate: "",
     email: "",
     password: "",
@@ -34,9 +35,18 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setFormData((prevState) => ({
+      ...prevState,
+      image: file, // Store the file object for upload
+    }));
+  };
+
   const validateForm = () => {
     const {
       name,
+      image,
       joiningDate,
       email,
       password,
@@ -51,6 +61,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
 
     if (
       !name ||
+      !image ||
       !joiningDate ||
       !email ||
       !password ||
@@ -94,15 +105,30 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
     if (!validateForm()) {
       return;
     }
+    console.log(formData);
+
+    const form = new FormData();
+    form.append("name", formData.name);
+    form.append("image", formData.image);
+    form.append("joiningDate", formData.joiningDate);
+    form.append("email", formData.email);
+    form.append("password", formData.password);
+    form.append("mobile", formData.mobile);
+    form.append("jobRole", formData.jobRole);
+    form.append("salary", formData.salary);
+    form.append("aadhar", formData.aadhar);
+    form.append("panCard", formData.panCard);
+    form.append("gender", formData.gender);
+    form.append("dob", formData.dob);
 
     try {
       setIsSubmitting(true);
       const response = await axios.post(
         "https://management-system-jet.vercel.app/api/auth/addEmployee",
-        formData,
+        form,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data", // Important for file uploads
           },
         }
       );
@@ -110,6 +136,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
         handleSuccess("Employee added successfully.");
       setFormData({
         name: "",
+        image: null, // Reset image after successful submission
         joiningDate: "",
         email: "",
         password: "",
@@ -132,7 +159,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-4 md:p-6 rounded shadow-md w-full max-w-4xl">
+      <div className="bg-white p-4 md:p-6 rounded shadow-md w-full max-w-4xl max-md:w-full overflow-y-auto">
         <h3 className="text-lg font-semibold mb-4 uppercase text-center">
           Add Employee
         </h3>
@@ -149,12 +176,11 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
               />
             </div>
             <div>
-              <label className="block font-medium mb-2">Joining Date</label>
+              <label className="block font-medium mb-2">Image</label>
               <input
-                type="date"
-                name="joiningDate"
-                value={formData.joiningDate}
-                onChange={handleInputChange}
+                type="file"
+                name="image"
+                onChange={handleImageChange} // Handle file change here
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
@@ -255,6 +281,29 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
               />
             </div>
             <div>
+              <label className="block font-medium mb-2">Joining Date</label>
+              <input
+                type="date"
+                name="joiningDate"
+                value={formData.joiningDate}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block font-medium mb-2">Pan Card</label>
+              <input
+                type="text"
+                name="panCard"
+                value={formData.panCard}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div>
               <label className="block font-medium mb-2">Aadhar Number</label>
               <input
                 type="text"
@@ -264,17 +313,6 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
-          </div>
-
-          <div>
-            <label className="block font-medium mb-2">Pan Card</label>
-            <input
-              type="text"
-              name="panCard"
-              value={formData.panCard}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded"
-            />
           </div>
 
           <div className="flex flex-col md:flex-row items-center justify-between mt-6 space-y-4 md:space-y-0">
@@ -288,7 +326,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-blue-600 text-white py-2 px-4 rounded w-full md:w-auto disabled:bg-gray-400"
+              className="bg-green-500 text-white py-2 px-4 rounded w-full md:w-auto"
             >
               {isSubmitting ? "Submitting..." : "Submit"}
             </button>

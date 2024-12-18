@@ -1,10 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import PrivateRoute from './Pages/PrivateRoute/PrivateRoute';
-import Login from './Components/Login/Login'
-import EmployeeDashbord from './Pages/EmployeeDashboard/EmployeeDashboard'
-import Dashboard from './Pages/Dashboard/Dashboard';
-import { Toaster } from 'react-hot-toast';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import PrivateRoute from "./Pages/PrivateRoute/PrivateRoute";
+import Login from "./Components/Login/Login";
+import EmployeeDashbord from "./Pages/EmployeeDashboard/EmployeeDashboard";
+import Dashboard from "./Pages/Dashboard/Dashboard";
+import { Toaster } from "react-hot-toast";
+import ChangePassword from "./Components/ChangePassword/ChangePassword";
 
 const App = () => {
   return (
@@ -19,10 +20,11 @@ const App = () => {
           path="/adminDashboard"
           element={<PrivateRoute element={<Dashboard />} />}
         />
+        <Route path="/changePassword" element={<ChangePassword />} />
       </Routes>
-      <Toaster/>
+
+      <Toaster />
     </Router>
-    
   );
 };
 
