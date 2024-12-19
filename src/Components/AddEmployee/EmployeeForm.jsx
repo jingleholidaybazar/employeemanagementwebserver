@@ -120,6 +120,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
     form.append("panCard", formData.panCard);
     form.append("gender", formData.gender);
     form.append("dob", formData.dob);
+    console.log("heloo mai formdata hu " + form);
 
     try {
       setIsSubmitting(true);
@@ -132,7 +133,6 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
           },
         }
       );
-      console.log(response.data);
 
       if (response.status === 200)
         handleSuccess("Employee added successfully.");

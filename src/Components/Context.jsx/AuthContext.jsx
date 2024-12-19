@@ -194,7 +194,6 @@ function AuthContextProvider({ children }) {
     }, 20000);
     return () => clearInterval(leaveInterval); // Cleanup on unmount
   }, []);
-  console.log(employees);
 
   return (
     <UserContext.Provider
