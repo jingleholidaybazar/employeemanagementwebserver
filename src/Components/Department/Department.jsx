@@ -27,7 +27,7 @@ const Department = () => {
     };
 
     fetchDepartments();
-  }, []);
+  }, [departments]);
 
   // Delete Department From The API
   const handleDelete = async (_id) => {

@@ -74,7 +74,7 @@ function AuthContextProvider({ children }) {
           },
         }
       );
-      console.log(response.data.employees)
+      console.log(response.data.employees);
       setEmployees(response.data.employees); // Update employees state with the fetched data
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -194,6 +194,7 @@ function AuthContextProvider({ children }) {
     }, 20000);
     return () => clearInterval(leaveInterval); // Cleanup on unmount
   }, []);
+  console.log(employees);
 
   return (
     <UserContext.Provider
