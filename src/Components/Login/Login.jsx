@@ -80,7 +80,7 @@ const Login = () => {
             <img
               src="https://i.imgur.com/f1OH7Ef.png"
               alt="Logo"
-              className="w-64 h-20 mb-10"
+              className="w-64 h-15 mb-10"
             />
           </div>
           <h2 className="font-bold text-3xl uppercase text-center text-[#002D74]">

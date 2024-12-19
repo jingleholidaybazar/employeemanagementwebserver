@@ -61,6 +61,7 @@ const Employees = () => {
       employee.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.department?.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  console.log(filteredEmployees.image);
 
   return (
     <div className="">

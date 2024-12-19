@@ -74,6 +74,7 @@ function AuthContextProvider({ children }) {
           },
         }
       );
+      console.log(response.data.employees)
       setEmployees(response.data.employees); // Update employees state with the fetched data
     } catch (error) {
       console.error("Error fetching employees:", error);

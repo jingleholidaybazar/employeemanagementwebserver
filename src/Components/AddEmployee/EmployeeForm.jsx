@@ -124,7 +124,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
     try {
       setIsSubmitting(true);
       const response = await axios.post(
-        "https://management-system-jet.vercel.app/api/auth/addEmployee",
+        "http://localhost:8080/api/auth/addEmployee",
         form,
         {
           headers: {
@@ -132,6 +132,8 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
           },
         }
       );
+      console.log(response.data);
+
       if (response.status === 200)
         handleSuccess("Employee added successfully.");
       setFormData({
@@ -150,7 +152,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       });
       onSubmit(response.data);
     } catch (error) {
-      console.error("Error adding employee:", error.response);
+      console.error("Error adding employee:", error);
       handleError("Failed to add employee.");
     } finally {
       setIsSubmitting(false);
