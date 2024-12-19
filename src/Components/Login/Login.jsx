@@ -27,15 +27,17 @@ const Login = () => {
         "https://management-system-jet.vercel.app/api/auth/login",
         { email, password }
       );
+      console.log(response.data.employee);
 
       if (response.status === 200) {
-        const { role, _id, name } = response.data.employee;
+        const { role, _id, name, image } = response.data.employee;
         const { token } = response.data;
 
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
         localStorage.setItem("id", _id);
         localStorage.setItem("name", name);
+        localStorage.setItem("image", image);
         handleSuccess("Login successful!");
 
         if (role === "admin") {

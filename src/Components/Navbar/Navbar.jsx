@@ -9,6 +9,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
   const userRef = useRef(null);
   const { singaleEmployee } = useAuth();
   const name = localStorage.getItem("name");
+  const image = localStorage.getItem("image");
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
@@ -59,7 +60,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
       {/* Right side: User Section */}
       <div className="flex items-center space-x-3" ref={userRef}>
         <img
-          src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
+          src={`https://management-system-jet.vercel.app/${image}`}
           alt="User"
           className="h-10 w-10 rounded-full cursor-pointer"
           onClick={toggleDropdown}

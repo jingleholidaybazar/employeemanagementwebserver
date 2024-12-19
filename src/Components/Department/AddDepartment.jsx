@@ -25,16 +25,14 @@ const AddDepartment = ({ showModal, setShowModal, addNewDepartment }) => {
         }
       );
 
-      console.log(response.data); // Check if response is as expected
+      // Check if response is as expected
+      const { message, CreateDepartment } = response.data;
+      const { status } = response;
 
-      const { message, status, department } = response.data;
-
-      if (status == 201 && department) {
-        console.log(message);
-
+      if (status === 201 && CreateDepartment) {
         handleSuccess(message);
         // Add the new department to the parent state
-        addNewDepartment(department);
+        addNewDepartment(CreateDepartment);
 
         // Clear the form and close the modal
         setNewDepartmentName("");

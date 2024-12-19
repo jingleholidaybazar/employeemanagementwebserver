@@ -120,7 +120,6 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
     form.append("panCard", formData.panCard);
     form.append("gender", formData.gender);
     form.append("dob", formData.dob);
-    console.log("heloo mai formdata hu " + form);
 
     try {
       setIsSubmitting(true);
@@ -133,24 +132,30 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
           },
         }
       );
-
-      if (response.status === 200)
+      const { message } = response.data;
+      if (response.status === 201) {
         handleSuccess("Employee added successfully.");
-      setFormData({
-        name: "",
-        image: null, // Reset image after successful submission
-        joiningDate: "",
-        email: "",
-        password: "",
-        mobile: "",
-        jobRole: "",
-        salary: "",
-        aadhar: "",
-        panCard: "",
-        gender: "",
-        dob: "",
-      });
-      onSubmit(response.data);
+
+        setFormData({
+          name: "",
+          image: null, // Reset image after successful submission
+          joiningDate: "",
+          email: "",
+          password: "",
+          mobile: "",
+          jobRole: "",
+          salary: "",
+          aadhar: "",
+          panCard: "",
+          gender: "",
+          dob: "",
+        });
+        onSubmit(response.data);
+      } else if (response.status === 400) {
+        handleError(message);
+      } else if (response.status === 404) {
+        handleError(message);
+      }
     } catch (error) {
       console.error("Error adding employee:", error);
       handleError("Failed to add employee.");

@@ -37,7 +37,8 @@ function Dashboard() {
     localStorage.removeItem("role");
     localStorage.removeItem("name");
     localStorage.removeItem("id");
-    // localStorage.removeItem("activeComponent"); // Clear saved component on logout
+    localStorage.removeItem("image");
+    localStorage.removeItem("activeComponent"); // Clear saved component on logout
     navigate("/"); // Redirect to the home page
     setIsLogoutModalOpen(false);
   };

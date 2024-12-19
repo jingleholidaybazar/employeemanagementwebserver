@@ -61,7 +61,6 @@ const Employees = () => {
       employee.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       employee.department?.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  
 
   return (
     <div className="">
@@ -115,7 +114,7 @@ const Employees = () => {
                 <td className="border-gray-300 px-4 py-2">{index + 1}</td>
                 <td className="border-gray-300 px-4 py-2">
                   <img
-                    src={employee.image}
+                    src={`https://management-system-jet.vercel.app/${employee.image}`}
                     alt={employee.name}
                     className="w-10 h-10 rounded-full object-cover"
                   />
