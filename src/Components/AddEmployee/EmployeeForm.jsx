@@ -6,7 +6,6 @@ import { handleError, handleSuccess } from "../util";
 const EmployeeForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     name: "",
-    image: null, // Image should be null initially
     joiningDate: "",
     email: "",
     password: "",
@@ -35,18 +34,9 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setFormData((prevState) => ({
-      ...prevState,
-      image: file, // Store the file object for upload
-    }));
-  };
-
   const validateForm = () => {
     const {
       name,
-      image,
       joiningDate,
       email,
       password,
@@ -61,7 +51,6 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
 
     if (
       !name ||
-      !image ||
       !joiningDate ||
       !email ||
       !password ||
@@ -105,40 +94,18 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
     if (!validateForm()) {
       return;
     }
-    console.log(formData);
-
-    const form = new FormData();
-    form.append("name", formData.name);
-    form.append("image", formData.image);
-    form.append("joiningDate", formData.joiningDate);
-    form.append("email", formData.email);
-    form.append("password", formData.password);
-    form.append("mobile", formData.mobile);
-    form.append("jobRole", formData.jobRole);
-    form.append("salary", formData.salary);
-    form.append("aadhar", formData.aadhar);
-    form.append("panCard", formData.panCard);
-    form.append("gender", formData.gender);
-    form.append("dob", formData.dob);
 
     try {
       setIsSubmitting(true);
       const response = await axios.post(
         "https://management-system-jet.vercel.app/api/auth/addEmployee",
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // Important for file uploads
-          },
-        }
+        formData
       );
       const { message } = response.data;
       if (response.status === 201) {
         handleSuccess("Employee added successfully.");
-
         setFormData({
           name: "",
-          image: null, // Reset image after successful submission
           joiningDate: "",
           email: "",
           password: "",
@@ -151,9 +118,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
           dob: "",
         });
         onSubmit(response.data);
-      } else if (response.status === 400) {
-        handleError(message);
-      } else if (response.status === 404) {
+      } else {
         handleError(message);
       }
     } catch (error) {
@@ -166,7 +131,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-4 md:p-6 rounded shadow-md w-full max-w-4xl max-md:w-full overflow-y-auto">
+      <div className="bg-white p-4 md:p-6 rounded shadow-md w-full max-w-4xl overflow-y-auto">
         <h3 className="text-lg font-semibold mb-4 uppercase text-center">
           Add Employee
         </h3>
@@ -183,18 +148,6 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
               />
             </div>
             <div>
-              <label className="block font-medium mb-2">Image</label>
-              <input
-                type="file"
-                name="image"
-                onChange={handleImageChange} // Handle file change here
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
               <label className="block font-medium mb-2">Email</label>
               <input
                 type="email"
@@ -204,6 +157,9 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block font-medium mb-2">Password</label>
               <input
@@ -214,9 +170,6 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block font-medium mb-2">Mobile</label>
               <input
@@ -227,6 +180,9 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block font-medium mb-2">Gender</label>
               <select
@@ -241,9 +197,6 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 <option value="Other">Other</option>
               </select>
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block font-medium mb-2">DOB</label>
               <input
@@ -254,6 +207,9 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block font-medium mb-2">Job Role</label>
               <select
@@ -269,30 +225,14 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 <option value="Back-end Developer">Back-end Developer</option>
                 <option value="Front-end Developer">Front-end Developer</option>
                 <option value="Marketing">Marketing</option>
-                <option value="SEO">SEO</option>
-                <option value="Digital Marketing">Digital Marketing</option>
-                <option value="Internship">Internship</option>
               </select>
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block font-medium mb-2">Salary</label>
               <input
                 type="number"
                 name="salary"
                 value={formData.salary}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div>
-              <label className="block font-medium mb-2">Joining Date</label>
-              <input
-                type="date"
-                name="joiningDate"
-                value={formData.joiningDate}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
               />
@@ -316,6 +256,19 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 type="text"
                 name="aadhar"
                 value={formData.aadhar}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block font-medium mb-2">Joining Date</label>
+              <input
+                type="date"
+                name="joiningDate"
+                value={formData.joiningDate}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
               />

@@ -13,6 +13,9 @@ const Attendance = () => {
     total: 0,
   });
 
+  const [userLocation, setUserLocation] = useState(null);
+  const [targetLocation, setTargetLocation] = useState(null);
+
   const daysInMonth = currentDate.daysInMonth();
   const startDay = currentDate.startOf("month").day();
   const today = dayjs().format("YYYY/MM/DD");
@@ -48,19 +51,43 @@ const Attendance = () => {
     setAttendanceStats(stats);
   };
 
-  // Automatically mark leave at 2:30 PM
+  // Get user's current location and set it as the target
   useEffect(() => {
-    const checkAndMarkLeave = () => {
-      if (
-        currentTime >= "14:30" &&
-        !markedDates.some((entry) => entry.date === today)
-      ) {
-        markAttendance("leave");
-      }
-    };
-    const timer = setInterval(checkAndMarkLeave, 60000); // Check every minute
-    return () => clearInterval(timer);
-  }, [currentTime, markedDates]);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          setUserLocation(location);
+          setTargetLocation(location); // Use current location as the target
+        },
+        () => {
+          toast.error("Failed to retrieve location.");
+        }
+      );
+    } else {
+      toast.error("Geolocation is not supported by this browser.");
+    }
+  }, []);
+
+  // Calculate distance between two coordinates
+  const calculateDistance = (lat1, lng1, lat2, lng2) => {
+    const toRadians = (deg) => deg * (Math.PI / 180);
+    const earthRadius = 6371e3; // Earth radius in meters
+
+    const dLat = toRadians(lat2 - lat1);
+    const dLng = toRadians(lng2 - lng1);
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRadians(lat1)) *
+        Math.cos(toRadians(lat2)) *
+        Math.sin(dLng / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return earthRadius * c;
+  };
 
   const markAttendance = async (type) => {
     try {
@@ -81,6 +108,19 @@ const Attendance = () => {
 
   const handleMarkAttendance = (e) => {
     e.preventDefault();
+    if (!userLocation || !targetLocation) {
+      return toast.error("Unable to determine your location.");
+    }
+    const distance = calculateDistance(
+      userLocation.lat,
+      userLocation.lng,
+      targetLocation.lat,
+      targetLocation.lng
+    );
+    if (distance > 50) {
+      return toast.error("You are outside the 50-meter radius.");
+    }
+
     if (markedDates.some((entry) => entry.date === today)) {
       return toast.error("Attendance already marked for today.");
     }
