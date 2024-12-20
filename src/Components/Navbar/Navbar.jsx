@@ -53,7 +53,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
         <img
           src="https://i.imgur.com/f1OH7Ef.png"
           alt="Logo"
-          className="h-10 w-40 mr-3"
+          className="h-10 w-40 mr-3 "
         />
       </div>
 
@@ -62,7 +62,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
         <img
           src={`https://management-system-jet.vercel.app/${image}`}
           alt="User"
-          className="h-10 w-10 rounded-full cursor-pointer"
+          className="h-10 w-10 rounded-full cursor-pointer hidden"
           onClick={toggleDropdown}
         />
         <div

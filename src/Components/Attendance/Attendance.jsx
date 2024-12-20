@@ -197,7 +197,7 @@ const Attendance = () => {
           <form onSubmit={handleMarkAttendance}>
             <input
               type="text"
-              className="border rounded px-4 py-2 w-full"
+              className="border-2 rounded-xl px-4 py-3 w-full bg-white "
               disabled
               value={today}
             />
