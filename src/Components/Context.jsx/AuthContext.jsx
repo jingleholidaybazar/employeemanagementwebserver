@@ -47,17 +47,18 @@ function AuthContextProvider({ children }) {
   const fetchAttendance = async () => {
     try {
       const token = localStorage.getItem("token");
+
       const response = await axios.get(
-        `${apiBaseUrl}/app/api/attendance/allAttendance`, // Pass the employee ID in the URL path
+        "https://management-system-jet.vercel.app/api/attendance/allAttendance", // Pass the employee ID in the URL path
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log(response.data);
+      console.log(response.data.allattendance);
 
-      setAttendanceData(response.data);
+      setAttendanceData(response.data.allattendance);
     } catch (error) {
       console.error("Error updating employee:", error);
       setError("Failed to update employee. Please try again.");

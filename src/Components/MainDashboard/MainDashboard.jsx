@@ -4,7 +4,7 @@ import { useAuth } from "../Context.jsx/AuthContext";
 
 const MainDashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("week"); // Moved inside the component
-  const { leavesList, employees, departments } = useAuth();
+  const { leavesList, employees, departments, attendanceData } = useAuth();
 
   const totalSalary = employees.reduce(
     (total, employee) => total + employee.salary,
@@ -20,6 +20,20 @@ const MainDashboard = () => {
   const pendingCount = leavesList.filter(
     (leave) => leave.status === "Pending"
   ).length;
+
+  // Group attendance data by date
+  const getDailyAttendanceCounts = () => {
+    const grouped = {};
+    attendanceData.forEach((record) => {
+      const date = new Date(record.date).toLocaleDateString("en-US", {
+        weekday: "short",
+      });
+      grouped[date] = (grouped[date] || 0) + 1;
+    });
+    return grouped;
+  };
+
+  const attendanceCounts = getDailyAttendanceCounts();
 
   const stats = [
     {
@@ -123,8 +137,10 @@ const MainDashboard = () => {
         label: "Attendance Count",
         data:
           selectedPeriod === "week"
-            ? [8, 7, 9, 8, 7, 8, 7] // Weekly data
-            : [35, 36, 37, 38], // Monthly data
+            ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
+                (day) => attendanceCounts[day] || 0
+              )
+            : [35, 36, 37, 38], // Adjust for monthly as needed
         backgroundColor: "rgba(153, 102, 255, 0.6)",
         borderWidth: 0,
       },
