@@ -14,7 +14,10 @@ const Attendance = () => {
   });
 
   const [userLocation, setUserLocation] = useState(null);
-  const [targetLocation, setTargetLocation] = useState(null);
+  const [targetLocation, setTargetLocation] = useState({
+    lat: 12.9716, // Example latitude (Bangalore, India)
+    lng: 77.5946, // Example longitude
+  });
 
   const daysInMonth = currentDate.daysInMonth();
   const startDay = currentDate.startOf("month").day();
@@ -33,6 +36,7 @@ const Attendance = () => {
           `https://management-system-jet.vercel.app/api/attendance/getAttendance/${userId}/${formattedMonth}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
+
         const data = response.data.attendanceRecords || [];
         setMarkedDates(data);
         calculateStats(data);
@@ -47,11 +51,11 @@ const Attendance = () => {
   const calculateStats = (data) => {
     const stats = { fullDay: 0, halfDay: 0, leave: 0, total: 0 };
     data.forEach((entry) => stats[entry.type]++);
-    stats.total = stats.fullDay + stats.halfDay + stats.leave;
+    stats.total = stats.fullDay + stats.halfDay;
     setAttendanceStats(stats);
   };
 
-  // Get user's current location and set it as the target
+  // Get user's current location
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -61,7 +65,6 @@ const Attendance = () => {
             lng: position.coords.longitude,
           };
           setUserLocation(location);
-          setTargetLocation(location); // Use current location as the target
         },
         () => {
           toast.error("Failed to retrieve location.");
@@ -86,7 +89,7 @@ const Attendance = () => {
         Math.sin(dLng / 2) ** 2;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    return earthRadius * c;
+    return earthRadius * c; // Distance in meters
   };
 
   const markAttendance = async (type) => {
@@ -117,8 +120,8 @@ const Attendance = () => {
       targetLocation.lat,
       targetLocation.lng
     );
-    if (distance > 50) {
-      return toast.error("You are outside the 50-meter radius.");
+    if (distance > 30) {
+      return toast.error("You are outside the 30-meter radius.");
     }
 
     if (markedDates.some((entry) => entry.date === today)) {
@@ -159,10 +162,10 @@ const Attendance = () => {
           (item, index) => {
             const statKey = ["fullDay", "halfDay", "leave", "total"][index];
             const bgColors = [
-              "bg-green-100",
-              "bg-yellow-100",
-              "bg-red-100",
-              "bg-blue-100",
+              "bg-green-300",
+              "bg-yellow-300",
+              "bg-red-300",
+              "bg-blue-300",
             ];
             const textColors = [
               "text-green-600",
@@ -193,11 +196,11 @@ const Attendance = () => {
       </div>
 
       <div className="flex max-md:flex-wrap gap-5">
-        <div className="flex-1 bg-slate-50 p-6 rounded shadow-md w-2/3 max-md:w-full">
+        <div className="flex-1 bg-slate-100 p-6 rounded shadow-md w-2/3 max-md:w-full">
           <form onSubmit={handleMarkAttendance}>
             <input
               type="text"
-              className="border-2 rounded-xl px-4 py-3 w-full bg-white "
+              className="border-2 rounded-xl px-4 py-3 w-full bg-white"
               disabled
               value={today}
             />

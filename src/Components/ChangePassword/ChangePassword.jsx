@@ -19,7 +19,7 @@ const ChangePassword = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/password/changepassword",
+        "https://management-system-jet.vercel.app/api/password/changepassword",
         { email, newPassword }
       );
 

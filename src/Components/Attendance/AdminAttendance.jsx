@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import Loading from "../Loading/Loading";
 
 const AdminAttendance = () => {
   const [attendanceData, setAttendanceData] = useState([]);
@@ -19,15 +20,17 @@ const AdminAttendance = () => {
     halfDay: 0,
     leave: 0,
   });
-
+  const [isLoading, setIsLoading] = useState(true);
   const todayDate = dayjs().format("YYYY/MM/DD");
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchAttendance = async () => {
+      setIsLoading(true);
       try {
+        await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate loading
         const response = await axios.get(
-          "http://localhost:8080/api/attendance/allAttendance",
+          "https://management-system-jet.vercel.app/api/attendance/allAttendance",
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -50,12 +53,13 @@ const AdminAttendance = () => {
         setTodayStats(stats);
       } catch (error) {
         toast.error("Failed to fetch attendance data.");
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchAttendance();
   }, [token, todayDate]);
 
-  // Handle search input
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
@@ -68,11 +72,9 @@ const AdminAttendance = () => {
     setFilteredData(filtered);
   };
 
-  // Handle employee selection
   const handleEmployeeClick = (employeeName) => {
     setSelectedEmployee(employeeName);
 
-    // Calculate stats for the selected employee
     const stats = attendanceData.reduce(
       (acc, record) => {
         if (record.name === employeeName) {
@@ -86,7 +88,6 @@ const AdminAttendance = () => {
     setEmployeeStats(stats);
   };
 
-  // Handle showing today's summary
   const handleTodaySummary = () => {
     setSelectedEmployee(null);
   };
@@ -95,21 +96,15 @@ const AdminAttendance = () => {
     <div className="p-2">
       <Toaster />
 
-      {/* Display Today's Date at the Top */}
       <div className="text-center mb-4">
-        <h2 className="text-2xl font-bold text-gray-700">
-          Attendance Management
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-700">Attendance Management</h2>
         <p className="text-lg font-semibold">
           Today:{" "}
-          <span className="text-green-500">
-            {dayjs().format("DD MMMM YYYY")}
-          </span>
+          <span className="text-green-500">{dayjs().format("DD MMMM YYYY")}</span>
         </p>
       </div>
 
-      {/* Summary Section */}
-      <div className="mt-6 p-4  rounded-lg ">
+      <div className="mt-6 p-4 rounded-lg">
         <h3 className="text-lg font-bold text-gray-700 mb-4">
           {selectedEmployee
             ? `Attendance Summary for ${selectedEmployee}`
@@ -139,80 +134,65 @@ const AdminAttendance = () => {
             ))}
         </div>
       </div>
-      {/* Search Bar */}
-      <div className=" p-3">
+
+      <div className="p-3">
         <input
           type="text"
           placeholder="Search by name, type, or date..."
           value={searchQuery}
           onChange={handleSearch}
-          className="border-2 border-black rounded px-4 py-3 w-1/3 max-md:w-full "
+          className="border-2 border-black rounded px-4 py-3 w-1/3 max-md:w-full"
         />
       </div>
-      {/* <div className="text-lg font-bold text-center">
-          Total Attendance Marked Today:{" "}
-          <span className="text-blue-500">{todayCount}</span>
-        </div>
-       */}
 
-      {/* Attendance Table */}
-      <div className="bg-white shadow rounded-lg overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-red-500 text-white">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
-                ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
-                Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
-                Type
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {filteredData.length > 0 ? (
-              filteredData.map((record, index) => (
-                <tr
-                  key={index}
-                  className="hover:bg-gray-50 cursor-pointer"
-                  onClick={() => handleEmployeeClick(record.name)}
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{record.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{record.date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        record.type === "fullDay"
-                          ? "bg-green-100 text-green-800"
-                          : record.type === "halfDay"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {record.type}
-                    </span>
-                  </td>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className="bg-white shadow rounded-lg overflow-x-auto">
+          {filteredData.length > 0 ? (
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-red-500 text-white">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">ID</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Type</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan="4"
-                  className="text-center py-4 text-gray-500 font-semibold"
-                >
-                  No records found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {filteredData.map((record, index) => (
+                  <tr
+                    key={index}
+                    className="hover:bg-gray-50 cursor-pointer"
+                    onClick={() => handleEmployeeClick(record.name)}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{record.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{record.date}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          record.type === "fullDay"
+                            ? "bg-green-100 text-green-800"
+                            : record.type === "halfDay"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {record.type}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="text-center py-4 text-gray-500 font-semibold">
+              No records found.
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
