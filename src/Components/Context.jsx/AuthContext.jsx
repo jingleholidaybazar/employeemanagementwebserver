@@ -15,6 +15,7 @@ function AuthContextProvider({ children }) {
   const [singaleLeave, setSingaleLeave] = useState([]);
   const [reports, setReports] = useState([]);
   const [error, setError] = useState(null);
+  const [attendanceData, setAttendanceData] = useState([]);
 
   const logout = () => {
     setUser(null);
@@ -37,6 +38,26 @@ function AuthContextProvider({ children }) {
           },
         }
       );
+    } catch (error) {
+      console.error("Error updating employee:", error);
+      setError("Failed to update employee. Please try again.");
+    }
+  };
+
+  const fetchAttendance = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${apiBaseUrl}/app/api/attendance/allAttendance`, // Pass the employee ID in the URL path
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+
+      setAttendanceData(response.data);
     } catch (error) {
       console.error("Error updating employee:", error);
       setError("Failed to update employee. Please try again.");
@@ -74,7 +95,7 @@ function AuthContextProvider({ children }) {
           },
         }
       );
-      
+
       setEmployees(response.data.employees); // Update employees state with the fetched data
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -177,11 +198,13 @@ function AuthContextProvider({ children }) {
     fetchDepartment();
     fetchLeaves();
     fetchSingaleLeave();
+    fetchAttendance();
 
     const interval = setInterval(() => {
       fetchAllEmployees(); // Fetch data every 10 seconds
       fetchDepartment();
       fetchSingaleLeave();
+      fetchAttendance();
     }, 2000);
 
     return () => clearInterval(interval); // Cleanup on unmount
@@ -208,6 +231,7 @@ function AuthContextProvider({ children }) {
         singaleLeave,
         updateEmployee,
         deleteEmployee,
+        attendanceData,
         error, // Include error state for displaying errors
       }}
     >

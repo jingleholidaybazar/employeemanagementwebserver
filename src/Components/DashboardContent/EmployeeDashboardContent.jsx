@@ -4,6 +4,7 @@ import EmployeeProfile from "../EmployeeProfile/EmployeeProfile";
 import RequestLeave from "../EmployeeProfile/RequestLeave";
 import Attendance from "../Attendance/Attendance";
 import WorkReport from "../EmployeeProfile/WorkReport";
+import ChangePassword from "../ChangePassword/ChangePassword";
 
 // Example components for sidebar content
 const Dashboard = () => (
@@ -33,7 +34,7 @@ const WorkReports = () => (
 );
 const Settings = () => (
   <div>
-    Settings Content
+    <ChangePassword/>
   </div>
 );
 

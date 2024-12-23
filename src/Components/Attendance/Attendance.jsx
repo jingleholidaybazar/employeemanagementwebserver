@@ -15,8 +15,8 @@ const Attendance = () => {
 
   const [userLocation, setUserLocation] = useState(null);
   const [targetLocation, setTargetLocation] = useState({
-    lat: 12.9716, // Example latitude (Bangalore, India)
-    lng: 77.5946, // Example longitude
+    lat: 28.686328344888768,  // Example latitude (Bangalore, India)
+    lng: 77.3365892262804, // Example longitude
   });
 
   const daysInMonth = currentDate.daysInMonth();
@@ -114,12 +114,21 @@ const Attendance = () => {
     if (!userLocation || !targetLocation) {
       return toast.error("Unable to determine your location.");
     }
+
+    // Debugging log for location
+    console.log("User Location:", userLocation);
+    console.log("Target Location:", targetLocation);
+
     const distance = calculateDistance(
       userLocation.lat,
       userLocation.lng,
       targetLocation.lat,
       targetLocation.lng
     );
+
+    console.log("Distance between user and target:", distance, "meters");
+
+    // Check if the distance is within 30 meters
     if (distance > 30) {
       return toast.error("You are outside the 30-meter radius.");
     }
@@ -127,6 +136,7 @@ const Attendance = () => {
     if (markedDates.some((entry) => entry.date === today)) {
       return toast.error("Attendance already marked for today.");
     }
+
     let type = "leave";
     if (currentTime >= "08:50" && currentTime <= "09:10") type = "fullDay";
     else if (currentTime > "09:10" && currentTime <= "14:30") type = "halfDay";

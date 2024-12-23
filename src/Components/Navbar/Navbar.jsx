@@ -43,13 +43,6 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
     <nav className="bg-white text-black p-4 flex justify-between items-center shadow-md rounded-t-xl lg:rounded-t-3xl">
       {/* Left side: Toggle Button and Logo */}
       <div className="flex items-center">
-        <button
-          className="block md:hidden p-2 text-xl"
-          onClick={toggleSidebar}
-          aria-label="Toggle Sidebar"
-        >
-          ☰
-        </button>
         <img
           src="https://i.imgur.com/f1OH7Ef.png"
           alt="Logo"
@@ -72,6 +65,13 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
           <span className="text-md capitalize">{name || "User"}</span>
           <FaEllipsisV size={18} className=" max-md:hidden" />
         </div>
+        <button
+          className="block md:hidden p-2 text-xl"
+          onClick={toggleSidebar}
+          aria-label="Toggle Sidebar"
+        >
+          ☰
+        </button>
 
         {/* Dropdown */}
         <div className="relative" ref={dropdownRef}>

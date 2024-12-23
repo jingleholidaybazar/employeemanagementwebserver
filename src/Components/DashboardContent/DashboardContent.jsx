@@ -5,6 +5,7 @@ import Leave from "../../Pages/Leave/Leave";
 import Department from "../Department/Department";
 import WorkReport from "../WorkReport/WorkReports";
 import AdminAttendance from "../Attendance/AdminAttendance";
+import ChangePassword from "../ChangePassword/ChangePassword";
 
 // Dashboard content component
 const DashboardContent = ({ activeComponent }) => {
@@ -27,7 +28,7 @@ const DashboardContent = ({ activeComponent }) => {
           </div>
         );
       case "Settings":
-        return <div>Settings Content</div>;
+        return <div><ChangePassword/></div>;
       default:
         return <div>Select a section from the sidebar</div>;
     }
