@@ -85,14 +85,14 @@ function EmployeeProfile() {
           <table className="w-full border border-gray-300 text-left capitalize">
             <tbody>
               {[
-                ["Name", employee.name || "Nitish Kumar"],
-                ["Employee ID", employee._id || "12345em"],
-                ["Email", employee.email || "nk768276@gmail.com"],
-                ["Aadhar Number", employee.aadhar || "45362987"],
-                ["Pan Card Number", employee.pan || "ASDF6573D"],
-                ["Joining Date", employee.joiningDate || "25/12/2023"],
-                ["Phone Number", employee.phoneNumber || "9572576470"],
-                ["Salary", employee.salary || "30000 rs"],
+                ["Name", employee.name],
+                ["Employee ID", employee._id],
+                ["Email", employee.email],
+                ["Aadhar Number", employee.aadhar],
+                ["Pan Card Number", employee.pan],
+                ["Joining Date", employee.joiningDate],
+                ["Phone Number", employee.phoneNumber],
+                ["Salary", employee.salary],
               ].map(([label, value], index) => (
                 <tr
                   key={index}
