@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaEllipsisV, FaTimes, FaSignOutAlt, FaCog } from "react-icons/fa";
 import { useAuth } from "../Context.jsx/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Navbar({ onToggleSidebar, onLogoutModal }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -10,6 +11,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
   const { singaleEmployee } = useAuth();
   const name = localStorage.getItem("name");
   const image = localStorage.getItem("image");
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
@@ -105,7 +107,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
               <div>
                 <button
                   className="block w-full px-4 py-2 text-left text-gray-700 text-lg hover:bg-gray-200 rounded"
-                  onClick={() => alert("Go to Settings")}
+                  onClick={() => navigate("/changePassword")}
                 >
                   <FaCog className="mr-2 inline" /> Settings
                 </button>

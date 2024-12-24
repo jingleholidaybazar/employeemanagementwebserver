@@ -1,15 +1,59 @@
-import React, { useState } from "react";
-import { Bar } from "react-chartjs-2"; // Ensure this import matches your charting library
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../Context.jsx/AuthContext";
+import {
+  FaUsers,
+  FaDollarSign,
+  FaCheck,
+  FaTimes,
+  FaClock,
+} from "react-icons/fa"; // Import icons
+import Loading from "../Loading/Loading";
+import LeaveGraph from "./LeaveGraph";
+import AttendanceGraph from "./AttendanceGraph";
 
 const MainDashboard = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState("week"); // Moved inside the component
-  const { leavesList, employees, departments, attendanceData } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const { leavesList, employees, attendanceData, departments } = useAuth();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const getLast7Days = () => {
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      days.push({
+        fullDate: date.toLocaleDateString("en-US"),
+        day: date.toLocaleDateString("en-US", { weekday: "short" }),
+      });
+    }
+    return days;
+  };
+
+  const last7Days = getLast7Days();
 
   const totalSalary = employees.reduce(
     (total, employee) => total + employee.salary,
     0
   );
+
+  const totalEmployees = employees.length;
+  const totalDepartments = departments.length;
+
+  const totalSalaryInMonth = employees.reduce((total, employee) => {
+    const currentMonth = new Date().getMonth();
+    const employeeMonth = new Date(employee.salaryDate).getMonth();
+    if (currentMonth === employeeMonth) {
+      return total + employee.salary;
+    }
+    return total;
+  }, 0);
 
   const approvedCount = leavesList.filter(
     (leave) => leave.status === "Approved"
@@ -21,230 +65,104 @@ const MainDashboard = () => {
     (leave) => leave.status === "Pending"
   ).length;
 
-  // Group attendance data by date
-  const getDailyAttendanceCounts = () => {
-    const grouped = {};
+  const getFilteredAttendanceCounts = () => {
+    const grouped = { fullDay: {}, halfDay: {}, leave: {} };
     attendanceData.forEach((record) => {
-      const date = new Date(record.date).toLocaleDateString("en-US", {
-        weekday: "short",
-      });
-      grouped[date] = (grouped[date] || 0) + 1;
+      const date = new Date(record.date).toLocaleDateString("en-US");
+      const type = record.type;
+      if (type === "fullDay" || type === "halfDay" || type === "leave") {
+        grouped[type][date] = (grouped[type][date] || 0) + 1;
+      }
     });
     return grouped;
   };
 
-  const attendanceCounts = getDailyAttendanceCounts();
+  const filteredAttendanceCounts = getFilteredAttendanceCounts();
 
-  const stats = [
-    {
-      id: 1,
-      title: "Total Employees",
-      value: employees?.length || 0,
-      bgColor: " bg-gray-100",
-      icon: "👥",
-    },
-    {
-      id: 2,
-      title: "Total Departments",
-      value: departments?.length || 0,
-      bgColor: "bg-gray-100",
-      icon: "🏢",
-    },
-    {
-      id: 3,
-      title: "Monthly Pay",
-      value: `₹${totalSalary.toLocaleString()}`,
-      bgColor: "bg-gray-100",
-      icon: "💰",
-    },
-  ];
-
-  const leaveDetails = [
-    {
-      id: 1,
-      title: "Total Leave Applied",
-      value: leavesList?.length || 0,
-      bgColor: "bg-indigo-300",
-      textColor: "text-blue-500",
-      icon: "📝",
-    },
-    {
-      id: 2,
-      title: "Total Approved",
-      value: approvedCount,
-      bgColor: "bg-green-300",
-      textColor: "text-green-500",
-      icon: "✅",
-    },
-    {
-      id: 3,
-      title: "Total Pending",
-      value: pendingCount,
-      bgColor: "bg-yellow-300",
-      textColor: "text-yellow-500",
-      icon: "⏳",
-    },
-    {
-      id: 4,
-      title: "Total Rejected",
-      value: rejectedCount,
-      bgColor: "bg-red-300",
-      textColor: "text-red-500",
-      icon: "❌",
-    },
-  ];
-
-  // Leave Graph Data
   const leaveGraphData = {
-    labels:
-      selectedPeriod === "week"
-        ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        : ["1st", "2nd", "3rd", "4th"],
+    labels: last7Days.map((day) => day.day),
     datasets: [
       {
         label: "Leave Count",
-        data:
-          selectedPeriod === "week"
-            ? [
-                leavesList?.length,
-                leavesList?.length,
-                leavesList?.length,
-                leavesList?.length,
-                leavesList?.length,
-                leavesList?.length,
-                leavesList?.length,
-              ] // Weekly data
-            : [
-                leavesList?.length,
-                leavesList?.length,
-                leavesList?.length,
-                leavesList?.length,
-              ], // Monthly data
+        data: last7Days.map(
+          (day) => filteredAttendanceCounts.leave[day.fullDate] || 0
+        ),
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderWidth: 0,
       },
     ],
   };
 
-  // Attendance Graph Data
   const attendanceGraphData = {
-    labels:
-      selectedPeriod === "week"
-        ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        : ["1st", "2nd", "3rd", "4th"],
+    labels: last7Days.map((day) => day.day),
     datasets: [
       {
         label: "Attendance Count",
-        data:
-          selectedPeriod === "week"
-            ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
-                (day) => attendanceCounts[day] || 0
-              )
-            : [35, 36, 37, 38], // Adjust for monthly as needed
+        data: last7Days.map(
+          (day) =>
+            (filteredAttendanceCounts.fullDay[day.fullDate] || 0) +
+            (filteredAttendanceCounts.halfDay[day.fullDate] || 0)
+        ),
         backgroundColor: "rgba(153, 102, 255, 0.6)",
         borderWidth: 0,
       },
     ],
   };
 
-  // Handle graph period change
-  const handlePeriodChange = (event) => {
-    setSelectedPeriod(event.target.value);
-  };
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
-    <div className="min-lg:p-4 p-1 space-y-8 ">
+    <div className="min-lg:p-4 p-1 space-y-8">
       {/* General Statistics */}
-      <div className=" bg-white pb-3 pt-3 px-3 rounded-md shadow-sm">
-        <h2 className="text-2xl font-semibold mb-4  ">Overview</h2>
+      <div className="bg-white pb-3 pt-3 px-3 rounded-md shadow-sm">
+        <h2 className="text-2xl font-semibold mb-4">Overview</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-10 gap-6">
-          {stats.map((stat) => (
-            <div
-              key={stat.id}
-              className="flex items-center justify-center h-32 text-black rounded-lg shadow-md bg-pink-200"
-            >
-              <div className="text-4xl mr-4">{stat.icon}</div>
-              <div>
-                <h2 className="text-lg font-semibold text-gray-700">
-                  {stat.title}
-                </h2>
-                <p className="text-3xl font-bold text-gray-700 text-center">
-                  {stat.value}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Leave Details */}
-      <div className=" bg-white pb-3 pt-3 px-3 rounded-md shadow-sm">
-        <h2 className="text-2xl font-semibold mb-4">Leave Details</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {leaveDetails.map((detail) => (
-            <div
-              key={detail.id}
-              className={`flex items-center p-4 mb-10 text-white rounded-lg shadow-md ${detail.bgColor}`}
-            >
-              <div className="text-4xl mr-4">{detail.icon}</div>
-              <div>
-                <h2
-                  className={`text-xl font-bold ${detail.textColor}`}
-                  key={detail.id}
-                >
-                  {detail.title}
-                </h2>
-                <p
-                  className={`text-3xl font-bold text-center bg- ${detail.textColor}`}
-                  key={detail.id}
-                >
-                  {detail.value}
-                </p>
-              </div>
-            </div>
-          ))}
+          <div className="p-4 bg-pink-100 rounded-md shadow px-16 text-pink-700">
+            <h3 className="text-lg font-medium flex items-center">
+              <FaDollarSign className="mr-2" /> Total Salary
+            </h3>
+            <p className="text-2xl font-bold">${totalSalaryInMonth}</p>
+          </div>
+          <div className="p-4 bg-pink-100 rounded-md shadow px-16 text-pink-700">
+            <h3 className="text-lg font-medium flex items-center">
+              <FaUsers className="mr-2" /> Total Employees
+            </h3>
+            <p className="text-2xl font-bold">{totalEmployees}</p>
+          </div>
+          <div className="p-4 bg-pink-100 rounded-md shadow px-16 text-pink-700">
+            <h3 className="text-lg font-medium">Total Departments</h3>
+            <p className="text-2xl font-bold">{totalDepartments}</p>
+          </div>
+          <div className="p-4 bg-green-300 rounded-md shadow px-16 text-green-700">
+            <h3 className="text-lg font-medium flex items-center ">
+              <FaCheck className="mr-2 " /> Approved Leaves
+            </h3>
+            <p className="text-2xl font-bold ">{approvedCount}</p>
+          </div>
+          <div className="p-4 bg-yellow-300 rounded-md shadow px-16 text-yellow-700">
+            <h3 className="text-lg font-medium flex items-center ">
+              <FaClock className="mr-2 " /> Pending Leaves
+            </h3>
+            <p className="text-2xl font-bold ">{pendingCount}</p>
+          </div>
+          <div className="p-4 bg-red-300 rounded-md shadow px-16 text-red-700">
+            <h3 className="text-lg font-medium flex items-center ">
+              <FaTimes className="mr-2 " /> Rejected Leaves
+            </h3>
+            <p className="text-2xl font-bold ">{rejectedCount}</p>
+          </div>
         </div>
       </div>
 
       {/* Graphs Section */}
       <div className="flex max-md:flex-wrap gap-6">
-        {/* Leave Graph */}
-        <div className="w-full lg:w-1/2 p-4 shadow-md bg-white rounded-lg">
-          <div className=" flex justify-between ">
-            <h2 className="text-xl font-semibold mb-4">Leave Graph</h2>
-            <div className="mb-4">
-              {/* <label className="mr-2">Select Period:</label> */}
-              <select
-                value={selectedPeriod}
-                onChange={handlePeriodChange}
-                className="p-2 border rounded"
-              >
-                <option value="week">Week</option>
-                <option value="month">Month</option>
-              </select>
-            </div>
-          </div>
-          <Bar data={leaveGraphData} />
-        </div>
-
-        {/* Attendance Graph */}
-        <div className="w-full lg:w-1/2 p-4 shadow-md bg-white rounded-lg">
-          <div className=" flex justify-between">
-            <h2 className="text-xl font-semibold mb-4">Attendance Graph</h2>
-            <div className="mb-4">
-              {/* <label className="mr-2">Select Period:</label> */}
-              <select
-                value={selectedPeriod}
-                onChange={handlePeriodChange}
-                className="p-2 border rounded"
-              >
-                <option value="week">Week</option>
-                <option value="month">Month</option>
-              </select>
-            </div>
-          </div>
-          <Bar data={attendanceGraphData} />
-        </div>
+        <LeaveGraph leaveGraphData={leaveGraphData} last7Days={last7Days} />
+        <AttendanceGraph
+          attendanceGraphData={attendanceGraphData}
+          last7Days={last7Days}
+        />
       </div>
     </div>
   );

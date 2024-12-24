@@ -56,7 +56,7 @@ function AuthContextProvider({ children }) {
           },
         }
       );
-      console.log(response.data.allattendance);
+      
 
       setAttendanceData(response.data.allattendance);
     } catch (error) {
@@ -202,7 +202,7 @@ function AuthContextProvider({ children }) {
     fetchAttendance();
 
     const interval = setInterval(() => {
-      fetchAllEmployees(); // Fetch data every 10 seconds
+      // fetchAllEmployees(); // Fetch data every 10 seconds
       fetchDepartment();
       fetchSingaleLeave();
       fetchAttendance();

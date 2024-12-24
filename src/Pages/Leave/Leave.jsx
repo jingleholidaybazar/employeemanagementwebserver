@@ -3,6 +3,7 @@ import axios from "axios";
 import FullDescriptionModal from "./FullDescriptionModal";
 import { useAuth } from "../../Components/Context.jsx/AuthContext";
 import { toast } from "react-hot-toast"; // Import toast
+import Loading from "../../Components/Loading/Loading";
 
 const Leave = () => {
   const [leaves, setLeaves] = useState([]);
@@ -20,15 +21,24 @@ const Leave = () => {
     if (leavesList && Array.isArray(leavesList)) {
       setLeaves(leavesList);
       setFilteredLeaves(leavesList);
+
+      // Add a 2-second delay before setting loading to false
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
     } else {
       setLeaves([]);
       setFilteredLeaves([]);
-    }
-    setLoading(false);
-  }, [leavesList]);
 
+      // Add a 2-second delay before setting loading to false
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    }
+  }, [leavesList]);
   // Handle leave status change (approve/reject)
   const handleAction = async (_id, actionType) => {
+    setLoading(true); // Show loading while performing the action
     try {
       const response = await axios.put(
         `https://management-system-jet.vercel.app/api/leave/statusUpdate/${_id}`,
@@ -67,6 +77,7 @@ const Leave = () => {
       console.error("Error updating leave status:", error);
       toast.error("Failed to update leave status.");
     }
+    setLoading(false); // Hide loading after the action completes
   };
 
   // Handle filter change
@@ -138,9 +149,12 @@ const Leave = () => {
   };
 
   return (
-    <div className="">
+    <div className="relative">
+      {/* Full-page Loading Spinner */}
+      {loading && <Loading />}
+
       {/* Search bar and filter buttons */}
-      <div className="flex max-md:flex-wrap space-y-3 justify-between items-center pb-2 rounded-lg w-full ">
+      <div className="flex max-md:flex-wrap space-y-3 justify-between items-center pb-2 rounded-lg w-full">
         <div className="flex gap-3 max-md:w-full px-2">
           <input
             type="text"
@@ -151,7 +165,7 @@ const Leave = () => {
           />
         </div>
 
-        <div className="flex max-md:flex-wrap justify-evenly  gap-2">
+        <div className="flex max-md:flex-wrap justify-evenly gap-2">
           <button
             className={`font-semibold px-4 py-2 rounded bg-green-600 text-white max-md:w-2/5 ${
               filter === "Approved"
@@ -195,11 +209,7 @@ const Leave = () => {
         </div>
       </div>
 
-      {loading ? (
-        <div className="flex justify-center items-center">
-          <div className="animate-spin h-8 w-8 border-t-2 border-blue-500 border-solid rounded-full"></div>
-        </div>
-      ) : (
+      {!loading && (
         <div className="overflow-x-auto shadow-md">
           <table className="w-full text-sm text-left text-gray-500 bg-white shadow-md rounded-lg">
             <thead className="bg-red-500 uppercase text-white font-semibold ">

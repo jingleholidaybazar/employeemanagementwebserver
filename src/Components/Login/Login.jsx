@@ -3,11 +3,13 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { handleError, handleSuccess } from "../util";
+import Loading from "../Loading/Loading"; // Import the Loading component
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // State for loading spinner
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -22,12 +24,12 @@ const Login = () => {
       return;
     }
 
+    setLoading(true); // Start loading
     try {
       const response = await axios.post(
         "https://management-system-jet.vercel.app/api/auth/login",
         { email, password }
       );
-      console.log(response.data.employee);
 
       if (response.status === 200) {
         const { role, _id, name, image } = response.data.employee;
@@ -58,6 +60,8 @@ const Login = () => {
       } else {
         handleError("An error occurred while logging in.");
       }
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -67,8 +71,8 @@ const Login = () => {
 
   return (
     <section className="min-h-screen flex box-border justify-center items-center">
+      {loading && <Loading />} {/* Show Loading spinner */}
       <div className="bg-gray-100 rounded-2xl flex max-w-5xl p-2 items-center shadow-lg">
-        {/* Image Section */}
         <div className="md:block hidden w-1/2">
           <img
             className="rounded-2xl max-h-[1600px]"

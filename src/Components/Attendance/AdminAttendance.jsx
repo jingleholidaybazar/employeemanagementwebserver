@@ -14,11 +14,13 @@ const AdminAttendance = () => {
     fullDay: 0,
     halfDay: 0,
     leave: 0,
+    totalAttendance: 0,
   });
   const [employeeStats, setEmployeeStats] = useState({
     fullDay: 0,
     halfDay: 0,
     leave: 0,
+    totalAttendance: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
   const todayDate = dayjs().format("YYYY/MM/DD");
@@ -28,7 +30,6 @@ const AdminAttendance = () => {
     const fetchAttendance = async () => {
       setIsLoading(true);
       try {
-        await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate loading
         const response = await axios.get(
           "https://management-system-jet.vercel.app/api/attendance/allAttendance",
           { headers: { Authorization: `Bearer ${token}` } }
@@ -50,6 +51,8 @@ const AdminAttendance = () => {
           },
           { fullDay: 0, halfDay: 0, leave: 0 }
         );
+
+        stats.totalAttendance = todayRecords.length - stats.leave; // Calculate total attendance
         setTodayStats(stats);
       } catch (error) {
         toast.error("Failed to fetch attendance data.");
@@ -85,6 +88,9 @@ const AdminAttendance = () => {
       { fullDay: 0, halfDay: 0, leave: 0 }
     );
 
+    stats.totalAttendance =
+      attendanceData.filter((record) => record.name === employeeName).length -
+      stats.leave; // Calculate total attendance for selected employee
     setEmployeeStats(stats);
   };
 
@@ -95,14 +101,21 @@ const AdminAttendance = () => {
   return (
     <div className="p-2">
       <Toaster />
-
-      <div className="text-center mb-4">
-        <h2 className="text-2xl font-bold text-gray-700">Attendance Management</h2>
-        <p className="text-lg font-semibold">
-          Today:{" "}
-          <span className="text-green-500">{dayjs().format("DD MMMM YYYY")}</span>
-        </p>
-      </div>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className="text-center mb-4">
+          <h2 className="text-2xl font-bold text-gray-700">
+            Attendance Management
+          </h2>
+          <p className="text-lg font-semibold">
+            Today:{" "}
+            <span className="text-green-500">
+              {dayjs().format("DD MMMM YYYY")}
+            </span>
+          </p>
+        </div>
+      )}
 
       <div className="mt-6 p-4 rounded-lg">
         <h3 className="text-lg font-bold text-gray-700 mb-4">
@@ -113,25 +126,29 @@ const AdminAttendance = () => {
 
         <div className="flex justify-between max-md:flex-wrap gap-5">
           {(selectedEmployee ? employeeStats : todayStats) &&
-            ["fullDay", "halfDay", "leave"].map((type, index) => (
-              <div
-                key={index}
-                className={`flex flex-col items-center justify-center rounded-lg p-4 w-64 h-32 max-md:w-full ${
-                  type === "fullDay"
-                    ? "bg-green-300 text-green-800"
-                    : type === "halfDay"
-                    ? "bg-yellow-300 text-yellow-800"
-                    : "bg-red-300 text-red-800"
-                }`}
-              >
-                <h4 className="text-xl font-bold capitalize">
-                  {type.replace(/([a-z])([A-Z])/g, "$1 $2")}
-                </h4>
-                <p className="text-2xl">
-                  {selectedEmployee ? employeeStats[type] : todayStats[type]}
-                </p>
-              </div>
-            ))}
+            ["fullDay", "halfDay", "leave", "totalAttendance"].map(
+              (type, index) => (
+                <div
+                  key={index}
+                  className={`flex flex-col items-center justify-center rounded-lg p-4 w-64 h-32 max-md:w-full ${
+                    type === "fullDay"
+                      ? "bg-green-300 text-green-800"
+                      : type === "halfDay"
+                      ? "bg-yellow-300 text-yellow-800"
+                      : type === "leave"
+                      ? "bg-red-300 text-red-800"
+                      : "bg-blue-300 text-blue-800"
+                  }`}
+                >
+                  <h4 className="text-xl font-bold capitalize">
+                    {type.replace(/([a-z])([A-Z])/g, "$1 $2")}
+                  </h4>
+                  <p className="text-2xl">
+                    {selectedEmployee ? employeeStats[type] : todayStats[type]}
+                  </p>
+                </div>
+              )
+            )}
         </div>
       </div>
 
@@ -145,54 +162,58 @@ const AdminAttendance = () => {
         />
       </div>
 
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <div className="bg-white shadow rounded-lg overflow-x-auto">
-          {filteredData.length > 0 ? (
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-red-500 text-white">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Date</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Type</th>
+      <div className="bg-white shadow rounded-lg overflow-x-auto">
+        {filteredData.length > 0 ? (
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-red-500 text-white">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
+                  ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
+                  Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase">
+                  Type
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {filteredData.map((record, index) => (
+                <tr
+                  key={record._id} // Using unique identifier for key
+                  className="hover:bg-gray-50 cursor-pointer"
+                  onClick={() => handleEmployeeClick(record.name)}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{record.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{record.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        record.type === "fullDay"
+                          ? "bg-green-100 text-green-800"
+                          : record.type === "halfDay"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {record.type}
+                    </span>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {filteredData.map((record, index) => (
-                  <tr
-                    key={index}
-                    className="hover:bg-gray-50 cursor-pointer"
-                    onClick={() => handleEmployeeClick(record.name)}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{record.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{record.date}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          record.type === "fullDay"
-                            ? "bg-green-100 text-green-800"
-                            : record.type === "halfDay"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {record.type}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className="text-center py-4 text-gray-500 font-semibold">
-              No records found.
-            </div>
-          )}
-        </div>
-      )}
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="text-center py-4 text-gray-500 font-semibold">
+            No records found.
+          </div>
+        )}
+      </div>
     </div>
   );
 };
