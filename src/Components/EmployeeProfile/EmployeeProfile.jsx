@@ -89,9 +89,9 @@ function EmployeeProfile() {
                 ["Employee ID", employee._id],
                 ["Email", employee.email],
                 ["Aadhar Number", employee.aadhar],
-                ["Pan Card Number", employee.pan],
+                ["Pan Card Number", employee.panCard],
                 ["Joining Date", employee.joiningDate],
-                ["Phone Number", employee.phoneNumber],
+                ["Phone Number", employee.mobile],
                 ["Salary", employee.salary],
               ].map(([label, value], index) => (
                 <tr
