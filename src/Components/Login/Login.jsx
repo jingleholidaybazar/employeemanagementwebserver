@@ -21,7 +21,7 @@ const Login = () => {
     const autoLogin = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/auth/autologin",
+          "https://management-system-jet.vercel.app/api/auth/autologin",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -36,7 +36,6 @@ const Login = () => {
           localStorage.setItem("role", role);
           localStorage.setItem("id", _id);
           localStorage.setItem("name", name);
-         
 
           // Redirect based on role
           if (role === "admin") {
