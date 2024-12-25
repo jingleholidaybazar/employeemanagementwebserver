@@ -42,7 +42,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
   }, []);
 
   return (
-    <nav className="bg-white text-black p-4 flex justify-between items-center shadow-md rounded-t-xl lg:rounded-t-3xl">
+    <nav className="bg-white text-black py-4 px-4 max-md:px-2 flex justify-between items-center shadow-md rounded-t-xl lg:rounded-t-3xl">
       {/* Left side: Toggle Button and Logo */}
       <div className="flex items-center">
         <img
@@ -68,7 +68,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
           <FaEllipsisV size={18} className=" max-md:hidden" />
         </div>
         <button
-          className="block md:hidden p-2 text-xl"
+          className="block md:hidden text-xl"
           onClick={toggleSidebar}
           aria-label="Toggle Sidebar"
         >

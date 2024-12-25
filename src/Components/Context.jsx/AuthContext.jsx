@@ -56,7 +56,6 @@ function AuthContextProvider({ children }) {
           },
         }
       );
-      
 
       setAttendanceData(response.data.allattendance);
     } catch (error) {

@@ -123,35 +123,35 @@ const MainDashboard = () => {
             <h3 className="text-lg font-medium flex items-center">
               <FaDollarSign className="mr-2" /> Total Salary
             </h3>
-            <p className="text-2xl font-bold">${totalSalaryInMonth}</p>
+            <p className="text-2xl font-bold pl-8 ">${totalSalaryInMonth}</p>
           </div>
           <div className="p-4 bg-pink-100 rounded-md shadow px-16 text-pink-700">
             <h3 className="text-lg font-medium flex items-center">
               <FaUsers className="mr-2" /> Total Employees
             </h3>
-            <p className="text-2xl font-bold">{totalEmployees}</p>
+            <p className="text-2xl font-bold pl-8">{totalEmployees}</p>
           </div>
           <div className="p-4 bg-pink-100 rounded-md shadow px-16 text-pink-700">
             <h3 className="text-lg font-medium">Total Departments</h3>
-            <p className="text-2xl font-bold">{totalDepartments}</p>
+            <p className="text-2xl font-bold pl-8">{totalDepartments}</p>
           </div>
           <div className="p-4 bg-green-300 rounded-md shadow px-16 text-green-700">
             <h3 className="text-lg font-medium flex items-center ">
               <FaCheck className="mr-2 " /> Approved Leaves
             </h3>
-            <p className="text-2xl font-bold ">{approvedCount}</p>
+            <p className="text-2xl font-bold  pl-8">{approvedCount}</p>
           </div>
           <div className="p-4 bg-yellow-300 rounded-md shadow px-16 text-yellow-700">
             <h3 className="text-lg font-medium flex items-center ">
               <FaClock className="mr-2 " /> Pending Leaves
             </h3>
-            <p className="text-2xl font-bold ">{pendingCount}</p>
+            <p className="text-2xl font-bold  pl-8">{pendingCount}</p>
           </div>
           <div className="p-4 bg-red-300 rounded-md shadow px-16 text-red-700">
             <h3 className="text-lg font-medium flex items-center ">
               <FaTimes className="mr-2 " /> Rejected Leaves
             </h3>
-            <p className="text-2xl font-bold ">{rejectedCount}</p>
+            <p className="text-2xl font-bold pl-8 ">{rejectedCount}</p>
           </div>
         </div>
       </div>

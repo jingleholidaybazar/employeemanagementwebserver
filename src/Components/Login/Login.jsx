@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -15,6 +15,42 @@ const Login = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  // Auto login logic
+  useEffect(() => {
+    const autoLogin = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/auth/autologin", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (response.status === 200) {
+          const { role, _id, name, image } = response.data.employee;
+
+          // Store data in localStorage
+          localStorage.setItem("role", role);
+          localStorage.setItem("id", _id);
+          localStorage.setItem("name", name);
+          localStorage.setItem("image", image);
+
+          // Redirect based on role
+          if (role === "admin") {
+            navigate("/adminDashboard");
+          } else if (role === "employee") {
+            navigate("/employeeDashboard");
+          } else {
+            handleError("User type not recognized.");
+          }
+        }
+      } catch (error) {
+        console.log("Auto-login failed:", error);
+      }
+    };
+
+    autoLogin();
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -71,7 +107,6 @@ const Login = () => {
 
   return (
     <section className="min-h-screen flex box-border justify-center items-center">
-      {loading && <Loading />} {/* Show Loading spinner */}
       <div className="bg-gray-100 rounded-2xl flex max-w-5xl p-2 items-center shadow-lg">
         <div className="md:block hidden w-1/2">
           <img
@@ -132,13 +167,40 @@ const Login = () => {
                 />
               </svg>
             </div>
+
             <button
-              className="bg-[#002D74] text-white py-2 rounded-xl hover:scale-105 duration-300 hover:bg-[#206ab1] font-medium"
+              className="bg-[#002D74] text-white py-2 rounded-xl hover:scale-105 duration-300 hover:bg-[#206ab1] font-medium flex items-center justify-center"
               type="submit"
+              disabled={loading} // Disable button while loading
             >
-              Login
+              {loading ? (
+                <svg
+                  className="w-6 h-6 animate-spin text-red-700"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 1 1 16 0A8 8 0 0 1 4 12z"
+                  ></path>
+                </svg>
+              ) : (
+                "Login"
+              )}
             </button>
           </form>
+
           <div className="mt-6 items-center text-gray-100">
             <hr className="border-gray-300" />
             <p className="text-center text-sm">OR</p>
