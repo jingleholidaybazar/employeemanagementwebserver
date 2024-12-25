@@ -38,7 +38,7 @@ const Login = () => {
           localStorage.setItem("name", name);
 
           // Redirect based on role
-          if (role === "admin") {
+          if (role === "superadmin") {
             navigate("/adminDashboard");
           } else if (role === "employee") {
             navigate("/employeeDashboard");
@@ -80,7 +80,7 @@ const Login = () => {
         localStorage.setItem("image", image);
         handleSuccess("Login successful!");
 
-        if (role === "admin") {
+        if (role === "superadmin") {
           navigate("/adminDashboard");
         } else if (role === "employee") {
           navigate("/employeeDashboard");

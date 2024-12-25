@@ -20,7 +20,7 @@ const PrivateRoute = ({ element }) => {
       ) {
         if (userRole === "employee") {
           navigate("/employeeDashboard");
-        } else if (userRole === "admin") {
+        } else if (userRole === "superadmin") {
           navigate("/adminDashboard");
         }
       }
