@@ -30,11 +30,11 @@ const Login = () => {
         );
         console.log(response.data.employee);
         if (response.status === 200) {
-          const { role, _id, name } = response.data.employee;
+          const { role, id, name } = response.data.employee;
 
           // Store data in localStorage
           localStorage.setItem("role", role);
-          localStorage.setItem("id", _id);
+          localStorage.setItem("id", id);
           localStorage.setItem("name", name);
 
           // Redirect based on role
