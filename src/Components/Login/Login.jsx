@@ -20,20 +20,23 @@ const Login = () => {
   useEffect(() => {
     const autoLogin = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/auth/autologin", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-
+        const response = await axios.get(
+          "http://localhost:8080/api/auth/autologin",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        console.log(response.data.employee);
         if (response.status === 200) {
-          const { role, _id, name, image } = response.data.employee;
+          const { role, _id, name } = response.data.employee;
 
           // Store data in localStorage
           localStorage.setItem("role", role);
           localStorage.setItem("id", _id);
           localStorage.setItem("name", name);
-          localStorage.setItem("image", image);
+         
 
           // Redirect based on role
           if (role === "admin") {
