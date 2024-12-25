@@ -15,7 +15,7 @@ const Attendance = () => {
 
   const [userLocation, setUserLocation] = useState(null);
   const [targetLocation, setTargetLocation] = useState({
-    lat: 28.686328344888768,  // Example latitude (Bangalore, India)
+    lat: 28.686328344888768, // Example latitude (Bangalore, India)
     lng: 77.3365892262804, // Example longitude
   });
 
@@ -110,6 +110,9 @@ const Attendance = () => {
   };
 
   const handleMarkAttendance = (e) => {
+    if (currentTime < "08:40") {
+      return toast.error("Attendance marking starts at 8:40 AM.");
+    }
     e.preventDefault();
     if (!userLocation || !targetLocation) {
       return toast.error("Unable to determine your location.");
