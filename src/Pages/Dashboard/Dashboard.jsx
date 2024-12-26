@@ -91,8 +91,8 @@ function Dashboard() {
 
       {/* Logout Confirmation Modal */}
       {isLogoutModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 mx-15">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-md:w-80">
             <h2 className="text-xl font-semibold mb-4">Confirm Logout</h2>
             <p className="text-gray-600 mb-6">
               Are you sure you want to log out?
