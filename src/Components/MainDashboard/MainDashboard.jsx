@@ -126,13 +126,13 @@ const MainDashboard = () => {
         {birthdayEmployees.length > 0 && (
           <div className="bg-green-200 text-green-800 text-center py-2 mb-4 rounded-lg">
             <p className="text-lg font-semibold">
-              🎉 Happy Birthday to:
+              🎉 Today is
               {birthdayEmployees.map((employee, index) => (
                 <span key={employee.id}>
                   {index > 0 && ", "} {employee.name}
                 </span>
               ))}{" "}
-              🎂
+              's birthday.🎂
             </p>
           </div>
         )}

@@ -76,7 +76,6 @@ function AuthContextProvider({ children }) {
           },
         }
       );
-      handleSuccess("Employee deleted successfully");
     } catch (error) {
       handleError("Error deleting employee:", error);
       setError("Failed to delete employee. Please try again.");

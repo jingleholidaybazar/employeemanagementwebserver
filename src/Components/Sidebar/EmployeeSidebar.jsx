@@ -22,7 +22,7 @@ function Sidebar({ onOptionSelect, options, onLogoutModal }) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-gray-800 text-white">
+    <div className="flex flex-col h-full max-md:h-[85vh] bg-gray-800 text-white">
       {/* Menu Options */}
       <div className="flex-1 overflow-y-auto">
         <ul>

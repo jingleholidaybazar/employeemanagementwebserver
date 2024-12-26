@@ -68,7 +68,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
           <FaEllipsisV size={18} className=" max-md:hidden" />
         </div>
         <button
-          className="block md:hidden text-xl"
+          className="block md:hidden text-xl font-bold"
           onClick={toggleSidebar}
           aria-label="Toggle Sidebar"
         >

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import dayjs from "dayjs";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import Loading from "../Loading/Loading";
 
 const Attendance = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
@@ -12,7 +13,7 @@ const Attendance = () => {
     leave: 0,
     total: 0,
   });
-
+  const [loading, setLoading] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
   const [targetLocation, setTargetLocation] = useState({
     lat: 28.686328344888768, // Example latitude (Bangalore, India)
@@ -42,6 +43,8 @@ const Attendance = () => {
         calculateStats(data);
       } catch (error) {
         toast.error("Failed to fetch attendance data.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchAttendance();
@@ -166,6 +169,9 @@ const Attendance = () => {
       return { date, markedDate };
     });
   }, [currentDate, markedDates]);
+  if (loading) {
+    return <Loading message="Loading employee data..." />;
+  }
 
   return (
     <div className="p-1 min-h-screen">
