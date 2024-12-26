@@ -14,6 +14,7 @@ import AttendanceGraph from "./AttendanceGraph";
 const MainDashboard = () => {
   const [loading, setLoading] = useState(true);
   const { leavesList, employees, attendanceData, departments } = useAuth();
+  const [birthdayEmployees, setBirthdayEmployees] = useState([]); // Store all employees with today's birthday
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -22,6 +23,19 @@ const MainDashboard = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  // Check if today is the employee's birthday
+  useEffect(() => {
+    const currentDate = new Date().toISOString().slice(5, 10); // Format: MM-DD
+
+    // Find all employees whose birthday is today
+    const birthdayList = employees.filter((employee) => {
+      const employeeDOB = new Date(employee.dob).toISOString().slice(5, 10);
+      return currentDate === employeeDOB;
+    });
+
+    setBirthdayEmployees(birthdayList); // Update state with all birthday employees
+  }, [employees]);
 
   const getLast7Days = () => {
     const days = [];
@@ -45,15 +59,6 @@ const MainDashboard = () => {
 
   const totalEmployees = employees.length;
   const totalDepartments = departments.length;
-
-  const totalSalaryInMonth = employees.reduce((total, employee) => {
-    const currentMonth = new Date().getMonth();
-    const employeeMonth = new Date(employee.salaryDate).getMonth();
-    if (currentMonth === employeeMonth) {
-      return total + employee.salary;
-    }
-    return total;
-  }, 0);
 
   const approvedCount = leavesList.filter(
     (leave) => leave.status === "Approved"
@@ -117,13 +122,27 @@ const MainDashboard = () => {
     <div className="min-lg:p-4 p-1 space-y-8">
       {/* General Statistics */}
       <div className="bg-white pb-3 pt-3 px-3 rounded-md shadow-sm">
+        {/* Birthday Messages */}
+        {birthdayEmployees.length > 0 && (
+          <div className="bg-green-200 text-green-800 text-center py-2 mb-4 rounded-lg">
+            <p className="text-lg font-semibold">
+              🎉 Happy Birthday to:
+              {birthdayEmployees.map((employee, index) => (
+                <span key={employee.id}>
+                  {index > 0 && ", "} {employee.name}
+                </span>
+              ))}{" "}
+              🎂
+            </p>
+          </div>
+        )}
         <h2 className="text-2xl font-semibold mb-4">Overview</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-10 gap-6">
           <div className="p-4 bg-pink-100 rounded-md shadow px-16 text-pink-700">
             <h3 className="text-lg font-medium flex items-center">
               <FaDollarSign className="mr-2" /> Total Salary
             </h3>
-            <p className="text-2xl font-bold pl-8 ">${totalSalaryInMonth}</p>
+            <p className="text-2xl font-bold pl-8 ">${totalSalary}</p>
           </div>
           <div className="p-4 bg-pink-100 rounded-md shadow px-16 text-pink-700">
             <h3 className="text-lg font-medium flex items-center">

@@ -16,6 +16,7 @@ const Welcome = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("week");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true); // State to track loading status
+  const [showBirthdayMessage, setShowBirthdayMessage] = useState(false); // Track birthday message visibility
   const { singaleLeave = [], singaleEmployee } = useAuth();
 
   // Simulate data fetching
@@ -26,6 +27,22 @@ const Welcome = () => {
       setLoading(false);
     }, 2000);
   }, []);
+
+  // Check if today is the employee's birthday
+  useEffect(() => {
+    if (singaleEmployee?.dob) {
+      const currentDate = new Date().toISOString().slice(5, 10); // Format: MM-DD
+      const employeeDOB = new Date(singaleEmployee.dob)
+        .toISOString()
+        .slice(5, 10);
+
+      if (currentDate === employeeDOB) {
+        setShowBirthdayMessage(true); // Keep the message displayed all day
+      } else {
+        setShowBirthdayMessage(false); // Hide the message if it's not their birthday
+      }
+    }
+  }, [singaleEmployee]);
 
   // Leave data calculations
   const counts = {
@@ -106,6 +123,18 @@ const Welcome = () => {
         <Loading />
       ) : (
         <>
+          {/* Birthday Message */}
+          {showBirthdayMessage && (
+            <div className="bg-green-200 text-green-800 text-center py-2 mb-4 rounded-lg">
+              🎉 Wishing you a very happy birthday, {singaleEmployee?.name}! 🎂
+              <br />
+              <span className="text-base font-normal">
+                Filled with love, joy, and laughter. May this year bring you
+                endless happiness and success.
+              </span>
+            </div>
+          )}
+
           {/* Leave Buttons */}
           <div className="flex flex-wrap justify-between gap-4 mb-5">
             {Object.keys(leaveData).map((status) => (

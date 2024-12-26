@@ -81,7 +81,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
             <div className="absolute right-0 mt-5 w-64 bg-white text-black rounded shadow-lg p-4">
               {/* Close Icon */}
               <button
-                className="absolute top-2 right-2 text-black hover:bg-red-600 rounded-md p-1 hover:text-white"
+                className="absolute top-2 right-2 border-2 border-gray-950 text-gray-700 hover:border-red-500 hover:bg-red-500 rounded-2xl p-1 hover:text-white"
                 onClick={() => setIsDropdownOpen(false)}
                 aria-label="Close Dropdown"
               >
