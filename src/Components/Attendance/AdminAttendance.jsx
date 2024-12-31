@@ -166,18 +166,18 @@ const AdminAttendance = () => {
       </div>
 
       <div className=" flex justify-between">
-        <div className="p-3 w-2/5">
+        <div className="p-3 w-2/5 max-sm:w-[62%]">
           <input
             type="text"
             placeholder="Search by name, type, or date..."
             value={searchQuery}
             onChange={handleSearch}
-            className="border-2 border-black rounded px-4 py-3 w-full max-md:w-full"
+            className="border-2 border-black rounded px-4 py-3 w-full "
           />
         </div>
-        <div className=" p-3 w-1/5">
+        <div className=" p-3 w-1/5 max-sm:w-[37%]">
           <button
-            className=" border-2 border-red-500 text-red-500 font-semibold h-14 w-full rounded hover:text-white hover:bg-red-300"
+            className=" border-2 border-red-500 text-red-500 font-semibold  h-12 w-full rounded hover:text-white hover:bg-red-300"
             onClick={handleMarkLeave}
           >
             Mark Leave
