@@ -98,6 +98,19 @@ const AdminAttendance = () => {
     setSelectedEmployee(null);
   };
 
+  // Handle "Mark Leave" button click
+  const handleMarkLeave = async () => {
+    try {
+      const response = await axios.get(
+        "https://management-system-jet.vercel.app/api/automark/auto-mark",
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Leave marked successfully!");
+    } catch (error) {
+      toast.error("Failed to mark leave.");
+    }
+  };
+
   return (
     <div className="p-2">
       <Toaster />
@@ -152,14 +165,24 @@ const AdminAttendance = () => {
         </div>
       </div>
 
-      <div className="p-3">
-        <input
-          type="text"
-          placeholder="Search by name, type, or date..."
-          value={searchQuery}
-          onChange={handleSearch}
-          className="border-2 border-black rounded px-4 py-3 w-1/3 max-md:w-full"
-        />
+      <div className=" flex justify-between">
+        <div className="p-3 w-2/5">
+          <input
+            type="text"
+            placeholder="Search by name, type, or date..."
+            value={searchQuery}
+            onChange={handleSearch}
+            className="border-2 border-black rounded px-4 py-3 w-full max-md:w-full"
+          />
+        </div>
+        <div className=" p-3 w-1/5">
+          <button
+            className=" border-2 border-red-500 text-red-500 font-semibold h-14 w-full rounded hover:text-white hover:bg-red-300"
+            onClick={handleMarkLeave}
+          >
+            Mark Leave
+          </button>
+        </div>
       </div>
 
       <div className="bg-white shadow rounded-lg overflow-x-auto">

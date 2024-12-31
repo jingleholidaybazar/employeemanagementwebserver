@@ -5,6 +5,7 @@ import axios from "axios";
 import Loading from "../Loading/Loading";
 
 const Attendance = () => {
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [markedDates, setMarkedDates] = useState([]);
   const [attendanceStats, setAttendanceStats] = useState({
@@ -112,7 +113,7 @@ const Attendance = () => {
     }
   };
 
-  const handleMarkAttendance = (e) => {
+  const handleMarkAttendance = async (e) => {
     if (currentTime < "08:40") {
       return toast.error("Attendance marking starts at 8:40 AM.");
     }
@@ -133,7 +134,6 @@ const Attendance = () => {
     );
 
     console.log("Distance between user and target:", distance, "meters");
-
     // Check if the distance is within 30 meters
     if (distance > 30) {
       return toast.error("You are outside the 30-meter radius.");
@@ -147,7 +147,14 @@ const Attendance = () => {
     if (currentTime >= "08:40" && currentTime <= "09:10") type = "fullDay";
     else if (currentTime > "09:10" && currentTime <= "14:30") type = "halfDay";
 
-    markAttendance(type);
+    setButtonLoading(true); // Set loading state
+    try {
+      await markAttendance(type);
+    } catch (error) {
+      console.error("Error marking attendance:", error);
+    } finally {
+      setButtonLoading(false); // Reset loading state
+    }
   };
 
   const updateStats = (type) => {
@@ -224,8 +231,35 @@ const Attendance = () => {
               value={today}
             />
             <div className="flex justify-center">
-              <button className="bg-green-500 text-white px-4 py-2 mt-2 mb-2 rounded">
-                Mark Attendance
+              <button
+                type="submit"
+                className="bg-green-500 text-white w-52 h-10 mt-2 mb-2 rounded flex items-center justify-center"
+                disabled={buttonLoading} // Disable button while loading
+              >
+                {buttonLoading ? (
+                  <svg
+                    className="animate-spin h-5 w-5 text-white mr-2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8z"
+                    ></path>
+                  </svg>
+                ) : (
+                  "Mark Attendance"
+                )}
               </button>
             </div>
           </form>
