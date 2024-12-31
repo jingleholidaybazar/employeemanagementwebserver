@@ -25,6 +25,7 @@ const AdminAttendance = () => {
   const [isLoading, setIsLoading] = useState(true);
   const todayDate = dayjs().format("YYYY/MM/DD");
   const token = localStorage.getItem("token");
+  const [isMarkingLeave, setIsMarkingLeave] = useState(false); // State for marking leave button
 
   useEffect(() => {
     const fetchAttendance = async () => {
@@ -100,6 +101,7 @@ const AdminAttendance = () => {
 
   // Handle "Mark Leave" button click
   const handleMarkLeave = async () => {
+    setIsMarkingLeave(true); // Set loading state to true
     try {
       const response = await axios.get(
         "https://management-system-jet.vercel.app/api/automark/auto-mark",
@@ -108,6 +110,8 @@ const AdminAttendance = () => {
       toast.success("Leave marked successfully!");
     } catch (error) {
       toast.error("Failed to mark leave.");
+    } finally {
+      setIsMarkingLeave(false); // Reset loading state
     }
   };
 
@@ -180,7 +184,7 @@ const AdminAttendance = () => {
             className=" border-2 border-red-500 text-red-500 font-semibold  h-12 w-full rounded hover:text-white hover:bg-red-300"
             onClick={handleMarkLeave}
           >
-            Mark Leave
+            {isMarkingLeave ? "Marking..." : "Mark Leave"}
           </button>
         </div>
       </div>
