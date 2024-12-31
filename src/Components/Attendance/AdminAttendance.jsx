@@ -101,17 +101,24 @@ const AdminAttendance = () => {
 
   // Handle "Mark Leave" button click
   const handleMarkLeave = async () => {
-    setIsMarkingLeave(true); // Set loading state to true
-    try {
-      const response = await axios.get(
-        "https://management-system-jet.vercel.app/api/automark/auto-mark",
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success("Leave marked successfully!");
-    } catch (error) {
-      toast.error("Failed to mark leave.");
-    } finally {
-      setIsMarkingLeave(false); // Reset loading state
+    const currentTime = dayjs().format("HH:mm");
+    const cutoffTime = "14:30";
+
+    if (currentTime > cutoffTime) {
+      setIsMarkingLeave(true); // Set loading state to true
+      try {
+        const response = await axios.get(
+          "https://management-system-jet.vercel.app/api/automark/auto-mark",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        toast.success("Leave marked successfully!");
+      } catch (error) {
+        toast.error("Failed to mark leave.");
+      } finally {
+        setIsMarkingLeave(false); // Reset loading state
+      }
+    } else {
+      toast.error("Leave can only be marked after 2:30 PM.");
     }
   };
 
