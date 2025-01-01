@@ -73,10 +73,10 @@ function EmployeeProfile() {
             className="w-40 h-40 sm:w-60 sm:h-60 lg:w-80 lg:h-80 rounded-md object-cover shadow-md"
           />
           <h3 className="font-sans font-semibold tracking-widest text-center mt-2 text-lg uppercase">
-            {employee.name || "Nitish Kumar"}
+            {employee.name }
           </h3>
           <h3 className="font-sans font-medium tracking-widest text-center text-gray-500 uppercase">
-            {employee.jobRole || "Developer"}
+            {employee.jobRole }
           </h3>
         </div>
 

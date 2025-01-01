@@ -32,7 +32,7 @@ function EmployeeDashboard() {
     localStorage.removeItem("id");
     localStorage.removeItem("image");
     localStorage.removeItem("activeComponent"); // Clear saved state on logout
-    navigate("/"); // Redirect to home page after logout
+    navigate("/login"); // Redirect to home page after logout
     setIsLogoutModalOpen(false);
   };
 

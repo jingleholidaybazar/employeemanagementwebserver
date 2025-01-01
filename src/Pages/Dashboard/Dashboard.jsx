@@ -39,7 +39,7 @@ function Dashboard() {
     localStorage.removeItem("id");
     localStorage.removeItem("image");
     localStorage.removeItem("activeComponent"); // Clear saved component on logout
-    navigate("/"); // Redirect to the home page
+    navigate("/login"); // Redirect to the home page
     setIsLogoutModalOpen(false);
   };
 

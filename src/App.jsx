@@ -6,12 +6,14 @@ import EmployeeDashbord from "./Pages/EmployeeDashboard/EmployeeDashboard";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import { Toaster } from "react-hot-toast";
 import ChangePassword from "./Components/ChangePassword/ChangePassword";
+import AutoLogin from "./Pages/AuotoLoging/AuotoLoging";
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+       <Route path="/" element={<AutoLogin />} />
+        <Route path="/login" element={<Login />} />
         <Route
           path="/employeeDashboard"
           element={<PrivateRoute element={<EmployeeDashbord />} />}

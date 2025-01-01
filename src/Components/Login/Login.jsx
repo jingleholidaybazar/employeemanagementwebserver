@@ -16,43 +16,43 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  // Auto login logic
-  useEffect(() => {
-    const autoLogin = async () => {
-      try {
-        const response = await axios.get(
-          "https://management-system-jet.vercel.app/api/auth/autologin",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        console.log(response.data.employee);
-        if (response.status === 200) {
-          const { role, id, name } = response.data.employee;
+  // // Auto login logic
+  // useEffect(() => {
+  //   const autoLogin = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "https://management-system-jet.vercel.app/api/auth/autologin",
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //           },
+  //         }
+  //       );
+  //       console.log(response.data.employee);
+  //       if (response.status === 200) {
+  //         const { role, id, name } = response.data.employee;
 
-          // Store data in localStorage
-          localStorage.setItem("role", role);
-          localStorage.setItem("id", id);
-          localStorage.setItem("name", name);
+  //         // Store data in localStorage
+  //         localStorage.setItem("role", role);
+  //         localStorage.setItem("id", id);
+  //         localStorage.setItem("name", name);
 
-          // Redirect based on role
-          if (role === "superadmin") {
-            navigate("/adminDashboard");
-          } else if (role === "employee") {
-            navigate("/employeeDashboard");
-          } else {
-            handleError("User type not recognized.");
-          }
-        }
-      } catch (error) {
-        console.log("Auto-login failed:", error);
-      }
-    };
+  //         // Redirect based on role
+  //         if (role === "superadmin") {
+  //           navigate("/adminDashboard");
+  //         } else if (role === "employee") {
+  //           navigate("/employeeDashboard");
+  //         } else {
+  //           handleError("User type not recognized.");
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.log("Auto-login failed:", error);
+  //     }
+  //   };
 
-    autoLogin();
-  }, [navigate]);
+  //   autoLogin();
+  // }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
