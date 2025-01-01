@@ -58,7 +58,7 @@ const ChangePassword = () => {
 
   return (
     <section className="flex justify-center items-centr relative my-24 ">
-      <div className="bg-gray-300 rounded-2xl p-8 max-w-md w-full shadow-lg z-5">
+      <div className="bg-gray-200 rounded-2xl p-8 max-w-md w-full shadow-lg z-5">
         <h2 className="font-bold text-3xl text-center text-[#002D74] mb-6">
           Change Password
         </h2>
@@ -67,7 +67,7 @@ const ChangePassword = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-md font-medium text-gray-700"
             >
               Registered Email
             </label>
@@ -83,7 +83,7 @@ const ChangePassword = () => {
           <div>
             <label
               htmlFor="aadhar"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-md font-medium text-gray-700"
             >
               Aadhaar Number
             </label>
@@ -101,7 +101,7 @@ const ChangePassword = () => {
           <div>
             <label
               htmlFor="newPassword"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-md font-medium text-gray-700"
             >
               New Password
             </label>

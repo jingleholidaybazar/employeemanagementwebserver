@@ -144,7 +144,7 @@ const Attendance = () => {
     }
 
     let type = "leave";
-    if (currentTime >= "08:40" && currentTime <= "09:10") type = "fullDay";
+    if (currentTime >= "08:40" && currentTime <= "09:06") type = "fullDay";
     else if (currentTime > "09:10" && currentTime <= "14:30") type = "halfDay";
 
     setButtonLoading(true); // Set loading state
