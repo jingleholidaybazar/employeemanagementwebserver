@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../Components/Loading/Loading";
 
 function AutoLogin() {
+  const [isLoading, setIsLoading] = useState(true); // Loading state tracker
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,12 +22,12 @@ function AutoLogin() {
         if (response.status === 200) {
           const { role, id, name } = response.data.employee;
 
-          // Store data in localStorage
+          // Store retrieved user details in local storage
           localStorage.setItem("role", role);
           localStorage.setItem("id", id);
           localStorage.setItem("name", name);
 
-          // Redirect based on role
+          // Redirect user based on their role
           if (role === "superadmin") {
             navigate("/adminDashboard");
           } else if (role === "employee") {
@@ -35,21 +37,26 @@ function AutoLogin() {
           }
         }
       } catch (error) {
-        // Handle expired or invalid token
+        // Handle token-related errors and redirect to login
         if (error.response && error.response.status === 403) {
           console.warn("Token expired or invalid. Redirecting to login.");
-          localStorage.clear(); // Clear all stored user data
-          navigate("/login"); // Navigate to the login page
+          localStorage.clear(); // Clear outdated session data
+          navigate("/login");
         } else {
           console.error("Auto-login failed:", error);
         }
+      } finally {
+        // Introduce a deliberate 1-second delay
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
       }
     };
 
     autoLogin();
   }, [navigate]);
 
-  return <div></div>;
+  return <div>{isLoading ? <Loading /> : null}</div>;
 }
 
 export default AutoLogin;
