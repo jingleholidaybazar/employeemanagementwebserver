@@ -48,9 +48,9 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
         <img
           src="https://i.imgur.com/f1OH7Ef.png"
           alt="Logo"
-          className="h-10 w-40 mr-3 "
+          className="h-10 w-40 mr-3 max-sm:w-36 "
         />
-      </div>
+      </div>  
 
       {/* Right side: User Section */}
       <div className="flex items-center space-x-3" ref={userRef}>

@@ -156,10 +156,10 @@ const Employees = () => {
                   <td className="border-gray-300 px-4 py-2">
                     {employee.salary}
                   </td>
-                  <td className="border-gray-300 px-4 py-2 text-center flex justify-center gap-4">
+                  <td className="border-gray-300 px-4 py-2 text-center ">
                     <button
                       onClick={() => onEdit(employee)}
-                      className="text-blue-500 hover:text-blue-700"
+                      className="text-blue-500 hover:text-blue-700 mr-2"
                     >
                       <FaEdit />
                     </button>
