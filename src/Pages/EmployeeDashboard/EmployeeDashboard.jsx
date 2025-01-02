@@ -76,7 +76,7 @@ function EmployeeDashboard() {
           />
         )}
         {/* Main Content */}
-        <div className="flex-1 ml-0 overflow-y-auto p-3">
+        <div className="flex-1 ml-0 overflow-y-auto p-3 max-sm:p-2">
           {/* Render the dynamic dashboard content */}
           <EmployeeDashboardContent activeComponent={activeComponent} />
         </div>

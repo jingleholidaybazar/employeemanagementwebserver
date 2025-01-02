@@ -281,7 +281,7 @@ const Attendance = () => {
             </div>
           </form>
 
-          <div className="grid grid-cols-7 max-md:grid-cols-6 gap-3 mt-4">
+          <div className="grid grid-cols-7 gap-3 mt-4">
             {/* Weekday Headers */}
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
               <div key={day} className="text-center font-semibold">
@@ -290,7 +290,7 @@ const Attendance = () => {
             ))}
             {/* Empty slots for the first week */}
             {Array.from({ length: startDay }, (_, i) => (
-              <div key={`empty-${i}`} className="h-10"></div>
+              <div key={`empty-${i}`} className="h-10 "></div>
             ))}
             {/* Calendar Days */}
             {calendarDays.map(({ date, markedDate }, i) => {
@@ -313,7 +313,7 @@ const Attendance = () => {
               return (
                 <div
                   key={i}
-                  className={`h-20 max-sm:h-12 max-sm:w-12 flex flex-col items-center justify-center rounded ${bgColor} ${
+                  className={`h-20 max-sm:h-10 max-sm:w-10 flex flex-col items-center justify-center rounded ${bgColor} ${
                     isToday ? "border-2 border-blue-700" : ""
                   }`}
                 >
