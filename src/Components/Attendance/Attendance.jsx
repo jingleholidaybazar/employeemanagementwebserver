@@ -281,7 +281,7 @@ const Attendance = () => {
             </div>
           </form>
 
-          <div className="grid grid-cols-7 gap-3 mt-4">
+          <div className="grid grid-cols-7 max-md:grid-cols-6 gap-3 mt-4">
             {/* Weekday Headers */}
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
               <div key={day} className="text-center font-semibold">
