@@ -16,9 +16,9 @@ const Attendance = () => {
   });
   const [loading, setLoading] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
-  const [targetLocation, setTargetLocation] = useState({
-    lat: 28.686328344888768, // Example latitude (Bangalore, India)
-    lng: 77.3365892262804, // Example longitude
+  const [targetLocation] = useState({
+    lat: 28.686253, // Example latitude (Bangalore, India)
+    lng: 77.33669, // Example longitude
   });
 
   const daysInMonth = currentDate.daysInMonth();
@@ -54,7 +54,11 @@ const Attendance = () => {
   // Calculate stats
   const calculateStats = (data) => {
     const stats = { fullDay: 0, halfDay: 0, leave: 0, total: 0 };
-    data.forEach((entry) => stats[entry.type]++);
+    data.forEach((entry) => {
+      if (stats.hasOwnProperty(entry.type)) {
+        stats[entry.type]++;
+      }
+    });
     stats.total = stats.fullDay + stats.halfDay;
     setAttendanceStats(stats);
   };
@@ -79,9 +83,9 @@ const Attendance = () => {
     }
   }, []);
 
-  // Calculate distance between two coordinates
+  // Calculate distance between two coordinates using the Haversine formula
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
-    const toRadians = (deg) => deg * (Math.PI / 180);
+    const toRadians = (deg) => (deg * Math.PI) / 180;
     const earthRadius = 6371e3; // Earth radius in meters
 
     const dLat = toRadians(lat2 - lat1);
@@ -108,24 +112,26 @@ const Attendance = () => {
         updateStats(type);
         toast.success(`Attendance marked as ${type}`);
       }
-    } catch {
+    } catch (error) {
+      console.error("Error marking attendance:", error);
       toast.error("Failed to mark attendance.");
     }
   };
 
   const handleMarkAttendance = async (e) => {
+    e.preventDefault();
+
+    // Check if attendance marking is allowed based on time
     if (currentTime < "08:40") {
       return toast.error("Attendance marking starts at 8:40 AM.");
     }
-    e.preventDefault();
-    if (!userLocation || !targetLocation) {
+
+    // Ensure user location is available
+    if (!userLocation) {
       return toast.error("Unable to determine your location.");
     }
 
-    // Debugging log for location
-    console.log("User Location:", userLocation);
-    console.log("Target Location:", targetLocation);
-
+    // Calculate the distance between user and target locations
     const distance = calculateDistance(
       userLocation.lat,
       userLocation.lng,
@@ -133,25 +139,35 @@ const Attendance = () => {
       targetLocation.lng
     );
 
+    console.log("User Location:", userLocation);
+    console.log("Target Location:", targetLocation);
     console.log("Distance between user and target:", distance, "meters");
-    // Check if the distance is within 30 meters
-    if (distance > 30) {
-      return toast.error("You are outside the 30-meter radius.");
+
+    // Check if the distance is within 50 meters
+    const allowedRadius = 50; // in meters
+    if (distance > allowedRadius) {
+      return toast.error(`You are outside the ${allowedRadius}-meter radius.`);
     }
 
+    // Check if attendance is already marked for today
     if (markedDates.some((entry) => entry.date === today)) {
       return toast.error("Attendance already marked for today.");
     }
 
+    // Determine attendance type based on current time
     let type = "leave";
-    if (currentTime >= "08:40" && currentTime <= "09:06") type = "fullDay";
-    else if (currentTime > "09:10" && currentTime <= "14:30") type = "halfDay";
+    if (currentTime >= "08:40" && currentTime <= "09:06") {
+      type = "fullDay";
+    } else if (currentTime > "09:06" && currentTime <= "14:30") {
+      type = "halfDay";
+    }
 
     setButtonLoading(true); // Set loading state
     try {
       await markAttendance(type);
     } catch (error) {
       console.error("Error marking attendance:", error);
+      // Error handling is already done in markAttendance
     } finally {
       setButtonLoading(false); // Reset loading state
     }
@@ -161,7 +177,7 @@ const Attendance = () => {
     setAttendanceStats((prev) => ({
       ...prev,
       [type]: prev[type] + 1,
-      total: prev.total + 1,
+      total: type !== "leave" ? prev.total + 1 : prev.total,
     }));
   };
 
@@ -175,7 +191,8 @@ const Attendance = () => {
       );
       return { date, markedDate };
     });
-  }, [currentDate, markedDates]);
+  }, [currentDate, markedDates, daysInMonth]);
+
   if (loading) {
     return <Loading message="Loading employee data..." />;
   }
@@ -264,25 +281,50 @@ const Attendance = () => {
             </div>
           </form>
 
-          <div className="grid grid-cols-6 gap-3">
+          <div className="grid grid-cols-7 gap-3 mt-4">
+            {/* Weekday Headers */}
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+              <div key={day} className="text-center font-semibold">
+                {day}
+              </div>
+            ))}
+            {/* Empty slots for the first week */}
             {Array.from({ length: startDay }, (_, i) => (
               <div key={`empty-${i}`} className="h-10"></div>
             ))}
+            {/* Calendar Days */}
             {calendarDays.map(({ date, markedDate }, i) => {
               let bgColor = "bg-gray-200";
-              if (markedDate?.type === "fullDay")
-                bgColor = "bg-green-500 text-white";
-              if (markedDate?.type === "halfDay")
-                bgColor = "bg-yellow-500 text-white";
-              if (markedDate?.type === "leave")
-                bgColor = "bg-red-500 text-white";
+              let textColor = "text-black";
+
+              if (markedDate?.type === "fullDay") {
+                bgColor = "bg-green-500";
+                textColor = "text-white";
+              } else if (markedDate?.type === "halfDay") {
+                bgColor = "bg-yellow-500";
+                textColor = "text-white";
+              } else if (markedDate?.type === "leave") {
+                bgColor = "bg-red-500";
+                textColor = "text-white";
+              }
+
+              const isToday = date.isSame(dayjs(), "day");
 
               return (
                 <div
                   key={i}
-                  className={`h-20 max-sm:h-12 flex items-center justify-center rounded ${bgColor}`}
+                  className={`h-20 max-sm:h-12 flex flex-col items-center justify-center rounded ${bgColor} ${
+                    isToday ? "border-2 border-blue-700" : ""
+                  }`}
                 >
-                  {date.date()}
+                  <span className={`font-bold ${textColor}`}>
+                    {date.date()}
+                  </span>
+                  {markedDate && (
+                    <span className={`text-xs ${textColor}`}>
+                      {markedDate.type}
+                    </span>
+                  )}
                 </div>
               );
             })}
@@ -291,6 +333,27 @@ const Attendance = () => {
         <div className="bg-slate-50 p-6 rounded shadow-md w-1/3 max-md:w-full">
           <h2 className="text-lg font-bold mb-2">Today</h2>
           <p className="text-xl">{dayjs().format("DD MMMM YYYY")}</p>
+          {userLocation && (
+            <div className="mt-4">
+              <h3 className="text-md font-semibold">Your Location:</h3>
+              <p className="text-sm">
+                Latitude: {userLocation.lat.toFixed(6)}, Longitude:{" "}
+                {userLocation.lng.toFixed(6)}
+              </p>
+              <h3 className="text-md font-semibold mt-2">
+                Distance to Office:
+              </h3>
+              <p className="text-sm">
+                {calculateDistance(
+                  userLocation.lat,
+                  userLocation.lng,
+                  targetLocation.lat,
+                  targetLocation.lng
+                ).toFixed(2)}{" "}
+                meters
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
