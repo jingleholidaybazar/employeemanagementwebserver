@@ -3,6 +3,8 @@ import dayjs from "dayjs";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import Loading from "../Loading/Loading";
+import jsPDF from "jspdf";
+import { autoTable } from "jspdf-autotable"; // Import the autoTable plugin
 
 const Attendance = () => {
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -197,6 +199,74 @@ const Attendance = () => {
     return <Loading message="Loading employee data..." />;
   }
 
+  const downloadPdf = async () => {
+    const userId = localStorage.getItem("id");
+    const formattedMonth = currentDate.format("YYYY-MM");
+    const previousMonth = dayjs().subtract(1, "month").format("MMMM YYYY"); // Calculate previous month
+
+    const apiUrl = `https://management-system-jet.vercel.app/api/attendance/getAllMonthRecords/${userId}`;
+
+    try {
+      const response = await axios.get(apiUrl, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const attendanceData = response.data.attendanceRecordAllMonths || [];
+      if (!attendanceData.length) {
+        toast.error("No attendance data available.");
+        return;
+      }
+
+      // Grouping attendance records by month
+      const monthGroupedData = attendanceData.reduce((acc, record) => {
+        const month = dayjs(record.date).format("MMMM YYYY");
+        if (!acc[month]) acc[month] = [];
+        acc[month].push(record);
+        return acc;
+      }, {});
+
+      const doc = new jsPDF();
+
+      // Adding previous month at the top of the report
+      // doc.text(`Previous Month: ${previousMonth}`, 20, 20);
+      doc.text("Attendance Report", 20, 30);
+      doc.text(`Generated on: ${dayjs().format("YYYY-MM-DD")}`, 20, 40);
+
+      let startY = 50;
+      Object.entries(monthGroupedData).forEach(([month, records]) => {
+        doc.text(`Month: ${month}`, 20, startY);
+        startY += 10;
+
+        const fullDay = records.filter(
+          (entry) => entry.type === "fullDay"
+        ).length;
+        const halfDay = records.filter(
+          (entry) => entry.type === "halfDay"
+        ).length;
+        const leave = records.filter((entry) => entry.type === "leave").length;
+
+        doc.text(`Full Day: ${fullDay}`, 20, startY);
+        doc.text(`Half Day: ${halfDay}`, 80, startY);
+        doc.text(`Leave: ${leave}`, 140, startY);
+        startY += 10;
+
+        // Explicitly calling autoTable function from jsPDF instance
+        doc.autoTable({
+          startY, // this is to determine the starting position on the page
+          head: [["Date", "Type"]],
+          body: records.map((entry) => [entry.date, entry.type]),
+        });
+
+        startY = doc.previousAutoTable.finalY + 10; // Adjusting position for the next table
+      });
+
+      doc.save(`Attendance_Report_${formattedMonth}.pdf`);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Failed to generate the attendance report.");
+    }
+  };
+
   return (
     <div className="p-1 min-h-screen">
       <Toaster />
@@ -290,7 +360,7 @@ const Attendance = () => {
             ))}
             {/* Empty slots for the first week */}
             {Array.from({ length: startDay }, (_, i) => (
-              <div key={`empty-${i}`} className="h-10 "></div>
+              <div key={`empty-${i}`} className="h-10"></div>
             ))}
             {/* Calendar Days */}
             {calendarDays.map(({ date, markedDate }, i) => {
@@ -313,7 +383,7 @@ const Attendance = () => {
               return (
                 <div
                   key={i}
-                  className={`h-20 max-sm:h-10 max-sm:w-10 flex flex-col items-center justify-center rounded ${bgColor} ${
+                  className={`h-20 max-sm:h-12 max-sm:w-12 flex flex-col items-center justify-center rounded ${bgColor} ${
                     isToday ? "border-2 border-blue-700" : ""
                   }`}
                 >
@@ -354,6 +424,12 @@ const Attendance = () => {
               </p>
             </div>
           )}
+          <button
+            onClick={downloadPdf}
+            className="bg-blue-500 text-white w-full h-10 rounded mt-10"
+          >
+            Download PDF
+          </button>
         </div>
       </div>
     </div>
