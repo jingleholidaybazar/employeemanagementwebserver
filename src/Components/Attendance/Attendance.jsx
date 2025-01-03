@@ -383,7 +383,7 @@ const Attendance = () => {
               return (
                 <div
                   key={i}
-                  className={`h-20 max-sm:h-10 max-sm:w-12 flex flex-col items-center justify-center rounded ${bgColor} ${
+                  className={`h-20 max-sm:h-12 max-sm:w-10 flex flex-col items-center justify-center rounded ${bgColor} ${
                     isToday ? "border-2 border-blue-700" : ""
                   }`}
                 >
