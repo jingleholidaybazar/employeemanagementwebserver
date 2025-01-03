@@ -309,7 +309,7 @@ const Attendance = () => {
       </div>
 
       <div className="flex max-md:flex-wrap gap-5">
-        <div className="flex-1 bg-slate-100 p-6 rounded shadow-md w-2/3 max-md:w-full">
+        <div className="flex-1 bg-slate-100 p-3 rounded shadow-md w-2/3 max-md:w-full">
           <form onSubmit={handleMarkAttendance}>
             <input
               type="text"
@@ -383,7 +383,7 @@ const Attendance = () => {
               return (
                 <div
                   key={i}
-                  className={`h-20 max-sm:h-12 max-sm:w-10 p-1 flex flex-col items-center justify-center rounded ${bgColor} ${
+                  className={`h-20 max-sm:h-12 max-sm:w-12 flex flex-col items-center justify-center rounded ${bgColor} ${
                     isToday ? "border-2 border-blue-700" : ""
                   }`}
                 >
