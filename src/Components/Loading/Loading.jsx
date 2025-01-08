@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import spin from "../../assets/image/Spin.svg";
 
 const Loading = ({ message = "Loading..." }) => {
   const [color, setColor] = useState("red"); // Default color is red
@@ -26,7 +27,8 @@ const Loading = ({ message = "Loading..." }) => {
   return (
     <div className="min-h-screen flex justify-center items-center ">
       <div className="flex flex-col items-center">
-        <svg
+        <img src={spin} alt="" />
+        {/* <svg
           className={`animate-spin h-20 w-20 mb-4`}
           style={{ color }} // Apply dynamic color
           xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +48,7 @@ const Loading = ({ message = "Loading..." }) => {
             fill="currentColor"
             d="M4 12a8 8 0 018-8v8H4z"
           ></path>
-        </svg>
+        </svg> */}
         {message && <p className="text-lg text-gray-700">{message}</p>}
       </div>
     </div>
