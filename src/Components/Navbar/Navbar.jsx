@@ -9,13 +9,12 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
   const dropdownRef = useRef(null);
   const userRef = useRef(null);
   const { singaleEmployee } = useAuth();
-  const name = localStorage.getItem("name");
-  const image = localStorage.getItem("image");
   const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
+  const { jobRole, name, image } = singaleEmployee;
 
   const toggleSidebar = () => {
     const newState = !isSidebarOpen;
@@ -50,7 +49,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
           alt="Logo"
           className="h-10 w-40 mr-3 max-sm:w-36 "
         />
-      </div>  
+      </div>
 
       {/* Right side: User Section */}
       <div className="flex items-center space-x-3" ref={userRef}>
@@ -98,7 +97,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
                 <div>
                   <p className="font-semibold capitalize">{name || "User"}</p>
                   <p className="text-sm text-gray-500 capitalize">
-                    {singaleEmployee?.jobRole || "Role"}
+                    {jobRole || "Role"}
                   </p>
                 </div>
               </div>

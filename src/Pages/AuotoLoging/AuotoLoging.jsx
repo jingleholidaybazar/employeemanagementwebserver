@@ -20,12 +20,11 @@ function AutoLogin() {
         );
 
         if (response.status === 200) {
-          const { role, id, name } = response.data.employee;
+          const { role } = response.data.employee;
 
           // Store retrieved user details in local storage
-          localStorage.setItem("role", role);
-          localStorage.setItem("id", id);
-          localStorage.setItem("name", name);
+         
+          // localStorage.setItem("id", _id);
 
           // Redirect user based on their role
           if (role === "superadmin") {
