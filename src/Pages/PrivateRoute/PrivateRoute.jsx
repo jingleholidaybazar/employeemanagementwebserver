@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loading from "../../Components/Loading/Loading";
 
 const PrivateRoute = ({ element }) => {
   const location = useLocation();
@@ -61,7 +62,7 @@ const PrivateRoute = ({ element }) => {
 
   if (loading) {
     // Show a loading spinner or placeholder while fetching data
-    return <div>Loading...</div>;
+    return <Loading message="Loading employee data..." />;
   }
 
   // Render protected element or redirect

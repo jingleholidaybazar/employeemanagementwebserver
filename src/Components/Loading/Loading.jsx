@@ -18,7 +18,7 @@ const Loading = ({ message = "Loading..." }) => {
       if (currentSecond >= 3) {
         currentSecond = 0;
       }
-    }, 2000); // Change color every 2 seconds
+    }, 3000); // Change color every 2 seconds
 
     return () => clearInterval(interval); // Cleanup on component unmount
   }, []);
