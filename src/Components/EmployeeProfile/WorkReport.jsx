@@ -70,7 +70,22 @@ const WorkReport = () => {
         }
       } catch (error) {
         console.error("Error submitting work report:", error);
-        toast.error("Error submitting work report. Please try again.");
+        // toast.error("Error submitting work report. Please try again.");
+        if (error.response) {
+          if (error.response.status === 403) {
+            // Work report already exists
+            toast.error(" work report for this date already exists.");
+          } else if (error.response.status === 400) {
+            // Bad request (e.g., missing fields)
+            toast.error("Please ensure all fields are filled correctly.");
+          } else {
+            // Other errors
+            toast.error(
+              error.response.data.message ||
+                "Error submitting work report. Please try again."
+            );
+          }
+        }
       }
     } else {
       toast.error("Please fill out the work report field");
