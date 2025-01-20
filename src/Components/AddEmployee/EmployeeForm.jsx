@@ -16,22 +16,25 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
     panCard: "",
     gender: "",
     dob: "",
+    avatar: null, // Changed to null for file upload
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
 
-    // Format date fields to yyyy-mm-dd
-    let formattedValue = value;
-    if (name === "joiningDate" || name === "dob") {
-      formattedValue = new Date(value).toISOString().split("T")[0];
+    // Handle file input separately
+    if (name === "avatar" && files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        avatar: files[0],
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
     }
-
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: formattedValue,
-    }));
   };
 
   const validateForm = () => {
@@ -47,6 +50,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       panCard,
       gender,
       dob,
+      avatar,
     } = formData;
 
     if (
@@ -60,7 +64,8 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       !aadhar ||
       !panCard ||
       !gender ||
-      !dob
+      !dob ||
+      !avatar
     ) {
       return handleError("All fields are required.");
     }
@@ -91,17 +96,32 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+
     if (!validateForm()) {
       return;
     }
 
     try {
       setIsSubmitting(true);
+
+      // Prepare FormData for file upload
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach((key) => {
+        formDataToSend.append(key, formData[key]);
+      });
+
       const response = await axios.post(
         "https://management-system-jet.vercel.app/api/auth/addEmployee",
-        formData
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
+
       const { message } = response.data;
+
       if (response.status === 201) {
         handleSuccess("Employee added successfully.");
         setFormData({
@@ -116,6 +136,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
           panCard: "",
           gender: "",
           dob: "",
+          avatar: null,
         });
         onSubmit(response.data);
       } else {
@@ -269,6 +290,15 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
                 type="date"
                 name="joiningDate"
                 value={formData.joiningDate}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div>
+              <label className="block font-medium mb-2">Image</label>
+              <input
+                type="file"
+                name="avatar"
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
               />
