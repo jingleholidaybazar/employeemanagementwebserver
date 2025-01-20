@@ -63,7 +63,9 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
           className="flex items-center space-x-2 cursor-pointer"
           onClick={toggleDropdown}
         >
-          <span className="text-md capitalize">{name || "User"}</span>
+          <span className="text-md capitalize max-sm:hidden">
+            {name || "User"}
+          </span>
           <FaEllipsisV size={18} className=" max-md:hidden" />
         </div>
         <button
@@ -90,7 +92,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
               {/* User Information */}
               <div className="flex items-center mb-4">
                 <img
-                  src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
+                  src={avatar}
                   alt="User"
                   className="h-12 w-12 rounded-full mr-3"
                 />

@@ -83,7 +83,7 @@ function EmployeeProfile() {
 
         {/* Employee Details */}
         <div className="w-full lg:w-2/3 overflow-x-auto">
-          <table className="w-full border border-gray-300 text-left capitalize">
+          <table className="w-full border border-gray-300 text-left ">
             <tbody>
               {[
                 ["Name", employee.name],

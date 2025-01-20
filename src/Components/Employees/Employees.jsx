@@ -132,7 +132,7 @@ const Employees = () => {
                   <td className="border-gray-300 px-4 py-2">{index + 1}</td>
                   <td className="border-gray-300 px-4 py-2">
                     <img
-                      src={`https://management-system-jet.vercel.app/${employee.image}`}
+                      src={employee.avatar}
                       alt={employee.name}
                       className="w-10 h-10 rounded-full object-cover"
                     />
