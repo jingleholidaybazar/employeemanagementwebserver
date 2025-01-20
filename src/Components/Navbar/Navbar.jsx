@@ -14,7 +14,7 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
-  const { jobRole, name, image } = singaleEmployee;
+  const { jobRole, name, avatar } = singaleEmployee;
 
   const toggleSidebar = () => {
     const newState = !isSidebarOpen;
@@ -54,9 +54,9 @@ function Navbar({ onToggleSidebar, onLogoutModal }) {
       {/* Right side: User Section */}
       <div className="flex items-center space-x-3" ref={userRef}>
         <img
-          src={`https://management-system-jet.vercel.app/${image}`}
+          src={avatar}
           alt="User"
-          className="h-10 w-10 rounded-full cursor-pointer hidden"
+          className="h-10 w-10 rounded-full cursor-pointer "
           onClick={toggleDropdown}
         />
         <div

@@ -56,6 +56,8 @@ function EmployeeProfile() {
       </div>
     );
   }
+  console.log(employee);
+  console.log(employee.avatar);
 
   return (
     <div className="flex items-centermin-lg:p-4 bg-gray-50">
@@ -65,18 +67,17 @@ function EmployeeProfile() {
         <div className="flex flex-col items-center">
           <img
             src={
-              employee.image
-                ? `https://management-system-jet.vercel.app/${employee.image}`
-                : "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
+              employee?.avatar ||
+              "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
             }
             alt="Employee"
             className="w-40 h-40 sm:w-60 sm:h-60 lg:w-80 lg:h-80 rounded-md object-cover shadow-md"
           />
           <h3 className="font-sans font-semibold tracking-widest text-center mt-2 text-lg uppercase">
-            {employee.name }
+            {employee.name}
           </h3>
           <h3 className="font-sans font-medium tracking-widest text-center text-gray-500 uppercase">
-            {employee.jobRole }
+            {employee.jobRole}
           </h3>
         </div>
 
