@@ -64,8 +64,8 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       !aadhar ||
       !panCard ||
       !gender ||
-      !dob ||
-      !avatar
+      !dob 
+      // !avatar
     ) {
       return handleError("All fields are required.");
     }
