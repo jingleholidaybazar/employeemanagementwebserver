@@ -56,11 +56,19 @@ function EmployeeProfile() {
       </div>
     );
   }
-  console.log(employee);
-  console.log(employee.avatar);
+
+  // Format joining date (DD/MM/YYYY)
+  const formattedJoiningDate = employee.joiningDate
+    ? new Date(employee.joiningDate).toLocaleDateString("en-GB")
+    : "N/A";
+
+  // Get first 4 characters of Employee ID with "..."
+  const employeeIdShort = employee._id
+    ? employee._id.slice(0, 6).toUpperCase() + "..."
+    : "N/A";
 
   return (
-    <div className="flex items-centermin-lg:p-4 bg-gray-50">
+    <div className="flex items-center min-lg:p-4 bg-gray-50">
       {/* Profile Section */}
       <section className="w-full p-4 shadow-lg flex flex-col lg:flex-row gap-10 justify-center bg-white rounded-md">
         {/* Employee Image and Name */}
@@ -87,11 +95,11 @@ function EmployeeProfile() {
             <tbody>
               {[
                 ["Name", employee.name],
-                ["Employee ID", employee._id],
+                ["Employee ID", employeeIdShort],
                 ["Email", employee.email],
                 ["Aadhar Number", employee.aadhar],
                 ["Pan Card Number", employee.panCard],
-                ["Joining Date", employee.joiningDate],
+                ["Joining Date", formattedJoiningDate],
                 ["Phone Number", employee.mobile],
                 ["Salary", employee.salary],
               ].map(([label, value], index) => (
