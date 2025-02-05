@@ -27,7 +27,7 @@ const Loading = ({ message = "Loading..." }) => {
   return (
     <div className="min-h-screen flex justify-center items-center ">
       <div className="flex flex-col items-center">
-        <img src={spin} alt="" />
+        <img src={spin} alt="" className=" h-24 w-24" />
         {/* <svg
           className={`animate-spin h-20 w-20 mb-4`}
           style={{ color }} // Apply dynamic color
