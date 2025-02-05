@@ -92,7 +92,7 @@ const MainDashboard = () => {
         data: last7Days.map(
           (day) => filteredAttendanceCounts.leave[day.fullDate] || 0
         ),
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        backgroundColor: "rgba(255, 0, 0, 0.6)",
         borderWidth: 0,
       },
     ],
@@ -108,7 +108,7 @@ const MainDashboard = () => {
             (filteredAttendanceCounts.fullDay[day.fullDate] || 0) +
             (filteredAttendanceCounts.halfDay[day.fullDate] || 0)
         ),
-        backgroundColor: "rgba(153, 102, 255, 0.6)",
+        backgroundColor: "rgba(0, 128, 0, 0.6)",
         borderWidth: 0,
       },
     ],
@@ -125,7 +125,7 @@ const MainDashboard = () => {
         {/* Birthday Messages */}
         {birthdayEmployees.length > 0 && (
           <div className="bg-green-200 text-green-800 text-center py-2 mb-4 rounded-lg">
-            <p className="text-lg font-semibold">
+            <p className="text-lg font-bold">
               🎉 Today is
               {birthdayEmployees.map((employee, index) => (
                 <span key={employee.id}>
@@ -136,14 +136,14 @@ const MainDashboard = () => {
             </p>
           </div>
         )}
-        <h2 className="text-2xl font-semibold mb-4">Overview</h2>
+        <h2 className="text-2xl font-bold mb-4">Overview</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-10 gap-6">
           <div className="p-4 bg-pink-100 rounded-md shadow-md  text-pink-700 flex justify-evenly  border-pink-700">
             <h3 className="text-3xl font-medium flex items-center bg-pink-300 p-5 rounded-full ">
               <FaDollarSign className=" " />
             </h3>
             <div className="">
-              <h3 className="text-lg font-medium flex items-center">
+              <h3 className="text-lg flex items-center font-bold uppercase tracking-wide">
                 Total Salary
               </h3>
               <p className="text-2xl font-bold  ">${totalSalary}</p>
@@ -154,7 +154,7 @@ const MainDashboard = () => {
               <FaUsers className="" />
             </h3>
             <div>
-              <h3 className="text-lg font-medium flex items-center">
+              <h3 className="text-lg flex items-center  font-bold uppercase tracking-wide">
                 Total Employees
               </h3>
               <p className="text-2xl font-bold pl-8">{totalEmployees}</p>
@@ -165,7 +165,7 @@ const MainDashboard = () => {
               <FaUsers className="" />
             </h3>
             <div>
-              <h3 className="text-lg font-medium">Total Departments</h3>
+              <h3 className="text-lg   font-bold uppercase tracking-wide">Total Departments</h3>
               <p className="text-2xl font-bold pl-8">{totalDepartments}</p>
             </div>
           </div>
@@ -174,7 +174,7 @@ const MainDashboard = () => {
               <FaCheck />
             </h3>
             <div>
-              <h3 className="text-lg font-medium flex items-center ">
+              <h3 className="text-lg  flex items-center  font-bold uppercase tracking-wide">
                 Approved Leaves
               </h3>
               <p className="text-2xl font-bold  pl-8">{approvedCount}</p>
@@ -185,7 +185,7 @@ const MainDashboard = () => {
               <FaClock />
             </h3>
             <div>
-              <h3 className="text-lg font-medium flex items-center ">
+              <h3 className="text-lg  font-bold uppercase tracking-wide flex items-center ">
                 Pending Leaves
               </h3>
               <p className="text-2xl font-bold  pl-8">{pendingCount}</p>
@@ -196,7 +196,7 @@ const MainDashboard = () => {
               <FaTimes />
             </h3>
             <div>
-              <h3 className="text-lg font-medium flex items-center ">
+              <h3 className="text-lg  font-bold uppercase tracking-wide flex items-center ">
                 Rejected Leaves
               </h3>
               <p className="text-2xl font-bold pl-8 ">{rejectedCount}</p>

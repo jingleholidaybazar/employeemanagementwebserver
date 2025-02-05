@@ -1,4 +1,5 @@
 import React from "react";
+import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./Pages/PrivateRoute/PrivateRoute";
 import Login from "./Components/Login/Login";
@@ -12,7 +13,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-       <Route path="/" element={<AutoLogin />} />
+        <Route path="/" element={<AutoLogin />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="/employeeDashboard"
