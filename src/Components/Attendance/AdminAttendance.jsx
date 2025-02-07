@@ -314,7 +314,7 @@ const AdminAttendance = () => {
 
       <div className="flex max-md:flex-wrap justify-between items-center gap-4 my-2">
         {/* Date Input Section */}
-        <div className="w-full sm:w-1/2">
+        <div className="w-full sm:w-1/3">
           <input
             type="date"
             value={selectedDate}
