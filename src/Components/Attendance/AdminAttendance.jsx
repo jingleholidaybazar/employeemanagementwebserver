@@ -3,8 +3,11 @@ import dayjs from "dayjs";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../Loading/Loading";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const AdminAttendance = () => {
+  const [selectedDate, setSelectedDate] = useState("");
   const [attendanceData, setAttendanceData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -64,14 +67,28 @@ const AdminAttendance = () => {
     fetchAttendance();
   }, [token, todayDate]);
 
+  // ------------------handle Search------------------------
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
+
     const filtered = attendanceData.filter(
       (record) =>
         record.name.toLowerCase().includes(query) ||
         record.type.toLowerCase().includes(query) ||
         record.date.includes(query)
+    );
+
+    setFilteredData(filtered);
+  };
+
+  const handleDateChange = (e) => {
+    const selected = e.target.value;
+    setSelectedDate(selected);
+
+    const formattedDate = dayjs(selected).format("YYYY/MM/DD"); // Convert to match stored data format
+    const filtered = attendanceData.filter(
+      (record) => record.date === formattedDate
     );
     setFilteredData(filtered);
   };
@@ -79,20 +96,29 @@ const AdminAttendance = () => {
   const handleEmployeeClick = (employeeName) => {
     setSelectedEmployee(employeeName);
 
-    const stats = attendanceData.reduce(
+    // Get the current month in "YYYY/MM" format
+    const currentMonth = dayjs().format("YYYY/MM");
+
+    // Filter attendance records for the selected employee within the current month
+    const currentMonthRecords = attendanceData.filter(
+      (record) =>
+        record.name === employeeName && record.date.startsWith(currentMonth)
+    );
+
+    // Calculate stats for the current month
+    const stats = currentMonthRecords.reduce(
       (acc, record) => {
-        if (record.name === employeeName) {
-          acc[record.type]++;
-        }
+        acc[record.type]++;
         return acc;
       },
       { fullDay: 0, halfDay: 0, leave: 0 }
     );
 
-    stats.totalAttendance =
-      attendanceData.filter((record) => record.name === employeeName).length -
-      stats.leave; // Calculate total attendance for selected employee
+    stats.totalAttendance = currentMonthRecords.length - stats.leave;
     setEmployeeStats(stats);
+
+    // Update filteredData to show only the selected employee's current month records
+    setFilteredData(currentMonthRecords);
   };
 
   const handleTodaySummary = () => {
@@ -100,6 +126,7 @@ const AdminAttendance = () => {
   };
 
   // Handle "Mark Leave" button click
+
   const handleMarkLeave = async () => {
     const currentTime = dayjs().format("HH:mm");
     const cutoffTime = "14:30";
@@ -120,6 +147,115 @@ const AdminAttendance = () => {
     } else {
       toast.error("Leave can only be marked after 2:30 PM.");
     }
+  };
+
+  // donload PDF
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+
+    // Get the current month and previous month in YYYY/MM format
+    const currentMonth = dayjs().format("YYYY/MM");
+    const previousMonth = dayjs().subtract(1, "month").format("YYYY/MM");
+
+    // Get the full month names (e.g., January, February, etc.)
+    const currentMonthName = dayjs(currentMonth, "YYYY/MM").format("MMMM YYYY");
+    const previousMonthName = dayjs(previousMonth, "YYYY/MM").format(
+      "MMMM YYYY"
+    );
+
+    doc.setFontSize(16);
+    doc.text("Monthly Employee Attendance Summary", 14, 10);
+
+    // Group attendance records by employee for current and previous months
+    const employeeAttendance = {
+      [previousMonth]: {},
+      [currentMonth]: {},
+    };
+
+    attendanceData.forEach((record) => {
+      if (
+        record.date.startsWith(previousMonth) ||
+        record.date.startsWith(currentMonth)
+      ) {
+        const month = record.date.startsWith(previousMonth)
+          ? previousMonth
+          : currentMonth;
+
+        if (!employeeAttendance[month][record.name]) {
+          employeeAttendance[month][record.name] = {
+            fullDay: 0,
+            halfDay: 0,
+            leave: 0,
+            totalAttendance: 0,
+          };
+        }
+        employeeAttendance[month][record.name][record.type]++;
+        employeeAttendance[month][record.name].totalAttendance =
+          employeeAttendance[month][record.name].fullDay +
+          employeeAttendance[month][record.name].halfDay;
+      }
+    });
+
+    // Prepare table data for both months
+    const tableColumn = [
+      "ID",
+      "Employee Name",
+      "Full Day",
+      "Half Day",
+      "Leave",
+      "Total Attendance",
+    ];
+    const tableRows = [];
+
+    // For Previous Month
+    doc.text(`Attendance Report - ${previousMonthName}`, 14, 20);
+    let index = 1;
+    for (const [name, stats] of Object.entries(
+      employeeAttendance[previousMonth]
+    )) {
+      tableRows.push([
+        index++,
+        name,
+        stats.fullDay,
+        stats.halfDay,
+        stats.leave,
+        stats.totalAttendance,
+      ]);
+    }
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+    });
+
+    // Reset table rows for the next month
+    tableRows.length = 0;
+
+    // For Current Month
+    doc.addPage();
+    doc.text(`Attendance Report - ${currentMonthName}`, 14, 20);
+    index = 1;
+    for (const [name, stats] of Object.entries(
+      employeeAttendance[currentMonth]
+    )) {
+      tableRows.push([
+        index++,
+        name,
+        stats.fullDay,
+        stats.halfDay,
+        stats.leave,
+        stats.totalAttendance,
+      ]);
+    }
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+    });
+
+    doc.save("Monthly_Attendance_Report.pdf");
   };
 
   return (
@@ -176,22 +312,31 @@ const AdminAttendance = () => {
         </div>
       </div>
 
-      <div className=" flex justify-between">
-        <div className="p-3 w-2/5 max-sm:w-[62%]">
+      <div className="flex max-md:flex-wrap justify-between items-center gap-4 my-2">
+        {/* Date Input Section */}
+        <div className="w-full sm:w-1/2">
           <input
-            type="text"
-            placeholder="Search by name, type, or date..."
-            value={searchQuery}
-            onChange={handleSearch}
-            className="border-2 border-black rounded px-4 py-3 w-full "
+            type="date"
+            value={selectedDate}
+            onChange={handleDateChange}
+            className="border-2 h-12 w-full px-4 py-1 rounded-lg border-red-500"
           />
         </div>
-        <div className=" p-3 w-1/5 max-sm:w-[37%]">
+
+        {/* Buttons Section */}
+        <div className="w-full sm:w-1/2 flex flex-col sm:flex-row gap-3">
           <button
-            className=" border-2 border-red-500 text-red-500 font-semibold  h-12 w-full rounded hover:text-white hover:bg-red-300"
+            className="border-2 border-red-500 text-red-500 font-semibold h-12 w-full sm:w-1/2 rounded-md hover:text-white hover:bg-red-300 transition"
             onClick={handleMarkLeave}
           >
             {isMarkingLeave ? "Marking..." : "Mark Leave"}
+          </button>
+
+          <button
+            className="border-2 border-blue-500 text-blue-500 font-semibold h-12 w-full sm:w-1/2 rounded-md hover:text-white hover:bg-blue-300 transition"
+            onClick={handleDownloadPDF}
+          >
+            Download PDF
           </button>
         </div>
       </div>
@@ -224,7 +369,9 @@ const AdminAttendance = () => {
                 >
                   <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{record.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{record.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {dayjs(record.date).format("D/M/YYYY")}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
