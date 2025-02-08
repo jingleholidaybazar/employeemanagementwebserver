@@ -55,7 +55,7 @@ const ChangePassword = () => {
   }
 
   return (
-    <section className="flex justify-center items-center min-h-screen bg-gray-50">
+    <section className="flex justify-center  bg-gray-50">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-semibold text-center text-[#002D74] mb-6">
           Change Password
