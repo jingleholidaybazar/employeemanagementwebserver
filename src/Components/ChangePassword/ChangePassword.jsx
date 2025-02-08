@@ -2,23 +2,22 @@ import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Loading from "../Loading/Loading"; // Import your Loading component
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Loading from "../Loading/Loading";
 
 const ChangePassword = () => {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [aadhar, setaadhar] = useState(""); // State to store Aadhaar number
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
-  const [isLoading, setIsLoading] = useState(true); // Initially set to true to show the loading screen
+  const [aadhar, setAadhar] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Simulate a 2-second loading delay before rendering the page content
     const timer = setTimeout(() => {
-      setIsLoading(false); // Hide the loading screen after 2 seconds
+      setIsLoading(false);
     }, 2000);
-
-    return () => clearTimeout(timer); // Cleanup timeout if the component is unmounted
+    return () => clearTimeout(timer);
   }, []);
 
   const handleChangePassword = async (e) => {
@@ -29,7 +28,7 @@ const ChangePassword = () => {
       return;
     }
 
-    setIsLoading(true); // Show loading indicator
+    setIsLoading(true);
 
     try {
       const response = await axios.post(
@@ -39,7 +38,7 @@ const ChangePassword = () => {
 
       if (response.status === 200) {
         toast.success("Password changed successfully!");
-        navigate("/"); // Navigate back to login page after successful password change
+        navigate("/");
       } else {
         toast.error("Failed to change password.");
       }
@@ -47,53 +46,54 @@ const ChangePassword = () => {
       toast.error("An error occurred while changing password.");
       console.error(error);
     } finally {
-      setIsLoading(false); // Hide loading indicator after request
+      setIsLoading(false);
     }
   };
 
   if (isLoading) {
-    // Show loading spinner for 2 seconds
     return <Loading />;
   }
 
   return (
-    <section className="flex justify-center items-centr relative my-24 ">
-      <div className="bg-gray-200 rounded-2xl p-8 max-w-md w-full shadow-lg z-5">
-        <h2 className="font-bold text-3xl text-center text-[#002D74] mb-6">
+    <section className="flex justify-center items-center min-h-screen bg-gray-50">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+        <h2 className="text-2xl font-semibold text-center text-[#002D74] mb-6">
           Change Password
         </h2>
-        <form className="flex flex-col gap-4" onSubmit={handleChangePassword}>
+        <form className="space-y-4" onSubmit={handleChangePassword}>
           {/* Email Input */}
           <div>
             <label
               htmlFor="email"
-              className="block text-md font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700"
             >
               Registered Email
             </label>
             <input
               id="email"
-              className="p-2 mt-1 rounded-xl border w-full"
               type="email"
+              className="mt-1 w-full p-3 border rounded-lg focus:ring-[#002D74] focus:border-[#002D74] outline-none"
               placeholder="Enter your registered email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
+
+          {/* Aadhaar Input */}
           <div>
             <label
               htmlFor="aadhar"
-              className="block text-md font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700"
             >
               Aadhaar Number
             </label>
             <input
               id="aadhar"
-              className="p-2 mt-1 rounded-xl border w-full"
               type="text"
+              className="mt-1 w-full p-3 border rounded-lg focus:ring-[#002D74] focus:border-[#002D74] outline-none"
               placeholder="Enter your Aadhaar number"
               value={aadhar}
-              onChange={(e) => setaadhar(e.target.value)}
+              onChange={(e) => setAadhar(e.target.value)}
             />
           </div>
 
@@ -101,36 +101,34 @@ const ChangePassword = () => {
           <div>
             <label
               htmlFor="newPassword"
-              className="block text-md font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700"
             >
               New Password
             </label>
             <div className="relative">
               <input
                 id="newPassword"
-                className="p-2 mt-1 rounded-xl border w-full"
-                type={showPassword ? "text" : "password"} // Toggle input type
+                type={showPassword ? "text" : "password"}
+                className="mt-1 w-full p-3 border rounded-lg focus:ring-[#002D74] focus:border-[#002D74] outline-none"
                 placeholder="Enter new password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-2 flex items-center text-gray-500"
-                onClick={() => setShowPassword(!showPassword)} // Toggle visibility
+                className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? "Hide" : "Show"}
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
           </div>
 
-          {/* Aadhaar Number Input */}
-
           {/* Submit Button */}
           <button
-            className="bg-[#002D74] text-white py-2 rounded-xl mt-4"
+            className="w-full bg-[#002D74] text-white p-3 rounded-lg font-semibold transition hover:bg-[#001a47] disabled:opacity-50"
             type="submit"
-            disabled={isLoading} // Disable button while loading
+            disabled={isLoading}
           >
             Change Password
           </button>
