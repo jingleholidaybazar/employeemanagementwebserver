@@ -8,6 +8,7 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import { Toaster } from "react-hot-toast";
 import ChangePassword from "./Components/ChangePassword/ChangePassword";
 import AutoLogin from "./Pages/AuotoLoging/AuotoLoging";
+import BlackListEmployee from "./Pages/BlackListEmploye/BlackListEmployee";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<AutoLogin />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/blacklist" element={<BlackListEmployee />} />
         <Route
           path="/employeeDashboard"
           element={<PrivateRoute element={<EmployeeDashbord />} />}

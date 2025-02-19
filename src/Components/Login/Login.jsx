@@ -45,6 +45,8 @@ const Login = () => {
             navigate("/adminDashboard");
           } else if (employee.role === "employee") {
             navigate("/employeeDashboard");
+          } else if (employee.role === "BlackList") {
+            navigate("/blacklist");
           } else {
             handleError("User type not recognized.");
           }

@@ -23,7 +23,7 @@ function AutoLogin() {
           const { role } = response.data.employee;
 
           // Store retrieved user details in local storage
-         
+
           // localStorage.setItem("id", _id);
 
           // Redirect user based on their role
@@ -31,6 +31,8 @@ function AutoLogin() {
             navigate("/adminDashboard");
           } else if (role === "employee") {
             navigate("/employeeDashboard");
+          } else if (role === "BlackList") {
+            navigate("/blacklist");
           } else {
             console.error("User type not recognized.");
           }
