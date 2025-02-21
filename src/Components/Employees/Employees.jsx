@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import EmployeeForm from "../AddEmployee/EmployeeForm";
 import { useAuth } from "../Context.jsx/AuthContext";
-import MainDashboard from "../MainDashboard/MainDashboard";
 import { handleError, handleSuccess } from "../util";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
-import Loading from "../Loading/Loading"; // Import the modal
+import EmployeeDetailsModal from "./EmployeeDetailsModal"; // Import the modal
+import Loading from "../Loading/Loading";
 
 const Employees = () => {
   const [employeesList, setEmployeesList] = useState([]);
@@ -15,19 +14,18 @@ const Employees = () => {
   const [employeeToEdit, setEmployeeToEdit] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState(null); // State for selected employee
+  const [showDetailsModal, setShowDetailsModal] = useState(false); // Modal visibility state
   const { deleteEmployee, updateEmployee, employees } = useAuth();
-  const [loading, setLoading] = useState(true); // Initial loading state
+  const [loading, setLoading] = useState(true);
 
-  // Fetch employees and set loading state
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        setLoading(true); // Start loading
+        setLoading(true);
         setEmployeesList(employees);
-
-        // Simulate loading for 2 seconds
         setTimeout(() => {
-          setLoading(false); // Stop loading after 2 seconds
+          setLoading(false);
         }, 2000);
       } catch (error) {
         handleError("Error fetching employees:", error);
@@ -43,24 +41,8 @@ const Employees = () => {
     setShowForm(true);
   };
 
-  const handleAddEmployee = (newEmployee) => {
-    const newId = employeesList.length + 1;
-    setEmployeesList([
-      ...employeesList,
-      {
-        id: newId,
-        image: newEmployee.image
-          ? URL.createObjectURL(newEmployee.image)
-          : "https://via.placeholder.com/40",
-        ...newEmployee,
-      },
-    ]);
-    setShowForm(false);
-  };
-
   const handleDeleteEmployee = async () => {
     if (!employeeToDelete) return;
-
     try {
       await deleteEmployee(employeeToDelete._id);
       setEmployeesList((prevEmployees) =>
@@ -82,7 +64,7 @@ const Employees = () => {
 
   return (
     <div className="">
-      {loading && <Loading />} {/* Show loading spinner */}
+      {loading && <Loading />}
       <>
         <h2 className="text-2xl font-semibold text-center uppercase mb-3">
           Employee Details
@@ -97,17 +79,15 @@ const Employees = () => {
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
-          <div className="flex justify-between items-center mb-4">
-            <button
-              onClick={() => {
-                setShowForm(true);
-                setEmployeeToEdit(null);
-              }}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >
-              Add New Employee
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              setShowForm(true);
+              setEmployeeToEdit(null);
+            }}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Add New Employee
+          </button>
         </div>
 
         <div className="shadow-md w-full rounded-lg bg-white overflow-x-auto">
@@ -119,16 +99,19 @@ const Employees = () => {
                 <th className="border-gray-300 px-4 py-2">Name</th>
                 <th className="border-gray-300 px-4 py-2">Email</th>
                 <th className="border-gray-300 px-4 py-2">Phone</th>
-                <th className="border-gray-300 px-4 py-2">Aadhar No</th>
-                <th className="border-gray-300 px-4 py-2">Pan Card No</th>
-                <th className="border-gray-300 px-4 py-2">Job Role</th>
-                <th className="border-gray-300 px-4 py-2">Salary</th>
                 <th className="border-gray-300 px-4 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredEmployees.map((employee, index) => (
-                <tr key={employee.id} className="hover:bg-gray-200">
+                <tr
+                  key={employee.id}
+                  className="hover:bg-gray-200 cursor-pointer"
+                  onClick={() => {
+                    setSelectedEmployee(employee);
+                    setShowDetailsModal(true);
+                  }}
+                >
                   <td className="border-gray-300 px-4 py-2">{index + 1}</td>
                   <td className="border-gray-300 px-4 py-2">
                     <img
@@ -144,27 +127,19 @@ const Employees = () => {
                   <td className="border-gray-300 px-4 py-2">
                     {employee.mobile}
                   </td>
-                  <td className="border-gray-300 px-4 py-2">
-                    {employee.aadhar}
-                  </td>
-                  <td className="border-gray-300 px-4 py-2">
-                    {employee.panCard}
-                  </td>
-                  <td className="border-gray-300 px-4 py-2">
-                    {employee.jobRole}
-                  </td>
-                  <td className="border-gray-300 px-4 py-2">
-                    {employee.salary}
-                  </td>
                   <td className="border-gray-300 px-4 py-2 text-center ">
                     <button
-                      onClick={() => onEdit(employee)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit(employee);
+                      }}
                       className="text-blue-500 hover:text-blue-700 mr-2"
                     >
                       <FaEdit />
                     </button>
                     <button
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setEmployeeToDelete(employee);
                         setShowDeleteModal(true);
                       }}
@@ -182,7 +157,7 @@ const Employees = () => {
         {showForm && (
           <EmployeeForm
             employee={employeeToEdit}
-            onSubmit={employeeToEdit ? updateEmployee : handleAddEmployee}
+            onSubmit={employeeToEdit ? updateEmployee : () => {}}
             onCancel={() => setShowForm(false)}
           />
         )}
@@ -192,6 +167,12 @@ const Employees = () => {
           onConfirm={handleDeleteEmployee}
           onCancel={() => setShowDeleteModal(false)}
           employeeName={employeeToDelete?.name}
+        />
+
+        <EmployeeDetailsModal
+          isOpen={showDetailsModal}
+          employee={selectedEmployee}
+          onClose={() => setShowDetailsModal(false)}
         />
       </>
     </div>

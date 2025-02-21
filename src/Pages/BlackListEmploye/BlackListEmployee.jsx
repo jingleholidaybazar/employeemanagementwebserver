@@ -4,7 +4,7 @@ function BlackListEmployee() {
   return (
     <div className="flex items-center justify-center h-screen px-4">
       {/* Container */}
-      <div className="flex flex-col md:flex-row items-center w-full max-w-4xl bg-gray-100 shadow-lg rounded-lg p-6">
+      <div className="flex flex-col md:flex-row items-center w-full max-w-4xl bg-gray-100 shadow-lg rounded-md p-6">
         {/* Left Side - Image */}
         <div className="w-full md:w-1/2 flex justify-center">
           <img
@@ -20,7 +20,9 @@ function BlackListEmployee() {
             Access Denied
           </h2>
           <p className="text-gray-700 mt-3 text-lg leading-relaxed">
-            Your access has been restricted due to policy violations or security concerns. If you believe this is an error, please contact the administrator to resolve the issue.
+            Your access has been restricted due to policy violations or security
+            concerns. If you believe this is an error, please contact the
+            administrator to resolve the issue.
           </p>
         </div>
       </div>

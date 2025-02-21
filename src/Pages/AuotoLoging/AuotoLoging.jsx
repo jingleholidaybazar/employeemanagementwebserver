@@ -31,7 +31,7 @@ function AutoLogin() {
             navigate("/adminDashboard");
           } else if (role === "employee") {
             navigate("/employeeDashboard");
-          } else if (role === "BlackList") {
+          } else if (role === "blacklist") {
             navigate("/blacklist");
           } else {
             console.error("User type not recognized.");
