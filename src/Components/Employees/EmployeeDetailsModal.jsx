@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaTimes } from "react-icons/fa";
+import { handleError, handleSuccess } from "../util";
 
 const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
   const [status, setStatus] = useState(""); // Store fetched status
@@ -18,10 +19,8 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("id");
 
-    console.log("Retrieved User ID:", userId);
-
     if (!token) {
-      console.error("No authentication token found!");
+      handleError("No authentication token found!");
       return null;
     }
     return {
@@ -46,19 +45,18 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
 
     try {
       setLoading(true);
-      console.log(selectedStatus);
 
       await axios.patch(
-        `http://localhost:8080/api/auth/blacklist/${employeeId}`,
+        `https://employees-management-sooty.vercel.app/api/auth/blacklist/${employeeId}`,
         { role: selectedStatus },
         authHeaders
       );
 
       setStatus(selectedStatus); // Update UI state after successful request
-      alert("Employee status updated successfully!"); // Notification
+      handleSuccess("Employee Role updated successfully!"); // Notification
       onClose(); // Close modal after update
     } catch (error) {
-      console.error("Error updating status:", error);
+      handleError("Error updating status:", error);
     } finally {
       setLoading(false);
     }
