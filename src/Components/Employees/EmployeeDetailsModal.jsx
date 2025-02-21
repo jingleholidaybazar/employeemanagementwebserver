@@ -76,19 +76,25 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
         </button>
 
         {/* Employee Image */}
-        <div className="flex justify-center items-center md:w-1/2 p-4">
+        <div className="flex flex-col justify-center items-center md:w-1/2 p-4">
+          {/* Employee Image */}
           <img
             src={employee.avatar}
             alt={employee.name}
-            className="w-40 h-40 md:w-52 md:h-52 rounded-full object-cover border border-gray-300 shadow-md"
+            className="w-40 h-40 md:w-64 md:h-64 rounded-lg object-cover border border-gray-300 "
           />
+
+          {/* Employee Name */}
+          <h3 className="mt-3 text-xl font-semibold text-gray-900 text-center">
+            {employee.name}
+          </h3>
+
+          {/* Job Role */}
+          <p className="text-gray-600 text-center">{employee.jobRole}</p>
         </div>
 
         {/* Employee Details */}
         <div className="md:w-1/2 p-4 overflow-y-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            {employee.name}
-          </h2>
           <div className="space-y-2 text-gray-700">
             <p>
               <strong>Email:</strong> {employee.email}
