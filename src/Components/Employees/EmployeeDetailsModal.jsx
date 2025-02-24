@@ -15,23 +15,6 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
   }, [isOpen, employee]);
 
   // Get Token & User ID from Local Storage
-  const getAuthHeaders = () => {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("id");
-
-    if (!token) {
-      handleError("No authentication token found!");
-      return null;
-    }
-    return {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    };
-  };
-
-  // Handle Submit Status Change
   const handleSubmit = async () => {
     if (!selectedStatus) return; // Prevent empty submission
     const employeeId = employee.id || employee._id;
@@ -40,8 +23,11 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
       return;
     }
 
-    const authHeaders = getAuthHeaders();
-    if (!authHeaders) return;
+    const token = localStorage.getItem("token"); // Get token here
+    if (!token) {
+      handleError("No authentication token found!");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -49,11 +35,17 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
       await axios.patch(
         `https://employees-management-sooty.vercel.app/api/auth/blacklist/${employeeId}`,
         { role: selectedStatus },
-        authHeaders
+        {
+          headers: {
+            // Headers should be in the third argument
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
 
-      setStatus(selectedStatus); // Update UI state after successful request
-      handleSuccess("Employee Role updated successfully!"); // Notification
+      setStatus(selectedStatus);
+      handleSuccess("Employee Role updated successfully!");
       onClose(); // Close modal after update
     } catch (error) {
       handleError("Error updating status:", error);
