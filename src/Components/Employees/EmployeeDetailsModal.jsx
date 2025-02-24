@@ -37,9 +37,7 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
         { role: selectedStatus },
         {
           headers: {
-            // Headers should be in the third argument
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
           },
         }
       );
