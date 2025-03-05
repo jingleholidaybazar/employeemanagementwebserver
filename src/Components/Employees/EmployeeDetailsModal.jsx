@@ -33,7 +33,7 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
       setLoading(true);
 
       await axios.patch(
-        `http://localhost:8080/api/auth/blacklist/${employeeId}`,
+        `https://management-system-jet.vercel.app/api/auth/blacklist/${employeeId}`,
         { role: selectedStatus },
         {
           headers: {
