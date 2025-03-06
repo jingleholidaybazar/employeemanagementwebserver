@@ -64,7 +64,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       !aadhar ||
       !panCard ||
       !gender ||
-      !dob 
+      !dob
       // !avatar
     ) {
       return handleError("All fields are required.");
@@ -111,7 +111,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       });
 
       const response = await axios.post(
-        "https://management-system-jet.vercel.app/api/auth/addEmployee",
+        "https://management-system-jvif.onrender.com/api/auth/addEmployee",
         formDataToSend,
         {
           headers: {

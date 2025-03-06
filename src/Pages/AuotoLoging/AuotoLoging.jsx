@@ -11,7 +11,7 @@ function AutoLogin() {
     const autoLogin = async () => {
       try {
         const response = await axios.get(
-          "https://management-system-jet.vercel.app/api/auth/autologin",
+          "https://management-system-jvif.onrender.com/api/auth/autologin",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

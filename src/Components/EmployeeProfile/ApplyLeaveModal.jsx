@@ -10,7 +10,7 @@ const ApplyLeaveModal = ({ isOpen, toggleModal }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [formError, setFormError] = useState(""); // New state for form validation
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
@@ -58,7 +58,7 @@ const ApplyLeaveModal = ({ isOpen, toggleModal }) => {
 
     try {
       const response = await axios.post(
-        "https://management-system-jet.vercel.app/api/leave/leaveRequest", // Your API endpoint
+        "https://management-system-jvif.onrender.com/api/leave/leaveRequest", // Your API endpoint
         leaveData,
         {
           headers: {

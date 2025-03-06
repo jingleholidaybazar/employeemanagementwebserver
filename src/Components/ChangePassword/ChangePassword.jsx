@@ -32,7 +32,7 @@ const ChangePassword = () => {
 
     try {
       const response = await axios.post(
-        "https://management-system-jet.vercel.app/api/password/changepassword",
+        "https://management-system-jvif.onrender.com/api/password/changepassword",
         { email, newPassword, aadhar }
       );
 

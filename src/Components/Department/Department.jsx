@@ -21,7 +21,7 @@ const Department = () => {
       setLoading(true); // Set loading to true before the fetch starts
       try {
         const response = await axios.get(
-          "https://management-system-jet.vercel.app/api/department/getDepartment"
+          "https://management-system-jvif.onrender.com/api/department/getDepartment"
         );
         setDepartments(response.data.department || []);
       } catch (error) {
@@ -43,7 +43,7 @@ const Department = () => {
 
     try {
       await axios.delete(
-        `https://management-system-jet.vercel.app/api/department/deleteDepartment/${_id}`
+        `https://management-system-jvif.onrender.com/api/department/deleteDepartment/${_id}`
       );
       setDepartments(
         departments.filter((department) => department._id !== _id)
@@ -67,7 +67,7 @@ const Department = () => {
 
     try {
       await axios.put(
-        `https://management-system-jet.vercel.app/api/department/updateDepartment/${currentDepartment._id}`,
+        `https://management-system-jvif.onrender.com/api/department/updateDepartment/${currentDepartment._id}`,
         { departmentName: newName }
       );
       setDepartments(
@@ -98,9 +98,9 @@ const Department = () => {
 
   return (
     <div className="container mx-auto p-4 max-md:p-1">
-      {loading ? <Loading/>
-        
-      : (
+      {loading ? (
+        <Loading />
+      ) : (
         <div>
           <div className="flex justify-between items-center mb-4">
             <div className="relative w-1/3">
