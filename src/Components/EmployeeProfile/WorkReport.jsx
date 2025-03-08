@@ -15,7 +15,7 @@ const WorkReport = () => {
   const [loadingTime, setLoadingTime] = useState(true); // New state for loading delay
 
   const apiBaseUrl =
-    "https://management-system-jvif.onrender.com/api/report/workereportCreate"; // URL to fetch data
+    "https://management-system-te7m.onrender.com/api/report/workereportCreate"; // URL to fetch data
 
   // Toggle form visibility
   const handleButtonClick = () => {
@@ -110,7 +110,7 @@ const WorkReport = () => {
       const id = localStorage.getItem("id");
 
       const response = await axios.get(
-        `https://management-system-jvif.onrender.com/api/report/singaleReport/${id}`,
+        `https://management-system-te7m.onrender.com/api/report/singaleReport/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

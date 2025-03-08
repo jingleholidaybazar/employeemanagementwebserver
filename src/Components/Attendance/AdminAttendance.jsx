@@ -35,7 +35,7 @@ const AdminAttendance = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          "https://management-system-jvif.onrender.com/api/attendance/allAttendance",
+          "https://management-system-te7m.onrender.com/api/attendance/allAttendance",
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -135,7 +135,7 @@ const AdminAttendance = () => {
       setIsMarkingLeave(true); // Set loading state to true
       try {
         const response = await axios.get(
-          "https://management-system-jvif.onrender.com/api/automark/auto-mark",
+          "https://management-system-te7m.onrender.com/api/automark/auto-mark",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         toast.success("Leave marked successfully!");

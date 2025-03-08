@@ -12,7 +12,7 @@ const WorkReport = () => {
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
 
   const apiBaseUrl =
-    "https://management-system-jvif.onrender.com/api/report/getAllReport"; // API URL
+    "https://management-system-te7m.onrender.com/api/report/getAllReport"; // API URL
 
   // Fetch data from the API
   const fetchWorkReports = async () => {

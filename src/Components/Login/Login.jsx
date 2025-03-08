@@ -26,7 +26,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://management-system-jvif.onrender.com/api/auth/login",
+        "https://management-system-te7m.onrender.com/api/auth/login",
         { email, password }
       );
 
