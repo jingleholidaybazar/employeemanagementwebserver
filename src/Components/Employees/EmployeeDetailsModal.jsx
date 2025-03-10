@@ -33,7 +33,7 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
       setLoading(true);
 
       await axios.patch(
-        `https://management-system-te7m.onrender.com/api/auth/blacklist/${employeeId}`,
+        `https://management-system-he71.onrender.com/api/auth/blacklist/${employeeId}`,
         { role: selectedStatus },
         {
           headers: {

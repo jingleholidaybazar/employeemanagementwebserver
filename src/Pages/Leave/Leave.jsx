@@ -41,7 +41,7 @@ const Leave = () => {
     setLoading(true); // Show loading while performing the action
     try {
       const response = await axios.put(
-        `https://management-system-te7m.onrender.com/api/leave/statusUpdate/${_id}`,
+        `https://management-system-he71.onrender.com/api/leave/statusUpdate/${_id}`,
         { status: actionType === "approve" ? "Approved" : "Rejected" },
         {
           headers: {
