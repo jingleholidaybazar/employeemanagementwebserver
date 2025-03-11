@@ -153,50 +153,14 @@ const AdminAttendance = () => {
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
 
-    // Get the current month and previous month in YYYY/MM format
-    const currentMonth = dayjs().format("YYYY/MM");
-    const previousMonth = dayjs().subtract(1, "month").format("YYYY/MM");
-
-    // Get the full month names (e.g., January, February, etc.)
-    const currentMonthName = dayjs(currentMonth, "YYYY/MM").format("MMMM YYYY");
-    const previousMonthName = dayjs(previousMonth, "YYYY/MM").format(
-      "MMMM YYYY"
-    );
-
     doc.setFontSize(16);
     doc.text("Monthly Employee Attendance Summary", 14, 10);
 
-    // Group attendance records by employee for current and previous months
-    const employeeAttendance = {
-      [previousMonth]: {},
-      [currentMonth]: {},
-    };
+    // Extract all unique months from attendanceData
+    const months = [
+      ...new Set(attendanceData.map((record) => record.date.slice(0, 7))),
+    ].sort();
 
-    attendanceData.forEach((record) => {
-      if (
-        record.date.startsWith(previousMonth) ||
-        record.date.startsWith(currentMonth)
-      ) {
-        const month = record.date.startsWith(previousMonth)
-          ? previousMonth
-          : currentMonth;
-
-        if (!employeeAttendance[month][record.name]) {
-          employeeAttendance[month][record.name] = {
-            fullDay: 0,
-            halfDay: 0,
-            leave: 0,
-            totalAttendance: 0,
-          };
-        }
-        employeeAttendance[month][record.name][record.type]++;
-        employeeAttendance[month][record.name].totalAttendance =
-          employeeAttendance[month][record.name].fullDay +
-          employeeAttendance[month][record.name].halfDay;
-      }
-    });
-
-    // Prepare table data for both months
     const tableColumn = [
       "ID",
       "Employee Name",
@@ -205,54 +169,54 @@ const AdminAttendance = () => {
       "Leave",
       "Total Attendance",
     ];
-    const tableRows = [];
 
-    // For Previous Month
-    doc.text(`Attendance Report - ${previousMonthName}`, 14, 20);
     let index = 1;
-    for (const [name, stats] of Object.entries(
-      employeeAttendance[previousMonth]
-    )) {
-      tableRows.push([
-        index++,
-        name,
-        stats.fullDay,
-        stats.halfDay,
-        stats.leave,
-        stats.totalAttendance,
-      ]);
-    }
 
-    doc.autoTable({
-      head: [tableColumn],
-      body: tableRows,
-      startY: 30,
-    });
+    months.forEach((month, monthIndex) => {
+      const monthName = dayjs(month, "YYYY/MM").format("MMMM YYYY");
+      const employeeAttendance = {};
 
-    // Reset table rows for the next month
-    tableRows.length = 0;
+      // Filter attendance records for this month
+      attendanceData.forEach((record) => {
+        if (record.date.startsWith(month)) {
+          if (!employeeAttendance[record.name]) {
+            employeeAttendance[record.name] = {
+              fullDay: 0,
+              halfDay: 0,
+              leave: 0,
+              totalAttendance: 0,
+            };
+          }
+          employeeAttendance[record.name][record.type]++;
+          employeeAttendance[record.name].totalAttendance =
+            employeeAttendance[record.name].fullDay +
+            employeeAttendance[record.name].halfDay;
+        }
+      });
 
-    // For Current Month
-    doc.addPage();
-    doc.text(`Attendance Report - ${currentMonthName}`, 14, 20);
-    index = 1;
-    for (const [name, stats] of Object.entries(
-      employeeAttendance[currentMonth]
-    )) {
-      tableRows.push([
-        index++,
-        name,
-        stats.fullDay,
-        stats.halfDay,
-        stats.leave,
-        stats.totalAttendance,
-      ]);
-    }
+      // Prepare table data
+      const tableRows = [];
+      index = 1;
+      for (const [name, stats] of Object.entries(employeeAttendance)) {
+        tableRows.push([
+          index++,
+          name,
+          stats.fullDay || 0,
+          stats.halfDay || 0,
+          stats.leave || 0,
+          stats.totalAttendance || 0,
+        ]);
+      }
 
-    doc.autoTable({
-      head: [tableColumn],
-      body: tableRows,
-      startY: 30,
+      // Add a new page for each month (except the first)
+      if (monthIndex > 0) doc.addPage();
+      doc.text(`Attendance Report - ${monthName}`, 14, 20);
+
+      doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 30,
+      });
     });
 
     doc.save("Monthly_Attendance_Report.pdf");

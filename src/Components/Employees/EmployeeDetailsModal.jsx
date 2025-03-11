@@ -7,6 +7,7 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
   const [status, setStatus] = useState(""); // Store fetched status
   const [selectedStatus, setSelectedStatus] = useState(""); // Store user-selected status
   const [loading, setLoading] = useState(false); // For API calls
+  const [halfDayLoading, setHalfDayLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen && employee && (employee.id || employee._id)) {
@@ -49,6 +50,43 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
       handleError("Error updating status:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const markAsHalfDay = async () => {
+    const employeeId = employee.id || employee._id;
+    if (!employeeId) {
+      handleError("Employee ID is missing!");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      handleError("Authentication token is missing!");
+      return;
+    }
+
+    try {
+      setHalfDayLoading(true);
+
+      const response = await axios.patch(
+        `https://management-system-he71.onrender.com/api/attendance/markHalfday/${employeeId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Attach token
+          },
+        }
+      );
+
+      handleSuccess(
+        response.data.message || "Marked as Half-Day Successfully!"
+      );
+      onClose(); // Close modal after marking attendance
+    } catch (error) {
+      handleError(error.response?.data?.message || "Error marking half-day!");
+    } finally {
+      setHalfDayLoading(false);
     }
   };
 
@@ -130,6 +168,14 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
               disabled={loading || selectedStatus === status} // Disable if same status or loading
             >
               {loading ? "Updating..." : "Submit"}
+            </button>
+            {/* Mark as Half-Day Button */}
+            <button
+              onClick={markAsHalfDay}
+              className="w-full mt-1 p-2 border rounded-lg bg-yellow-500 text-white focus:ring focus:ring-gray-300"
+              disabled={halfDayLoading}
+            >
+              {halfDayLoading ? "Marking..." : "Mark as Half-Day"}
             </button>
           </div>
         </div>
