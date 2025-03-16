@@ -14,8 +14,8 @@ const Employees = () => {
   const [employeeToEdit, setEmployeeToEdit] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
-  const [selectedEmployee, setSelectedEmployee] = useState(null); // State for selected employee
-  const [showDetailsModal, setShowDetailsModal] = useState(false); // Modal visibility state
+  const [selectedEmployee, setSelectedEmployee] = useState(null); 
+  const [showDetailsModal, setShowDetailsModal] = useState(false); 
   const { deleteEmployee, updateEmployee, employees } = useAuth();
   const [loading, setLoading] = useState(true);
 
