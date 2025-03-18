@@ -111,7 +111,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       });
 
       const response = await axios.post(
-        "https://management-system-u8i4.onrender.com/api/auth/addEmployee",
+        "https://management-system-azmr.onrender.com/api/auth/addEmployee",
         formDataToSend,
         {
           headers: {

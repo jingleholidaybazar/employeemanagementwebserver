@@ -18,7 +18,7 @@ const PrivateRoute = ({ element }) => {
       const fetchEmployeeData = async () => {
         try {
           const response = await axios.get(
-            `https://management-system-u8i4.onrender.com/api/employee/getSingaleEmployee/${employeeId}`,
+            `https://management-system-azmr.onrender.com/api/employee/getSingaleEmployee/${employeeId}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`, // Include the token in headers
