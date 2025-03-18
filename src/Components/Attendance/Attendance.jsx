@@ -19,8 +19,8 @@ const Attendance = () => {
   const [loading, setLoading] = useState(true);
   const [userLocation, setUserLocation] = useState(null);
   const [targetLocation] = useState({
-    lat: 28.686253, // Example latitude (Bangalore, India)
-    lng: 77.33669, // Example longitude
+    lat: 28.689442776588916, // Example latitude (Bangalore, India)
+    lng: 77.34029190000001, // Example longitude
   });
 
   const daysInMonth = currentDate.daysInMonth();
@@ -160,7 +160,7 @@ const Attendance = () => {
     let type = "leave";
     if (currentTime >= "08:40" && currentTime <= "09:06") {
       type = "fullDay";
-    } else if (currentTime > "09:06" && currentTime <= "14:30") {
+    } else if (currentTime > "012:06" && currentTime <= "14:30") {
       type = "halfDay";
     }
 
