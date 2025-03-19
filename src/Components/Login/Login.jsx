@@ -26,7 +26,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://management-system-azmr.onrender.com/api/auth/login",
+        "https://management-system-xkeo.onrender.com/api/auth/login",
         { email, password }
       );
 

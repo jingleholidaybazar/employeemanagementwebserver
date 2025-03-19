@@ -1,8 +1,11 @@
 // MonthlyGraph.js
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
+import { useAuth } from "../Context.jsx/AuthContext";
 
 const MonthlyGraph = () => {
+  const { attendanceData } = useAuth();
+  console.log(attendanceData);
   const monthlyData = {
     fullDay: 20,
     halfDay: 5,

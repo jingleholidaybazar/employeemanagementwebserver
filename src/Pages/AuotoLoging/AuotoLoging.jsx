@@ -11,7 +11,7 @@ function AutoLogin() {
     const autoLogin = async () => {
       try {
         const response = await axios.get(
-          "https://management-system-azmr.onrender.com/api/auth/autologin",
+          "https://management-system-xkeo.onrender.com/api/auth/autologin",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
