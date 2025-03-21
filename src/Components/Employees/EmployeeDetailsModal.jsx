@@ -34,7 +34,7 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
       setLoading(true);
 
       await axios.patch(
-        `https://management-system-xkeo.onrender.com/api/auth/blacklist/${employeeId}`,
+        `https://management-system-nqq6.onrender.com/api/auth/blacklist/${employeeId}`,
         { role: selectedStatus },
         {
           headers: {
@@ -70,7 +70,7 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
       setHalfDayLoading(true);
 
       const response = await axios.patch(
-        `https://management-system-xkeo.onrender.com/api/attendance/markHalfday/${employeeId}`,
+        `https://management-system-nqq6.onrender.com/api/attendance/markHalfday/${employeeId}`,
         {},
         {
           headers: {

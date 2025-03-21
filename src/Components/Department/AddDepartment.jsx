@@ -19,7 +19,7 @@ const AddDepartment = ({ showModal, setShowModal, addNewDepartment }) => {
       const sanitizedDepartmentName = newDepartmentName.toString().trim();
 
       const response = await axios.post(
-        "https://management-system-xkeo.onrender.com/api/department/createDepartment",
+        "https://management-system-nqq6.onrender.com/api/department/createDepartment",
         {
           departmentName: sanitizedDepartmentName,
         }
