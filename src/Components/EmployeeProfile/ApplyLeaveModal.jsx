@@ -58,7 +58,7 @@ const ApplyLeaveModal = ({ isOpen, toggleModal }) => {
 
     try {
       const response = await axios.post(
-        "https://management-system-nqq6.onrender.com/api/leave/leaveRequest", // Your API endpoint
+        "https://employeemanagment-gilt.vercel.app/api/leave/leaveRequest", // Your API endpoint
         leaveData,
         {
           headers: {

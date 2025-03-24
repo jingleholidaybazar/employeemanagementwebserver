@@ -26,7 +26,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://management-system-nqq6.onrender.com/api/auth/login",
+        "https://employeemanagment-gilt.vercel.app/api/auth/login",
         { email, password }
       );
 

@@ -23,7 +23,7 @@ function AuthContextProvider({ children }) {
   };
 
   // Base URL for API requests (can be set via environment variables)
-  const apiBaseUrl = "https://management-system-nqq6.onrender.com"; // Use development URL by default
+  const apiBaseUrl = "https://employeemanagment-gilt.vercel.app"; // Use development URL by default
 
   // Function to update an employee's data
   const updateEmployee = async (id, updatedData) => {
@@ -49,7 +49,7 @@ function AuthContextProvider({ children }) {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        "https://management-system-nqq6.onrender.com/api/attendance/allAttendance", // Pass the employee ID in the URL path
+        "https://employeemanagment-gilt.vercel.app/api/attendance/allAttendance", // Pass the employee ID in the URL path
         {
           headers: {
             Authorization: `Bearer ${token}`,

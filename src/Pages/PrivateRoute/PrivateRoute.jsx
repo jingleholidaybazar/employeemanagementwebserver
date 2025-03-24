@@ -18,7 +18,7 @@ const PrivateRoute = ({ element }) => {
       const fetchEmployeeData = async () => {
         try {
           const response = await axios.get(
-            `https://management-system-nqq6.onrender.com/api/employee/getSingaleEmployee/${employeeId}`,
+            `https://employeemanagment-gilt.vercel.app/api/employee/getSingaleEmployee/${employeeId}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`, // Include the token in headers

@@ -111,7 +111,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       });
 
       const response = await axios.post(
-        "https://management-system-nqq6.onrender.com/api/auth/addEmployee",
+        "https://employeemanagment-gilt.vercel.app/api/auth/addEmployee",
         formDataToSend,
         {
           headers: {
