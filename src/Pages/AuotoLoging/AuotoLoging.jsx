@@ -11,7 +11,7 @@ function AutoLogin() {
     const autoLogin = async () => {
       try {
         const response = await axios.get(
-          "https://employeemanagment-gilt.vercel.app/api/auth/autologin",
+          "https://management-system-production-ffd5.up.railway.app/api/auth/autologin",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

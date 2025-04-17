@@ -26,7 +26,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://employeemanagment-gilt.vercel.app/api/auth/login",
+        "https://management-system-production-ffd5.up.railway.app/api/auth/login",
         { email, password }
       );
 

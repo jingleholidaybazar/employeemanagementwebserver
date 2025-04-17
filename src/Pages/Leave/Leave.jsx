@@ -41,7 +41,7 @@ const Leave = () => {
     setLoading(true); // Show loading while performing the action
     try {
       const response = await axios.put(
-        `https://employeemanagment-gilt.vercel.app/api/leave/statusUpdate/${_id}`,
+        `https://management-system-production-ffd5.up.railway.app/api/leave/statusUpdate/${_id}`,
         { status: actionType === "approve" ? "Approved" : "Rejected" },
         {
           headers: {

@@ -37,7 +37,7 @@ const RequestLeave = () => {
       try {
         await new Promise((resolve) => setTimeout(resolve, 2000));
         const response = await axios.get(
-          "https://employeemanagment-gilt.vercel.app/api/leave/getSingleLeave",
+          "https://management-system-production-ffd5.up.railway.app/api/leave/getSingleLeave",
           {
             headers: {
               Authorization: `Bearer ${token}`,

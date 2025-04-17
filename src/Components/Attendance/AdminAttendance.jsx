@@ -35,7 +35,7 @@ const AdminAttendance = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          "https://employeemanagment-gilt.vercel.app/api/attendance/allAttendance",
+          "https://management-system-production-ffd5.up.railway.app/api/attendance/allAttendance",
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -135,7 +135,7 @@ const AdminAttendance = () => {
       setIsMarkingLeave(true); // Set loading state to true
       try {
         const response = await axios.get(
-          "https://employeemanagment-gilt.vercel.app/api/automark/auto-mark",
+          "https://management-system-production-ffd5.up.railway.app/api/automark/auto-mark",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         toast.success("Leave marked successfully!");

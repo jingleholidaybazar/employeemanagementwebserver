@@ -37,7 +37,7 @@ const Attendance = () => {
       try {
         const formattedMonth = currentDate.format("YYYY-MM");
         const response = await axios.get(
-          `https://employeemanagment-gilt.vercel.app/api/attendance/getAttendance/${userId}/${formattedMonth}`,
+          `https://management-system-production-ffd5.up.railway.app/api/attendance/getAttendance/${userId}/${formattedMonth}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -105,7 +105,7 @@ const Attendance = () => {
   const markAttendance = async (type) => {
     try {
       const response = await axios.post(
-        "https://employeemanagment-gilt.vercel.app/api/attendance/markAttendance",
+        "https://management-system-production-ffd5.up.railway.app/api/attendance/markAttendance",
         { date: today, type },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -204,7 +204,7 @@ const Attendance = () => {
     const formattedMonth = currentDate.format("YYYY-MM");
     const previousMonth = dayjs().subtract(1, "month").format("MMMM YYYY"); // Calculate previous month
 
-    const apiUrl = `https://employeemanagment-gilt.vercel.app/api/attendance/getAllMonthRecords/${userId}`;
+    const apiUrl = `https://management-system-production-ffd5.up.railway.app/api/attendance/getAllMonthRecords/${userId}`;
 
     try {
       const response = await axios.get(apiUrl, {
