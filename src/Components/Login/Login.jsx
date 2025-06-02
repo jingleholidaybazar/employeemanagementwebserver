@@ -26,7 +26,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://employeemanagment-trda.onrender.com/api/auth/login",
+        "https://employeemanagment-production-c550.up.railway.app/api/auth/login",
         { email, password }
       );
 

@@ -15,7 +15,7 @@ const WorkReport = () => {
   const [loadingTime, setLoadingTime] = useState(true); // New state for loading delay
 
   const apiBaseUrl =
-    "https://employeemanagment-trda.onrender.com/api/report/workereportCreate"; // URL to fetch data
+    "https://employeemanagment-production-c550.up.railway.app/api/report/workereportCreate"; // URL to fetch data
 
   // Toggle form visibility
   const handleButtonClick = () => {
@@ -110,7 +110,7 @@ const WorkReport = () => {
       const id = localStorage.getItem("id");
 
       const response = await axios.get(
-        `https://employeemanagment-trda.onrender.com/api/report/singaleReport/${id}`,
+        `https://employeemanagment-production-c550.up.railway.app/api/report/singaleReport/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

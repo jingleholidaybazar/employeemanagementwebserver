@@ -41,7 +41,7 @@ const Leave = () => {
     setLoading(true); // Show loading while performing the action
     try {
       const response = await axios.put(
-        `https://employeemanagment-trda.onrender.com/api/leave/statusUpdate/${_id}`,
+        `https://employeemanagment-production-c550.up.railway.app/api/leave/statusUpdate/${_id}`,
         { status: actionType === "approve" ? "Approved" : "Rejected" },
         {
           headers: {

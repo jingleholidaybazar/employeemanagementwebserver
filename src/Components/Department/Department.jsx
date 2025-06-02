@@ -21,7 +21,7 @@ const Department = () => {
       setLoading(true); // Set loading to true before the fetch starts
       try {
         const response = await axios.get(
-          "https://employeemanagment-trda.onrender.com/api/department/getDepartment"
+          "https://employeemanagment-production-c550.up.railway.app/api/department/getDepartment"
         );
         setDepartments(response.data.department || []);
       } catch (error) {
@@ -43,7 +43,7 @@ const Department = () => {
 
     try {
       await axios.delete(
-        `https://employeemanagment-trda.onrender.com/api/department/deleteDepartment/${_id}`
+        `https://employeemanagment-production-c550.up.railway.app/api/department/deleteDepartment/${_id}`
       );
       setDepartments(
         departments.filter((department) => department._id !== _id)
@@ -67,7 +67,7 @@ const Department = () => {
 
     try {
       await axios.put(
-        `https://employeemanagment-trda.onrender.com/api/department/updateDepartment/${currentDepartment._id}`,
+        `https://employeemanagment-production-c550.up.railway.app/api/department/updateDepartment/${currentDepartment._id}`,
         { departmentName: newName }
       );
       setDepartments(

@@ -18,7 +18,7 @@ const PrivateRoute = ({ element }) => {
       const fetchEmployeeData = async () => {
         try {
           const response = await axios.get(
-            `https://employeemanagment-trda.onrender.com/api/employee/getSingaleEmployee/${employeeId}`,
+            `https://employeemanagment-production-c550.up.railway.app/api/employee/getSingaleEmployee/${employeeId}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`, // Include the token in headers

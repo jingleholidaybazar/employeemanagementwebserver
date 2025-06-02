@@ -58,7 +58,7 @@ const ApplyLeaveModal = ({ isOpen, toggleModal }) => {
 
     try {
       const response = await axios.post(
-        "https://employeemanagment-trda.onrender.com/api/leave/leaveRequest", // Your API endpoint
+        "https://employeemanagment-production-c550.up.railway.app/api/leave/leaveRequest", // Your API endpoint
         leaveData,
         {
           headers: {

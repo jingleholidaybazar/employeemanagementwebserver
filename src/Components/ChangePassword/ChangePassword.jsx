@@ -32,7 +32,7 @@ const ChangePassword = () => {
 
     try {
       const response = await axios.post(
-        "https://employeemanagment-trda.onrender.com/api/password/changepassword",
+        "https://employeemanagment-production-c550.up.railway.app/api/password/changepassword",
         { email, newPassword, aadhar }
       );
 

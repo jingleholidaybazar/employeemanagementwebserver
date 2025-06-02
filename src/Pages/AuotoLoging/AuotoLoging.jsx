@@ -11,7 +11,7 @@ function AutoLogin() {
     const autoLogin = async () => {
       try {
         const response = await axios.get(
-          "https://employeemanagment-trda.onrender.com/api/auth/autologin",
+          "https://employeemanagment-production-c550.up.railway.app/api/auth/autologin",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

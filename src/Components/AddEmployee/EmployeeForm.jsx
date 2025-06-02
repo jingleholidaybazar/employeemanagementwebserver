@@ -111,7 +111,7 @@ const EmployeeForm = ({ onSubmit, onCancel }) => {
       });
 
       const response = await axios.post(
-        "https://employeemanagment-trda.onrender.com/api/auth/addEmployee",
+        "https://employeemanagment-production-c550.up.railway.app/api/auth/addEmployee",
         formDataToSend,
         {
           headers: {

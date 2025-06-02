@@ -12,7 +12,7 @@ const WorkReport = () => {
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
 
   const apiBaseUrl =
-    "https://employeemanagment-trda.onrender.com/api/report/getAllReport"; // API URL
+    "https://employeemanagment-production-c550.up.railway.app/api/report/getAllReport"; // API URL
 
   // Fetch data from the API
   const fetchWorkReports = async () => {

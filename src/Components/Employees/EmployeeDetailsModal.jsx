@@ -34,7 +34,7 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
       setLoading(true);
 
       await axios.patch(
-        `https://employeemanagment-trda.onrender.com/api/auth/blacklist/${employeeId}`,
+        `https://employeemanagment-production-c550.up.railway.app/api/auth/blacklist/${employeeId}`,
         { role: selectedStatus },
         {
           headers: {
@@ -70,7 +70,7 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
       setHalfDayLoading(true);
 
       const response = await axios.patch(
-        `https://employeemanagment-trda.onrender.com/api/attendance/markHalfday/${employeeId}`,
+        `https://employeemanagment-production-c550.up.railway.app/api/attendance/markHalfday/${employeeId}`,
         {},
         {
           headers: {

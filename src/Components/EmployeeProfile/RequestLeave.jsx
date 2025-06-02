@@ -37,7 +37,7 @@ const RequestLeave = () => {
       try {
         await new Promise((resolve) => setTimeout(resolve, 2000));
         const response = await axios.get(
-          "https://employeemanagment-trda.onrender.com/api/leave/getSingleLeave",
+          "https://employeemanagment-production-c550.up.railway.app/api/leave/getSingleLeave",
           {
             headers: {
               Authorization: `Bearer ${token}`,
