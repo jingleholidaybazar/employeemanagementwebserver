@@ -22,7 +22,7 @@ function AuthContextProvider({ children }) {
     localStorage.removeItem("token");
   };
 
-  // Base URL for API requests (can be set via environment variables)
+  // Base URL for API requests (can be set via envhttps://management-system-production-ffd5.up.railway.appironment variables)
   const apiBaseUrl = "https://employeemanagment-production-c550.up.railway.app"; // Use development URL by default
 
   // Function to update an employee's data
@@ -49,7 +49,7 @@ function AuthContextProvider({ children }) {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        "https://management-system-production-ffd5.up.railway.app/api/attendance/allAttendance", // Pass the employee ID in the URL path
+        "https://employeemanagment-production-c550.up.railway.app/api/attendance/allAttendance", // Pass the employee ID in the URL path
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -150,7 +150,7 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
           {/* Dropdown for Employee Actions */}
           <div className="mt-4 flex gap-3">
             <select
-              className="w-full mt-1 p-2 border rounded-lg bg-gray-100 focus:ring focus:ring-gray-300"
+              className="w-full mt-1 p-2 border text-sm rounded-lg bg-gray-100 focus:ring focus:ring-gray-300"
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
               disabled={loading}
@@ -164,7 +164,7 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
             {/* Submit Button */}
             <button
               onClick={handleSubmit}
-              className="w-full mt-1 p-2 border rounded-lg bg-blue-500 text-white focus:ring focus:ring-gray-300"
+              className="w-full mt-1 p-2 border text-sm rounded-lg bg-blue-500 text-white focus:ring focus:ring-gray-300"
               disabled={loading || selectedStatus === status} // Disable if same status or loading
             >
               {loading ? "Updating..." : "Submit"}
@@ -172,7 +172,7 @@ const EmployeeDetailsModal = ({ isOpen, employee, onClose }) => {
             {/* Mark as Half-Day Button */}
             <button
               onClick={markAsHalfDay}
-              className="w-full mt-1 p-2 border rounded-lg bg-yellow-500 text-white focus:ring focus:ring-gray-300"
+              className="w-full mt-1 p-2 border text-sm rounded-lg bg-yellow-500 text-white focus:ring focus:ring-gray-300"
               disabled={halfDayLoading}
             >
               {halfDayLoading ? "Marking..." : "Mark as Half-Day"}
