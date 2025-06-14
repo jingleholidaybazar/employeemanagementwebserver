@@ -158,9 +158,9 @@ const Attendance = () => {
 
     // Determine attendance type based on current time
     let type = "leave";
-    if (currentTime >= "08:40" && currentTime <= "09:11") {
+    if (currentTime >= "08:40" && currentTime <= "09:07") {
       type = "fullDay";
-    } else if (currentTime > "09:11" && currentTime <= "14:30") {
+    } else if (currentTime > "09:07" && currentTime <= "14:30") {
       type = "halfDay";
     }
 
