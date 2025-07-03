@@ -94,7 +94,7 @@ const Employees = () => {
           <table className="w-full border-collapse border border-gray-300">
             <thead>
               <tr className="bg-red-500 text-left text-white">
-                <th className="border-gray-300 px-4 py-2">S. No</th>
+                <th className="border-gray-300 px-4 py-2">S.No</th>
                 <th className="border-gray-300 px-4 py-2">Image</th>
                 <th className="border-gray-300 px-4 py-2">Name</th>
                 <th className="border-gray-300 px-4 py-2">Email</th>

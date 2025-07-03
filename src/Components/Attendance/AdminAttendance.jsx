@@ -150,77 +150,85 @@ const AdminAttendance = () => {
   };
 
   // donload PDF
-  const handleDownloadPDF = () => {
-    const doc = new jsPDF();
+ const handleDownloadPDF = () => {
+  const doc = new jsPDF();
+  doc.setFontSize(16);
+  doc.text("Employee Attendance Summary", 14, 10);
 
-    doc.setFontSize(16);
-    doc.text("Monthly Employee Attendance Summary", 14, 10);
+  const tableColumn = [
+    "ID",
+    "Employee Name",
+    "Full Day",
+    "Half Day",
+    "Leave",
+    "Total Attendance",
+  ];
 
-    // Extract all unique months from attendanceData
-    const months = [
+  let months = [];
+
+  // Check if a specific month is selected
+  if (selectedDate) {
+    const selectedMonth = dayjs(selectedDate).format("YYYY/MM");
+    months = [selectedMonth];
+  } else {
+    // All months (default)
+    months = [
       ...new Set(attendanceData.map((record) => record.date.slice(0, 7))),
     ].sort();
+  }
 
-    const tableColumn = [
-      "ID",
-      "Employee Name",
-      "Full Day",
-      "Half Day",
-      "Leave",
-      "Total Attendance",
-    ];
-
+  months.forEach((month, monthIndex) => {
+    const monthName = dayjs(month, "YYYY/MM").format("MMMM YYYY");
+    const employeeAttendance = {};
     let index = 1;
 
-    months.forEach((month, monthIndex) => {
-      const monthName = dayjs(month, "YYYY/MM").format("MMMM YYYY");
-      const employeeAttendance = {};
-
-      // Filter attendance records for this month
-      attendanceData.forEach((record) => {
-        if (record.date.startsWith(month)) {
-          if (!employeeAttendance[record.name]) {
-            employeeAttendance[record.name] = {
-              fullDay: 0,
-              halfDay: 0,
-              leave: 0,
-              totalAttendance: 0,
-            };
-          }
-          employeeAttendance[record.name][record.type]++;
-          employeeAttendance[record.name].totalAttendance =
-            employeeAttendance[record.name].fullDay +
-            employeeAttendance[record.name].halfDay;
+    // Filter records for that month
+    attendanceData.forEach((record) => {
+      if (record.date.startsWith(month)) {
+        if (!employeeAttendance[record.name]) {
+          employeeAttendance[record.name] = {
+            fullDay: 0,
+            halfDay: 0,
+            leave: 0,
+            totalAttendance: 0,
+          };
         }
-      });
 
-      // Prepare table data
-      const tableRows = [];
-      index = 1;
-      for (const [name, stats] of Object.entries(employeeAttendance)) {
-        tableRows.push([
-          index++,
-          name,
-          stats.fullDay || 0,
-          stats.halfDay || 0,
-          stats.leave || 0,
-          stats.totalAttendance || 0,
-        ]);
+        employeeAttendance[record.name][record.type]++;
+        employeeAttendance[record.name].totalAttendance =
+          employeeAttendance[record.name].fullDay +
+          employeeAttendance[record.name].halfDay;
       }
-
-      // Add a new page for each month (except the first)
-      if (monthIndex > 0) doc.addPage();
-      doc.text(`Attendance Report - ${monthName}`, 14, 20);
-
-      doc.autoTable({
-        head: [tableColumn],
-        body: tableRows,
-        startY: 30,
-      });
     });
 
-    doc.save("Monthly_Attendance_Report.pdf");
-  };
+    const tableRows = Object.entries(employeeAttendance).map(
+      ([name, stats]) => [
+        index++,
+        name,
+        stats.fullDay,
+        stats.halfDay,
+        stats.leave,
+        stats.totalAttendance,
+      ]
+    );
+
+    if (monthIndex > 0) doc.addPage();
+    doc.text(`Attendance Report - ${monthName}`, 14, 20);
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+    });
+  });
+
+  const filename = selectedDate
+    ? `Attendance_Report_${dayjs(selectedDate).format("MMMM_YYYY")}.pdf`
+    : "Monthly_Attendance_Report.pdf";
+
+  doc.save(filename);
+};
+
 
   return (
     <div className="p-2">
@@ -296,12 +304,24 @@ const AdminAttendance = () => {
             {isMarkingLeave ? "Marking..." : "Mark Leave"}
           </button>
 
-          <button
+          
+
+          {/* Month Selector */}
+        <div className="w-full sm:w-1/3">
+          <input
+            type="month"
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="border-2 h-12 w-full px-4 py-1 rounded-lg border-blue-500"
+          />
+        </div>
+
+        <button
             className="border-2 border-blue-500 text-blue-500 font-semibold h-12 w-full sm:w-1/2 rounded-md hover:text-white hover:bg-blue-300 transition"
             onClick={handleDownloadPDF}
           >
             Download PDF
           </button>
+
         </div>
       </div>
 
